@@ -15,7 +15,7 @@ export default function MenuBar({menuBarRef, menuItemsRef}) {
                 !event.target.closest(".menu-detail") &&
                 !menuBarRef.current.classList.contains("menu-wide")
             ) {
-                hideMenuDetail();
+                hideMenuDetail(menuBarRef);
             }
         });
     }, [menuBarRef])
