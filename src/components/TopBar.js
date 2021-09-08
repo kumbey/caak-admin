@@ -2,12 +2,53 @@ import React from "react";
 import fullScreen from "../assets/js/full_screen";
 import toggleDarkMode from "../assets/js/dark_mode";
 import {toggleMenu} from "../assets/js/menu";
+import tippy from "tippy.js";
 
 export default function TopBar({darkModeRef, menuBarRef}) {
     const scheme = localStorage.getItem("scheme");
     scheme && document.documentElement.classList.add(scheme);
 
+    React.useEffect(()=> {
+        tippy('[data-toggle="dropdown-menu"]', {
+            theme: "light-border",
+            zIndex: 25,
+            offset: [0, 8],
+            arrow: false,
+            placement: "bottom-start",
+            interactive: true,
+            allowHTML: true,
+            animation: "shift-toward-extreme",
+            content: (reference) => {
+                let dropdownMenu = reference
+                    .closest(".dropdown")
+                    .querySelector(".dropdown-menu");
+                dropdownMenu = dropdownMenu.outerHTML;
+                return dropdownMenu;
+            },
+        });
+
+        // Custom Dropdown
+        tippy('[data-toggle="custom-dropdown-menu"]', {
+            theme: "light-border",
+            zIndex: 25,
+            offset: [0, 8],
+            arrow: false,
+            placement: "bottom-start",
+            interactive: true,
+            allowHTML: true,
+            animation: "shift-toward-extreme",
+            content: (reference) => {
+                let dropdownMenu = reference
+                    .closest(".dropdown")
+                    .querySelector(".custom-dropdown-menu");
+                dropdownMenu = dropdownMenu.outerHTML;
+                return dropdownMenu;
+            },
+        });
+    },[])
+
     React.useEffect(() => {
+
         if (scheme === "dark") {
             darkModeRef.current.checked = "checked";
         }
