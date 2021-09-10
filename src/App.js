@@ -5,8 +5,8 @@ import Register from "./components/Register";
 function App() {
   return (
     <React.Fragment>
-      <TopBar />
-      <Register />
+      <TopBar/>
+      <Register/>
     </React.Fragment>
   );
 }
