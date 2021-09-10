@@ -1,9 +1,13 @@
-import './App.css';
-import Navigation from "./components/partials/Navigation";
+import React from "react";
+import Login from "./components/Login";
+import TopBar from "./components/TopBar";
 
 function App() {
   return (
-    <Navigation/>
+    <React.Fragment>
+      <TopBar />
+      <Login />
+    </React.Fragment>
   );
 }
 
