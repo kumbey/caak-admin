@@ -1,6 +1,6 @@
 import React from "react";
 import TopBar from "./components/TopBar";
-import Register from "./components/Register";
+import Register from "./components/pages/Register";
 
 function App() {
   return (
