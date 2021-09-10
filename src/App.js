@@ -1,13 +1,12 @@
 import React from "react";
-import Login from "./components/Login";
 import TopBar from "./components/TopBar";
-import ForgotPassword from "./components/ForgotPassword";
+import Register from "./components/Register";
 
 function App() {
   return (
     <React.Fragment>
       <TopBar />
-      <ForgotPassword />
+      <Register />
     </React.Fragment>
   );
 }
