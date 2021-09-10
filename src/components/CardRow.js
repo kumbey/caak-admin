@@ -45,13 +45,13 @@ const CardRow = () => {
           </div>
         </div>
         <a
-          href="#"
+          href="#fafa"
           className="btn btn-icon btn_outlined btn_secondary mt-auto ml-auto lg:ml-0"
         >
           <span className="la la-pen-fancy" />
         </a>
         <a
-          href="#"
+          href="#fafa"
           className="btn btn-icon btn_outlined btn_danger lg:mt-2 ml-2 lg:ml-0"
         >
           <span className="la la-trash-alt" />

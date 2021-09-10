@@ -25,10 +25,10 @@ const CardColumn = () => {
         <p>December 15, 2019</p>
       </div>
       <div className="actions">
-        <a href="#" className="btn btn-icon btn_outlined btn_secondary">
+        <a href="#fafa" className="btn btn-icon btn_outlined btn_secondary">
           <span className="la la-pen-fancy" />
         </a>
-        <a href="#" className="btn btn-icon btn_outlined btn_danger ml-2">
+        <a href="#fafa" className="btn btn-icon btn_outlined btn_danger ml-2">
           <span className="la la-trash-alt" />
         </a>
         <div className="dropdown ml-auto -mr-3 -mb-3">
@@ -39,10 +39,10 @@ const CardColumn = () => {
             <span className="la la-ellipsis-v text-4xl leading-none" />
           </button>
           <div className="dropdown-menu">
-            <a href="#">Dropdown Action</a>
-            <a href="#">Link</a>
+            <a href="#fafa">Dropdown Action</a>
+            <a href="#fafa">Link</a>
             <hr />
-            <a href="#">Something Else</a>
+            <a href="#fafa">Something Else</a>
           </div>
         </div>
       </div>
