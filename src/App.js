@@ -1,12 +1,12 @@
 import React from "react";
-import TabsComp from "./components/TabsComp";
-//import TopBar from "./components/TopBar";
-//import Register from "./components/pages/Register";
+import TopBar from "./components/TopBar";
+import Register from "./components/pages/Register";
 
 function App() {
   return (
     <React.Fragment>
-      <TabsComp/>
+      <TopBar/>
+      <Register/>
     </React.Fragment>
   );
 }
