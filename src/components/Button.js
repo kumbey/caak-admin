@@ -1,10 +1,10 @@
 export default function Button(props) {
   return (
     <button
-      type="button"
+      type={props.type || "button"}
       className={`
-                ${props.className}
-                btn btn_${props.type}
+                ${props.className || ""}
+                btn btn_${props.skin}
                 ${props.uppercase ? "uppercase" : ""} 
                 ${props.outlined ? "btn_outlined" : ""} 
             `}

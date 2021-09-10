@@ -70,7 +70,12 @@ const Register = () => {
             </label>
           </div>
           <div className="flex">
-            <Button className={"ml-auto"} uppercase type={"primary"}>
+            <Button
+              className={"ml-auto"}
+              uppercase
+              type={"submit"}
+              skin={"primary"}
+            >
               Register
             </Button>
           </div>

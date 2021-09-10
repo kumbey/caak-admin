@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../Button";
 
 const Login = () => {
   const [user, setUser] = React.useState({
@@ -58,9 +59,14 @@ const Login = () => {
             <a href="auth-forgot-password.html" className="text-sm uppercase">
               Forgot Password?
             </a>
-            <button type="submit" className="btn btn_primary ml-auto uppercase">
+            <Button
+                className={"ml-auto"}
+                uppercase
+                type={"submit"}
+                skin={"primary"}
+            >
               Login
-            </button>
+            </Button>
           </div>
         </form>
       </div>
