@@ -1,4 +1,5 @@
 import React from "react";
+import Button from "../Button";
 
 const Register = () => {
   const [user, setUser] = React.useState({
@@ -69,9 +70,9 @@ const Register = () => {
             </label>
           </div>
           <div className="flex">
-            <button type="submit" className="btn btn_primary ml-auto uppercase">
+            <Button className={"ml-auto"} uppercase type={"primary"}>
               Register
-            </button>
+            </Button>
           </div>
         </form>
       </div>
