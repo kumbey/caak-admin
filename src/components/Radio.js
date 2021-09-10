@@ -6,7 +6,7 @@ export default function Radio(props) {
                     <span></span>
                     <span>Radio</span>
                 </label>
-                <label className="custom-radio mt-2">
+                <label className="custom-radio">
                     <input type="radio" name="radio" defaultChecked={props.defaultChecked}/>
                     <span></span>
                     <span>Radio Checked</span>

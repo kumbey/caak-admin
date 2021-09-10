@@ -1,6 +1,6 @@
 export default function FileBrowser(props) {
     return (
-        <form className="mt-5">
+        <form>
             <label className="input-group text-base font-normal" htmlFor="customFile">
                 <div
                     className="file-name input-addon input-addon-prepend input-group-item w-full overflow-x-hidden">

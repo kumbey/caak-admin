@@ -34,7 +34,7 @@ export default function Dropdowns(props) {
                 data-toggle="dropdown-menu" 
             >
                 Dropdown
-                <span className="ml-3 la la-caret-down text-xl leading-none"></span>
+                <span className="la la-caret-down text-xl leading-none"></span>
             </button>
             <div className="dropdown-menu">
                 <a href="/">Dropdown Action</a>

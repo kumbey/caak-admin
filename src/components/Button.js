@@ -3,11 +3,12 @@ export default function Button(props) {
         <button 
             type="button" 
             className={`
-                btn btn_${props.style} 
-                ${props.uppercase ? "uppercase" : ""} 
+                btn 
+                btn_${props.style} 
+                uppercase
                 ${props.outlined ? "btn_outlined" : ""} 
             `}>
-                Primary
+                {props.children}
         </button>
     )
 }

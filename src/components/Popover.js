@@ -20,7 +20,10 @@ export default function Popover(props) {
     },[])
     return (
         <div>
-        <button type="button" className={`btn btn_${props.style} uppercase`} data-toggle="popover"
+        <button 
+            type="button" 
+            className={`btn btn_${props.style} uppercase`} 
+            data-toggle="popover"
             data-popover-title="Popover Title"
             data-popover-content="Here’s some amazing content. It’s very engaging. Right?"
             data-tippy-placement={`${props.placement}`}>Toggle Popover</button>
