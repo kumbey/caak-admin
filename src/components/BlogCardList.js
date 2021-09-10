@@ -1,4 +1,5 @@
 import React from "react";
+import CheckBox from "./CheckBox";
 
 const BlogCardList = () => {
   return (
@@ -8,10 +9,7 @@ const BlogCardList = () => {
           <thead>
             <tr>
               <th className="w-px">
-                <label className="custom-checkbox">
-                  <input type="checkbox" checked partial />
-                  <span />
-                </label>
+                <CheckBox checked partial />
               </th>
               <th className="text-left uppercase">Title</th>
               <th className="text-center uppercase">Views</th>
@@ -23,10 +21,7 @@ const BlogCardList = () => {
           <tbody>
             <tr>
               <td>
-                <label className="custom-checkbox">
-                  <input type="checkbox" data-toggle="rowSelection" />
-                  <span />
-                </label>
+                <CheckBox partial={true} dataToggle={"rowSelection"} />
               </td>
               <td>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</td>
               <td className="text-center">100</td>
