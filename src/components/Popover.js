@@ -14,7 +14,7 @@ export default function Popover(props) {
         animation={"shift-toward-extreme"}
         content={
           <div>
-            <h5>props.title</h5>
+            <h5>{props.title}</h5>
             <div className={"mt-5"}>{props.content}</div>
           </div>
         }
@@ -23,7 +23,7 @@ export default function Popover(props) {
           type="button"
           className={`btn btn_${props.skin} ${props.uppercase}`}
         >
-            {props.children}
+          {props.children}
         </button>
       </Tippy>
     </div>

@@ -58,10 +58,10 @@ function App() {
       <Header />
       <Input />
       <Popover
-        popOverPosition={"bottom"}
+        popOverPosition={"right"}
         skin={"primary"}
-        title={"hii title"}
-        content={"nbsdajhkbdsahjds"}
+        title={"Popover Title"}
+        content={"Here’s some amazing content. It’s very engaging. Right?"}
       >
         Hello PopOver
       </Popover>
