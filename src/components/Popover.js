@@ -1,32 +1,31 @@
-import React from "react"
-import tippy from "tippy.js";
+import React from "react";
+import Tippy from "@tippyjs/react";
+
 export default function Popover(props) {
-    React.useEffect(() => {
-        tippy('[data-toggle="popover"]', {
-            theme: "light-border popover",
-            offset: [0, 12],
-            interactive: true,
-            allowHTML: true,
-            trigger: "click",
-            animation: "shift-toward-extreme",
-            content: (reference) => {
-              const title = reference.dataset.popoverTitle;
-              const content = reference.dataset.popoverContent;
-              const popover =
-                "<h5>" + title + "</h5>" + '<div class="mt-5">' + content + "</div>";
-              return popover;
-            },
-          });
-    },[])
-    return (
-        <div>
-        <button 
-            type="button" 
-            className={`btn btn_${props.style} uppercase`} 
-            data-toggle="popover"
-            data-popover-title="Popover Title"
-            data-popover-content="Here’s some amazing content. It’s very engaging. Right?"
-            data-tippy-placement={`${props.placement}`}>Toggle Popover</button>
+  return (
+    <div>
+      <Tippy
+        theme={"light-border popover"}
+        offset={[0, 12]}
+        interactive={true}
+        allowHTML={true}
+        trigger={"click"}
+        placement={props.popOverPosition}
+        animation={"shift-toward-extreme"}
+        content={
+          <div>
+            <h5>props.title</h5>
+            <div className={"mt-5"}>{props.content}</div>
+          </div>
+        }
+      >
+        <button
+          type="button"
+          className={`btn btn_${props.skin} ${props.uppercase}`}
+        >
+            {props.children}
+        </button>
+      </Tippy>
     </div>
-    )
+  );
 }

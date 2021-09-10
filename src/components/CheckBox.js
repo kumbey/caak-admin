@@ -4,7 +4,6 @@ export default function CheckBox(props) {
       <input
         type="checkbox"
         defaultChecked={props.checked}
-        data-toggle={props.dataToggle}
       />
       <span />
     </label>

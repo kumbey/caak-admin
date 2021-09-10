@@ -4,7 +4,7 @@ const Breadcrumb = () => {
   return (
     <div className={"flex flex-col"}>
       <h1>Blog</h1>
-      <ul>
+      <ul className={"flex items-center"}>
         <li>
           <a href="guak">Pages</a>
         </li>

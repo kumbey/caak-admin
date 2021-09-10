@@ -1,12 +1,81 @@
 import React from "react";
 import TopBar from "./components/TopBar";
+import Avatar from "./components/Avatar";
+import Badges from "./components/Badges";
+import Breadcrumb from "./components/Breadcrumb";
+import Button from "./components/Button";
+import CheckBox from "./components/CheckBox";
+import DropDown from "./components/DropDown";
+import Dropzone from "./components/Dropzone";
+import FileBrowser from "./components/FileBrowser";
+import Header from "./components/Header";
+import Input from "./components/Input";
+import Popover from "./components/Popover";
+import Radio from "./components/Radio";
+import RangeSlider from "./components/RangeSlider";
+import Rating from "./components/Rating";
+import Search from "./components/Search";
+import SearchInput from "./components/SearchInput";
+import Select from "./components/Select";
+import Switch from "./components/Switch";
+import Tables from "./components/Tables";
+import TagInput from "./components/TagInput";
+import TextArea from "./components/TextArea";
+import TipOver from "./components/TipOver";
+import Blog from "./components/pages/Blog";
+import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 
 function App() {
   return (
     <React.Fragment>
-      <TopBar/>
-      <Register/>
+      <TopBar />
+      <Login />
+      <Register />
+      <Blog />
+      <Avatar avatarStyle={"m-4"} shadow />
+      <Badges outlined skin={"danger"} badgeStyle={" m-4"}>
+        Badge
+      </Badges>
+      <Breadcrumb />
+      <Button
+        skin={"primary"}
+        icon={"las la-lg la-star"}
+        className={"w-12 h-12 bg-blue"}
+      />
+      <CheckBox checked />
+      <DropDown
+        split
+        uppercase
+        icon={"la la-star"}
+        iconStyle={"ml-2 text-lg"}
+        skin={"primary"}
+      >
+        DropDown
+      </DropDown>
+      <Dropzone />
+      <FileBrowser />
+      <Header />
+      <Input />
+      <Popover
+        popOverPosition={"bottom"}
+        skin={"primary"}
+        title={"hii title"}
+        content={"nbsdajhkbdsahjds"}
+      >
+        Hello PopOver
+      </Popover>
+      <Radio />
+      <RangeSlider />
+      <Rating />
+      <Search />
+      <SearchInput />
+      <Select />
+      <Switch />
+      <Tables />
+      <TagInput />
+      <TextArea />
+      <TipOver />
     </React.Fragment>
   );
 }
