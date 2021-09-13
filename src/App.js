@@ -33,6 +33,7 @@ import CardShowcase from "./components/CardShowcase";
 import CardBlank from "./components/CardBlank";
 import Alerts from "./components/Alerts";
 import Collapse from "./components/Collapse";
+import Accordion from "./components/Accordion";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -44,6 +45,7 @@ function App() {
       <Login />
       <Register />
       <Blog />
+      <Accordion/>
       <Alerts skin={"primary"} title={"DONE"} message={"This is message"} />
       <Alerts
         outlined

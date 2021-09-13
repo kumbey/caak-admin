@@ -1910,9 +1910,9 @@ Accordion
 &.active {
      @apply text-primary;
 
-.collapse-indicator {
-    @apply transform -rotate-180;
-}
+/*.collapse-indicator {*/
+/*    @apply transform -rotate-180;*/
+/*}*/
 }
 }
 }
