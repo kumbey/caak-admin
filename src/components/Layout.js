@@ -14,7 +14,7 @@ export default function Layout(props) {
                     ${props.uppercase ? "uppercase" : ""}
                     ml-${props.left}
                 `}
-                for="input"
+                htmlFor="input"
             >
                 {props.children}
             </label>
