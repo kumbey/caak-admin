@@ -3,6 +3,7 @@
 @import "tailwindcss/components.css";
 @import "components.css";
 @import "tailwindcss/utilities.css";
+@import "utilities.css";
 @import url("https://fonts.googleapis.com/css?family=Nunito+Sans:400,700|Nunito:400,700&display=swap");
 /* Line Awesome */
 

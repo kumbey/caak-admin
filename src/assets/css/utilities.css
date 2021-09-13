@@ -1,0 +1,11 @@
+.custom-select-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    margin-right: 1rem;
+    display: flex !important;
+    align-items: center;
+    --tw-text-opacity: 1;
+    color: rgba(204, 204, 204, var(--tw-text-opacity));
+}

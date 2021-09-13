@@ -84,7 +84,7 @@ function App() {
       <Rating />
       <Search />
       <SearchInput />
-      <Select />
+      <Select/>
       <Switch />
       <Tables />
       <TagInput />
