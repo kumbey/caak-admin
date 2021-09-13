@@ -40,6 +40,21 @@ const Collapse = (props) => {
     }, 200);
 
     setIsOpen(false);
+    collapse.addEventListener(
+      "transitionend",
+      () => {
+        collapse.classList.remove("open");
+
+        collapse.style.removeProperty("overflow-y");
+        collapse.style.removeProperty("height");
+        collapse.style.removeProperty("opacity");
+
+        collapse.style.removeProperty("transition-property");
+        collapse.style.removeProperty("transition-duration");
+        collapse.style.removeProperty("transition-timing-function");
+      },
+      { once: true }
+    );
   };
 
   const toggleCollapse = (collapse) => {
