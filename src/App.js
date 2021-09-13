@@ -33,8 +33,11 @@ import CardShowcase from "./components/CardShowcase";
 import CardBlank from "./components/CardBlank";
 import Alerts from "./components/Alerts";
 import Collapse from "./components/Collapse";
-import Accordion from "./components/Accordion";
+<<<<<<< HEAD
 import Layout from "./components/Layout";
+=======
+import Accordion from "./components/Accordion";
+>>>>>>> a6820caa637139fa17fc4ce76c01019fee21305d
 
 function App() {
   const darkModeRef = React.createRef();
@@ -46,7 +49,7 @@ function App() {
       <Login />
       <Register />
       <Blog />
-      <Accordion />
+      <Accordion/>
       <Alerts skin={"primary"} title={"DONE"} message={"This is message"} />
       <Alerts
         outlined
@@ -111,10 +114,10 @@ function App() {
       <Tables styles={"striped"} />
       <TagInput />
       <TextArea rows={5} />
-      <TipOver title={"sda"} content={"conaa"} skin={"primary"}>
-        Akakak
-      </TipOver>
-        <Layout bottom={2} uppercase left={2} border placeholder={"asdsad"}>sdadsa</Layout>
+      <TipOver />
+      <Layout placeholder={"placeholder"} uppercase background={"white"} bottom={"2"} left={"5"}>Basic</Layout>
+      <Layout placeholder={"placeholder"} uppercase border borderWidth={"300"} borderColor={"red"} bottom={"2"} background={'white'} left={"5"}>Border</Layout>
+      <Layout placeholder={"placeholder"} uppercase left={"5"}>Inbox</Layout>
     </React.Fragment>
   );
 }
