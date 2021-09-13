@@ -1,6 +1,6 @@
 import React from "react"
 
-export default function TabsComp() {
+export default function Tabs() {
     return (
         <div className="tabs">
             <nav className="tab-nav">
