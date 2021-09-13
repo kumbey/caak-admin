@@ -31,6 +31,7 @@ import CardImage from "./components/CardImage";
 import CardIcon from "./components/CardIcon";
 import CardShowcase from "./components/CardShowcase";
 import CardBlank from "./components/CardBlank";
+import Alerts from "./components/Alerts";
 
 function App() {
   return (
@@ -39,8 +40,19 @@ function App() {
       <Login />
       <Register />
       <Blog />
+      <Alerts
+        skin={"primary"}
+        title={"DONE"}
+        message={"This is message"}
+      />
+      <Alerts
+        outlined
+        skin={"danger"}
+        title={"DONE"}
+        message={"This is message"}
+      />
       <Avatar avatarStyle={"m-4"} shadow />
-      <Badges outlined skin={"danger"} badgeStyle={" m-4"}>
+      <Badges outlined skin={"danger"} badgeStyle={"m-4"}>
         Badge
       </Badges>
       <Breadcrumb />
@@ -70,7 +82,11 @@ function App() {
       <Dropzone />
       <FileBrowser />
       <Header />
-      <Input invalid placeholder={"New PLace holder"} helpText={"Please add correct"}/>
+      <Input
+        invalid
+        placeholder={"New PLace holder"}
+        helpText={"Please add correct"}
+      />
       <Popover
         popOverPosition={"right"}
         skin={"primary"}
@@ -79,16 +95,16 @@ function App() {
       >
         Hello PopOver
       </Popover>
-      <Radio invalid/>
+      <Radio invalid />
       <RangeSlider />
       <Rating />
       <Search />
       <SearchInput />
-      <Select/>
+      <Select />
       <Switch />
       <Tables />
       <TagInput />
-      <TextArea rows={5}/>
+      <TextArea rows={5} />
       <TipOver />
     </React.Fragment>
   );
