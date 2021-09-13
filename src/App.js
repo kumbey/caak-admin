@@ -32,6 +32,7 @@ import CardIcon from "./components/CardIcon";
 import CardShowcase from "./components/CardShowcase";
 import CardBlank from "./components/CardBlank";
 import Alerts from "./components/Alerts";
+import TabsComp from "./components/TabsComp";
 
 function App() {
   return (
@@ -102,7 +103,7 @@ function App() {
       <SearchInput />
       <Select />
       <Switch />
-      <Tables />
+      <Tables styles={"hoverable"} />
       <TagInput />
       <TextArea rows={5} />
       <TipOver />

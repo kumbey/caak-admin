@@ -1,42 +1,14 @@
 import React from "react"
 
 export default function TabsComp() {
-
-        let toggling = false;
-
-        const on = ("body", "click", '[data-toggle="tab"]', (event) => {
-            const trigger = event.target.closest('[data-toggle="tab"]');
-        
-            const tabs = trigger.closest(".tabs");
-            const activeTabTrigger = tabs.querySelector(".tab-nav .active");
-            const activeTab = tabs.querySelector(".collapse.open");
-            const targetedTab = tabs.querySelector(trigger.dataset.target);
-        
-            if (toggling) return;
-            if (activeTabTrigger === trigger) return;
-        
-            // Trigger
-            activeTabTrigger.classList.remove("active");
-            trigger.classList.add("active");
-        
-            // Tab
-            // Close
-            toggling = true;
-        
-            const closeCollapse = (activeTab, () => {
-                const openCollapse = (targetedTab, () => {
-                toggling = false;
-                });
-            });
-        });
     return (
-        <div className="tabs ml-5">
-            <nav className="tab-nav mt-5">
-                <button onClick={on}  className="nav-link h5 uppercase active" data-toggle="tab" data-target="#tab-1">Tab
+        <div className="tabs">
+            <nav className="tab-nav">
+                <button className="nav-link h5 uppercase active" data-toggle="tab" data-target="#tab-1">Tab
                     One</button>
-                <button onClick={on} className="nav-link h5 uppercase" data-toggle="tab" data-target="#tab-2">Tab
+                <button className="nav-link h5 uppercase" data-toggle="tab" data-target="#tab-2">Tab
                     Two</button>
-                <button onClick={on} className="nav-link h5 uppercase" data-toggle="tab" data-target="#tab-3">Tab
+                <button className="nav-link h5 uppercase" data-toggle="tab" data-target="#tab-3">Tab
                     Three</button>
             </nav>
             <div className="tab-content mt-5">
