@@ -32,20 +32,19 @@ import CardIcon from "./components/CardIcon";
 import CardShowcase from "./components/CardShowcase";
 import CardBlank from "./components/CardBlank";
 import Alerts from "./components/Alerts";
-import TabsComp from "./components/TabsComp";
+import Collapse from "./components/Collapse";
 
 function App() {
+  const darkModeRef = React.createRef();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const toggle = () => setIsOpen(true);
   return (
     <React.Fragment>
-      <TopBar />
+      <TopBar darkModeRef={darkModeRef} />
       <Login />
       <Register />
       <Blog />
-      <Alerts
-        skin={"primary"}
-        title={"DONE"}
-        message={"This is message"}
-      />
+      <Alerts skin={"primary"} title={"DONE"} message={"This is message"} />
       <Alerts
         outlined
         skin={"danger"}
@@ -71,6 +70,9 @@ function App() {
       <CardShowcase />
       <CardBlank />
       <CheckBox checked />
+      <Collapse open closeCollapse={isOpen} setIsOpen={setIsOpen} />
+      <Collapse closeCollapse={isOpen} setIsOpen={setIsOpen} />
+      <Button onClick={toggle}>Close all collapses</Button>
       <DropDown
         split
         uppercase
@@ -103,7 +105,7 @@ function App() {
       <SearchInput />
       <Select />
       <Switch />
-      <Tables styles={"hoverable"} />
+      <Tables styles={"striped"} />
       <TagInput />
       <TextArea rows={5} />
       <TipOver />
