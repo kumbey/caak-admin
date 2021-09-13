@@ -1,30 +1,30 @@
-import React from "react"
-import tippy from "tippy.js";
+import React from "react";
+import Tippy from "@tippyjs/react";
+
 export default function TipOver(props) {
-    React.useEffect(() => {
-        tippy('[data-toggle="tooltip"]', {
-            theme: "light-border tooltip",
-            touch: ["hold", 500],
-            offset: [0, 12],
-            interactive: true,
-            animation: "scale",
-        });
-    },[])
-    return (
-        <div>
-            <button 
-                type="button" 
-                className={`
-                    btn 
-                    btn_${props.styles}
-                    uppercase
-                `} 
-                data-toggle="tooltip"
-                data-tippy-content="Content looks in hover" 
-                data-tippy-placement={`${props.placement}`}
-                >
-                    Button
-            </button>
-        </div>
-    )
+  return (
+    <div>
+      <Tippy
+        theme={"light-border tooltip "}
+        offset={[0, 12]}
+        interactive={true}
+        allowHTML={true}
+        placement={props.tipOverPosition}
+        animation={"shift-toward-extreme"}
+        content={
+          <div>
+            <h5>{props.title}</h5>
+            <div className={"mt-5"}>{props.content}</div>
+          </div>
+        }
+      >
+        <button
+          type="button"
+          className={`btn btn_${props.skin} ${props.uppercase}`}
+        >
+          {props.children}
+        </button>
+      </Tippy>
+    </div>
+  );
 }

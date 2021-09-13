@@ -25,6 +25,11 @@ import TipOver from "./components/TipOver";
 import Blog from "./components/pages/Blog";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
+import TabsComp from "./components/TabsComp";
+import BasicInput from "./components/BasicInput";
+import MultipleInputs from "./components/MultipleInputs";
+import ButtonAddons from "./components/ButtonAddons";
+import MultipleAddons from "./components/MultipleAddons";
 
 function App() {
   return (
@@ -75,7 +80,18 @@ function App() {
       <Tables />
       <TagInput />
       <TextArea />
-      <TipOver />
+      <TipOver 
+        skin={"primary"} 
+        tipOverPosition={"right"} 
+        content={"teeestiing content "} 
+        title={"skraaaaaa"}>
+        Hello TipOver
+      </TipOver>
+      <TabsComp/>
+      <BasicInput placeholder={"placeholder text here"}>.link</BasicInput>
+      <MultipleInputs placeholder1={"Skratta name here"} placeholder2={"Skraa name here"}>Skratta bolon Skraaa</MultipleInputs>
+      <ButtonAddons placeholder={"placeholder shv"}>Click</ButtonAddons>
+      <MultipleAddons placeholder={"asdsad"} input1={"asdasd"} input2={"input2"}/>
     </React.Fragment>
   );
 }
