@@ -25,6 +25,12 @@ import TipOver from "./components/TipOver";
 import Blog from "./components/pages/Blog";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
+import CardRow from "./components/CardRow";
+import CardColumn from "./components/CardColumn";
+import CardImage from "./components/CardImage";
+import CardIcon from "./components/CardIcon";
+import CardShowcase from "./components/CardShowcase";
+import CardBlank from "./components/CardBlank";
 
 function App() {
   return (
@@ -43,6 +49,14 @@ function App() {
         icon={"las la-lg la-star"}
         className={"w-12 h-12 bg-blue"}
       />
+      <CardRow />
+      <div className={"w-96"}>
+        <CardColumn />
+      </div>
+      <CardImage />
+      <CardIcon />
+      <CardShowcase />
+      <CardBlank />
       <CheckBox checked />
       <DropDown
         split
