@@ -9,7 +9,7 @@ export default function TipOver(props) {
         offset={[0, 12]}
         interactive={true}
         allowHTML={true}
-        placement={props.tipOverPosition}
+        placement={props.tipOverPosition || "bottom"}
         animation={"shift-toward-extreme"}
         content={
           <div>
