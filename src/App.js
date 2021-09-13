@@ -70,7 +70,7 @@ function App() {
       <Dropzone />
       <FileBrowser />
       <Header />
-      <Input />
+      <Input invalid placeholder={"New PLace holder"} helpText={"Please add correct"}/>
       <Popover
         popOverPosition={"right"}
         skin={"primary"}
