@@ -79,7 +79,7 @@ function App() {
       >
         Hello PopOver
       </Popover>
-      <Radio />
+      <Radio invalid/>
       <RangeSlider />
       <Rating />
       <Search />
@@ -88,7 +88,7 @@ function App() {
       <Switch />
       <Tables />
       <TagInput />
-      <TextArea />
+      <TextArea rows={5}/>
       <TipOver />
     </React.Fragment>
   );

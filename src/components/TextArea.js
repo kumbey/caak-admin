@@ -1,7 +1,8 @@
-export default function TextArea() {
-    return (
-            <form className="mt-5">
-                <textarea className="form-control" rows="5"></textarea>
-            </form>
-    )
+export default function TextArea(props) {
+  return (
+    <textarea
+      className={`form-control ${props.invalid ? "is-invalid" : ""}`}
+      rows={props.rows}
+    />
+  );
 }
