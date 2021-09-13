@@ -25,11 +25,13 @@ import TipOver from "./components/TipOver";
 import Blog from "./components/pages/Blog";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
-import TabsComp from "./components/TabsComp";
-import BasicInput from "./components/BasicInput";
-import MultipleInputs from "./components/MultipleInputs";
-import ButtonAddons from "./components/ButtonAddons";
-import MultipleAddons from "./components/MultipleAddons";
+import CardRow from "./components/CardRow";
+import CardColumn from "./components/CardColumn";
+import CardImage from "./components/CardImage";
+import CardIcon from "./components/CardIcon";
+import CardShowcase from "./components/CardShowcase";
+import CardBlank from "./components/CardBlank";
+import Alerts from "./components/Alerts";
 
 function App() {
   return (
@@ -38,8 +40,19 @@ function App() {
       <Login />
       <Register />
       <Blog />
+      <Alerts
+        skin={"primary"}
+        title={"DONE"}
+        message={"This is message"}
+      />
+      <Alerts
+        outlined
+        skin={"danger"}
+        title={"DONE"}
+        message={"This is message"}
+      />
       <Avatar avatarStyle={"m-4"} shadow />
-      <Badges outlined skin={"danger"} badgeStyle={" m-4"}>
+      <Badges outlined skin={"danger"} badgeStyle={"m-4"}>
         Badge
       </Badges>
       <Breadcrumb />
@@ -48,6 +61,14 @@ function App() {
         icon={"las la-lg la-star"}
         className={"w-12 h-12 bg-blue"}
       />
+      <CardRow />
+      <div className={"w-96"}>
+        <CardColumn />
+      </div>
+      <CardImage />
+      <CardIcon />
+      <CardShowcase />
+      <CardBlank />
       <CheckBox checked />
       <DropDown
         split
@@ -61,7 +82,11 @@ function App() {
       <Dropzone />
       <FileBrowser />
       <Header />
-      <Input />
+      <Input
+        invalid
+        placeholder={"New PLace holder"}
+        helpText={"Please add correct"}
+      />
       <Popover
         popOverPosition={"right"}
         skin={"primary"}
@@ -70,7 +95,7 @@ function App() {
       >
         Hello PopOver
       </Popover>
-      <Radio />
+      <Radio invalid />
       <RangeSlider />
       <Rating />
       <Search />
@@ -79,19 +104,8 @@ function App() {
       <Switch />
       <Tables />
       <TagInput />
-      <TextArea />
-      <TipOver 
-        skin={"primary"} 
-        tipOverPosition={"right"} 
-        content={"teeestiing content "} 
-        title={"skraaaaaa"}>
-        Hello TipOver
-      </TipOver>
-      <TabsComp/>
-      <BasicInput placeholder={"placeholder text here"}>.link</BasicInput>
-      <MultipleInputs placeholder1={"Skratta name here"} placeholder2={"Skraa name here"}>Skratta bolon Skraaa</MultipleInputs>
-      <ButtonAddons placeholder={"placeholder shv"}>Click</ButtonAddons>
-      <MultipleAddons placeholder={"asdsad"} input1={"asdasd"} input2={"input2"}/>
+      <TextArea rows={5} />
+      <TipOver />
     </React.Fragment>
   );
 }
