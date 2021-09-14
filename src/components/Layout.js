@@ -18,7 +18,7 @@ export default function Layout(props) {
             >
                 {props.children}
             </label>
-            <input id="input" type="text" className={`form-control mt-${props.bottom} pt-4`} placeholder={props.placeholder}/>
+            <input type="text" className={`form-control mt-${props.bottom} pt-4`} placeholder={props.placeholder}/>
         </form>
     )
 }

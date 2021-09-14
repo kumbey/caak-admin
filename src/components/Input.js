@@ -5,7 +5,6 @@ export default function Input(props) {
         {props.title}
       </label>
       <input
-        id="input"
         type={props.type || "text"}
         className={`form-control ${props.invalid ? "is-invalid" : ""}`}
         placeholder={props.placeholder}

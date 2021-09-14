@@ -26,7 +26,6 @@ const Login = () => {
               Email
             </label>
             <input
-              id="email"
               type="text"
               className="form-control"
               placeholder="example@example.com"

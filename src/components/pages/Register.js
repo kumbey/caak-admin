@@ -40,7 +40,6 @@ const Register = () => {
               Email
             </label>
             <input
-              id="email"
               type="text"
               className="form-control"
               placeholder="example@example.com"
@@ -54,7 +53,6 @@ const Register = () => {
             </label>
             <label className="form-control-addon-within">
               <input
-                id="password"
                 type="password"
                 className="form-control border-none"
                 value={user.password}
