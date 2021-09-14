@@ -35,6 +35,7 @@ import Alerts from "./components/Alerts";
 import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
+import AddPost from "./components/pages/AddPost";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -89,6 +90,7 @@ function App() {
       <FileBrowser />
       <Header />
       <Input
+        title={"Title"}
         invalid
         placeholder={"New PLace holder"}
         helpText={"Please add correct"}
@@ -106,11 +108,11 @@ function App() {
       <Rating />
       <Search />
       <SearchInput />
-      <Select />
-      <Switch />
+      <Select default={"defaults"} second={"secondsdh"} />
+      <Switch text={"textshdee"} />
       <Tables styles={"striped"} />
       <TagInput />
-      <TextArea rows={5} />
+      <TextArea rows={5} title={"its Title"} />
       <TipOver />
       <Layout placeholder={"placeholder"} uppercase background={"white"} bottom={"2"} left={"5"}>Basic</Layout>
       <Layout placeholder={"placeholder"} uppercase border borderWidth={"300"} borderColor={"red"} bottom={"2"} background={'white'} left={"5"}>Border</Layout>

@@ -5,7 +5,7 @@ export default function Button(props) {
                 type={props.type || "button"}
                 className={`
                 ${props.className || ""}
-                btn btn_${props.skin || "primary"}
+                btn btn_${props.skin}
                 ${props.icon ? "btn-icon" : ""}
                 ${props.large ? "btn-icon_large" : ""}
                 ${props.outlined ? "btn_outlined" : ""} 
@@ -21,7 +21,7 @@ export default function Button(props) {
             type={props.type || "button"}
             className={`
                 ${props.className || ""}
-                btn btn_${props.skin || "primary"}
+                btn btn_${props.skin}
                 ${props.uppercase ? "uppercase" : ""} 
                 ${props.outlined ? "btn_outlined" : ""} 
             `}
