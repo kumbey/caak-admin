@@ -23,12 +23,13 @@ const Accordion = () => {
   };
 
   return (
-    <ul className="accordion border border-gray-300 dark:border-gray-900 rounded-xl mt-5 w-96">
+    <ul className="accordion border border-gray-300 dark:border-gray-900 rounded-xl w-96">
       {data.map((data, index) => (
         <AccordionItem
           onToggle={() => handleToggle(index)}
           active={clicked === index}
           index={index}
+          key={index}
           data={data}
           clicked={clicked}
         />

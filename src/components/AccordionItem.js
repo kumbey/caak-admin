@@ -10,7 +10,7 @@ const AccordionItem = ({ data, active, onToggle, clicked, index }) => {
   const contentEl = useRef(null);
 
   return (
-    <li className={`accordion_item ${active ? "active" : ""}`}>
+    <li key={index} className={`accordion_item ${active ? "active" : ""}`}>
       <h5
         onClick={onToggle}
         className="border-t border-gray-300 dark:border-gray-900 p-5 active"

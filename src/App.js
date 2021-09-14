@@ -35,10 +35,13 @@ import Alerts from "./components/Alerts";
 import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
+import Modal from "./components/Modal";
 
 function App() {
   const darkModeRef = React.createRef();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isModalVisible, setIsModalVisible] = React.useState(false);
+
   const toggle = () => setIsOpen(true);
   return (
     <React.Fragment>
@@ -46,7 +49,7 @@ function App() {
       <Login />
       <Register />
       <Blog />
-      <Accordion/>
+      <Accordion />
       <Alerts skin={"primary"} title={"DONE"} message={"This is message"} />
       <Alerts
         outlined
@@ -113,9 +116,60 @@ function App() {
       <TagInput />
       <TextArea rows={5} title={"its Title"} />
       <TipOver />
-      <Layout placeholder={"placeholder"} uppercase background={"white"} bottom={"2"} left={"5"}>Basic</Layout>
-      <Layout placeholder={"placeholder"} uppercase border borderWidth={"300"} borderColor={"red"} bottom={"2"} background={'white'} left={"5"}>Border</Layout>
-      <Layout placeholder={"placeholder"} uppercase left={"5"}>Inbox</Layout>
+      <Layout
+        placeholder={"placeholder"}
+        uppercase
+        background={"white"}
+        bottom={"2"}
+        left={"5"}
+      >
+        Basic
+      </Layout>
+      <Layout
+        placeholder={"placeholder"}
+        uppercase
+        border
+        borderWidth={"300"}
+        borderColor={"red"}
+        bottom={"2"}
+        background={"white"}
+        left={"5"}
+      >
+        Border
+      </Layout>
+      <Layout placeholder={"placeholder"} uppercase left={"5"}>
+        Inbox
+      </Layout>
+      <div className="mt-5">
+        <button
+          onClick={() => setIsModalVisible(true)}
+          className="btn btn_primary uppercase"
+          data-toggle="modal"
+        >
+          Open Modal
+        </button>
+        <Modal
+          title={"Awesome Title "}
+          content={
+            "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n" +
+            "                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores\n" +
+            "                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n" +
+            "                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n" +
+            "                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores\n" +
+            "                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n" +
+            "                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n" +
+            "                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores\n" +
+            "                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.\n" +
+            "                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut\n" +
+            "                    labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores\n" +
+            "                    et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+          }
+          type={"centered"}
+          set={setIsModalVisible}
+          show={isModalVisible}
+          onClose={() => setIsModalVisible(false)}
+        />
+      </div>
     </React.Fragment>
   );
 }

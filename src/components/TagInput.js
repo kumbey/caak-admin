@@ -6,7 +6,7 @@ export default function TagInput(props) {
                 <span className="flex items-center pl-4">
                     <span className="badge badge_primary">
                         {props.default}
-                        <button type="button" className="focus:outline-none ml-1 la la-times"></button>
+                        <button type="button" className="focus:outline-none ml-1 la la-times"/>
                     </span>
                 </span>
             </label>
