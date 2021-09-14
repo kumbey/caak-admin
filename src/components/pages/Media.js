@@ -28,28 +28,28 @@ const Media = () => {
             </div>
             <div className="card lg:flex p-4 mt-5">
                 <Button uppercase skin={"primary"}>
-                    <span class="la la-sync text-xl leading-none mr-2"></span>
+                    <span className="la la-sync text-xl leading-none mr-2"></span>
                     refresh
                 </Button>
-                <div class="lg:flex ml-auto mt-2 lg:mt-0">
+                <div className="lg:flex ml-auto mt-2 lg:mt-0">
                     <Button className="mr-2" uppercase skin={"primary"}>
-                        <span class="la la-upload text-xl leading-none mr-2"></span>
+                        <span className="la la-upload text-xl leading-none mr-2"></span>
                         upload
                     </Button>
                     <Button className="mr-2" uppercase skin={"primary"}>
-                        <span class="la la-folder-plus text-xl leading-none mr-2"></span>
+                        <span className="la la-folder-plus text-xl leading-none mr-2"></span>
                         new folder
                     </Button>
                     <Button className="mr-2" uppercase skin={"primary"}>
-                        <span class="la la-random text-xl leading-none mr-2"></span>
+                        <span className="la la-random text-xl leading-none mr-2"></span>
                         move
                     </Button>
                     <Button className="mr-2" uppercase skin={"primary"}>
-                        <span class="la la-redo-alt text-xl leading-none mr-2"></span>
+                        <span className="la la-redo-alt text-xl leading-none mr-2"></span>
                         rename
                     </Button>
                     <Button uppercase skin={"danger"}>
-                        <span class="la la-trash text-xl leading-none mr-2"></span>
+                        <span className="la la-trash text-xl leading-none mr-2"></span>
                         remove
                     </Button>
                 </div>
