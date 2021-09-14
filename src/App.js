@@ -35,7 +35,6 @@ import Alerts from "./components/Alerts";
 import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
-import AddPost from "./components/pages/AddPost";
 
 function App() {
   const darkModeRef = React.createRef();
