@@ -1,22 +1,24 @@
 import React from "react";
 
-const CardColumn = () => {
+const CardColumn = (props) => {
   return (
     <div className="card card_column card_hoverable">
       <div className="image">
         <div className="aspect-w-4 aspect-h-3">
           <img src="../assets/images/potato.jpg" alt={""} />
         </div>
+        {props.checkBox ? 
         <label className="custom-checkbox absolute top-0 left-0 mt-2 ml-2">
           <input type="checkbox" data-toggle="cardSelection" />
           <span />
-        </label>
+        </label> : ""}
+        {props.text ? 
         <div className="badge badge_outlined badge_secondary uppercase absolute top-0 right-0 mt-2 mr-2">
           Draft
-        </div>
+        </div> : ""}
       </div>
       <div className="header">
-        <h5>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</h5>
+        <h5>{props.header}</h5>
       </div>
       <div className="body">
         <h6 className="uppercase">Views</h6>
@@ -24,7 +26,8 @@ const CardColumn = () => {
         <h6 className="uppercase mt-4">Date Created</h6>
         <p>December 15, 2019</p>
       </div>
-      <div className="actions">
+      {props.actions ? 
+        <div className="actions">
         <a href="#fafa" className="btn btn-icon btn_outlined btn_secondary">
           <span className="la la-pen-fancy" />
         </a>
@@ -45,7 +48,8 @@ const CardColumn = () => {
             <a href="#fafa">Something Else</a>
           </div>
         </div>
-      </div>
+      </div>  
+      : ""}
     </div>
   );
 };

@@ -72,8 +72,9 @@ export default function DropDown(props) {
         <button
           className={`
                     btn
-                    ${props.uppercase}
+                    ${props.uppercase ? "uppercase" : ""}
                     btn_${props.skin}
+                    ${props.outlined ? "btn_outlined" : ""}
                 `}
         >
           {props.children}

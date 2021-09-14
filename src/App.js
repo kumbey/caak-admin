@@ -66,7 +66,7 @@ function App() {
       />
       <CardRow />
       <div className={"w-96"}>
-        <CardColumn />
+        <CardColumn checkBox text actions header={"Lorem ipsum dolor sit amet, consectetur adipiscing elit."}/>
       </div>
       <CardImage />
       <CardIcon />
