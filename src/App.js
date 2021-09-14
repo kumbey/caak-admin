@@ -14,7 +14,7 @@ import Popover from "./components/Popover";
 import Radio from "./components/Radio";
 import RangeSlider from "./components/RangeSlider";
 import Rating from "./components/Rating";
-import Search from "./components/Search";
+import SearchAndSelect from "./components/SearchAndSelect";
 import SearchInput from "./components/SearchInput";
 import Select from "./components/Select";
 import Switch from "./components/Switch";
@@ -106,7 +106,7 @@ function App() {
       <Radio invalid />
       <RangeSlider />
       <Rating />
-      <Search />
+      <SearchAndSelect />
       <SearchInput />
       <Select default={"defaults"} second={"secondsdh"} />
       <Switch text={"textshdee"} />
