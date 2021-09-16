@@ -12,7 +12,7 @@ const ToastProvider = ({ children }) => {
       toast.push({ content: content });
       setToasts([...toast]);
     },
-    [setToasts]
+    [setToasts, toasts]
   );
 
   const removeToast = useCallback(
@@ -26,7 +26,7 @@ const ToastProvider = ({ children }) => {
         setToasts([...removingToasts]);
       }, 200);
     },
-    [setToasts]
+    [setToasts, toasts]
   );
 
   return (

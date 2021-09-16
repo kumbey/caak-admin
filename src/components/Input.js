@@ -1,6 +1,6 @@
 export default function Input(props) {
   return (
-    <form>
+    <div>
       <label className="label block" htmlFor="input">
         {props.title}
       </label>
@@ -10,6 +10,6 @@ export default function Input(props) {
         placeholder={props.placeholder}
       />
       <small className="block">{props.helpText}</small>
-    </form>
+      </div>
   );
 }
