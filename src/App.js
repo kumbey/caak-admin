@@ -36,6 +36,7 @@ import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
 import Modal from "./components/Modal";
+import Tabs from "./components/Tabs";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -78,7 +79,7 @@ function App() {
       <CheckBox checked />
       <Collapse open closeCollapse={isOpen} setIsOpen={setIsOpen} />
       <Collapse closeCollapse={isOpen} setIsOpen={setIsOpen} />
-      <Button onClick={toggle}>Close all collapses</Button>
+      <Button skin={"primary"} onClick={toggle} uppercase>Close all collapses</Button>
       <DropDown
         split
         uppercase
@@ -169,7 +170,8 @@ function App() {
           show={isModalVisible}
           onClose={() => setIsModalVisible(false)}
         />
-      </div>
+        </div>
+      <Tabs/>
     </React.Fragment>
   );
 }

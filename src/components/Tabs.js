@@ -1,6 +1,12 @@
-export default function Tabs() {
+import React from "react"
+
+const Tabs = () => {
+    React.useEffect(() => {
+        
+    })
+
     return (
-        <div className="tabs">
+        <div className=" card tabs m-24 p-8">
             <nav className="tab-nav">
                 <button className="nav-link h5 uppercase active" data-toggle="tab" data-target="#tab-1">Tab
                     One</button>
@@ -47,3 +53,5 @@ export default function Tabs() {
         </div>
     )
 }
+
+export default Tabs

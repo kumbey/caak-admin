@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../Button";
+import Input from "../Input";
 
 const Login = () => {
   const [user, setUser] = React.useState({
@@ -25,9 +26,8 @@ const Login = () => {
             <label className="label block mb-2" htmlFor="email">
               Email
             </label>
-            <input
+            <Input
               type="text"
-              className="form-control"
               placeholder="example@example.com"
               value={user.email}
               onChange={handleChange}

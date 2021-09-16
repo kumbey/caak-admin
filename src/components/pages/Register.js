@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../Button";
+import Input from "../Input";
 
 const Register = () => {
   const [user, setUser] = React.useState({
@@ -39,7 +40,7 @@ const Register = () => {
             <label className="label block mb-2" htmlFor="email">
               Email
             </label>
-            <input
+            <Input
               type="text"
               className="form-control"
               placeholder="example@example.com"
