@@ -36,6 +36,8 @@ import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
 import Modal from "./components/Modal";
+import CreateToast from "./components/Toast/CreateToast";
+import ToastProvider from "./components/Toast/ToastProvider";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -43,6 +45,7 @@ function App() {
   const [isModalVisible, setIsModalVisible] = React.useState(false);
 
   const toggle = () => setIsOpen(true);
+
   return (
     <React.Fragment>
       <TopBar darkModeRef={darkModeRef} />
@@ -69,7 +72,12 @@ function App() {
       />
       <CardRow />
       <div className={"w-96"}>
-        <CardColumn checkBox text actions header={"Lorem ipsum dolor sit amet, consectetur adipiscing elit."}/>
+        <CardColumn
+          checkBox
+          text
+          actions
+          header={"Lorem ipsum dolor sit amet, consectetur adipiscing elit."}
+        />
       </div>
       <CardImage />
       <CardIcon />
@@ -170,6 +178,9 @@ function App() {
           onClose={() => setIsModalVisible(false)}
         />
       </div>
+      <ToastProvider>
+        <CreateToast />
+      </ToastProvider>
     </React.Fragment>
   );
 }
