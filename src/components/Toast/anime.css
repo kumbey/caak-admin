@@ -1,0 +1,28 @@
+@keyframes append-animate {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes remove-animate {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* animate new box */
+.addToast {
+  animation: append-animate 0.3s linear;
+}
+
+.removeToast {
+  animation: remove-animate 0.3s linear;
+}
