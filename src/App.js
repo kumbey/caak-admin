@@ -39,17 +39,22 @@ import Modal from "./components/Modal";
 import Tabs from "./components/Tabs/Tabs";
 import CreateToast from "./components/Toast/CreateToast";
 import ToastProvider from "./components/Toast/ToastProvider";
+import MenuBar from './components/MenuBar'
 
 function App() {
   const darkModeRef = React.createRef();
+  const menuBarRef = React.createRef();
+  const menuItemsRef = React.createRef();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isModalVisible, setIsModalVisible] = React.useState(false);
+  
 
   const toggle = () => setIsOpen(true);
 
   return (
     <React.Fragment>
-      <TopBar darkModeRef={darkModeRef} />
+      <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef}/>
+      <MenuBar menuBarRef={menuBarRef} darkModeRef={darkModeRef} menuItemsRef={menuItemsRef} /> 
       {/*<Login />
       <Register />
       <Blog />

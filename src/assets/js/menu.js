@@ -9,6 +9,7 @@ export const toggleMenu = (menuBar) => {
     }
 };
 
+
 export const showOverlay = (workspace) => {
     if (document.querySelector(".overlay")) return;
 
