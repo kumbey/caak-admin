@@ -3,10 +3,10 @@ import { useTheme } from "../context/ThemeContext"
 
 const Container = ({children, ...props}) => {
 
-    const {theme, menu} = useTheme()
+    const {theme, menuStyle} = useTheme()
 
     return(
-        <div {...props} className={theme +" "+ menu}>
+        <div {...props} className={`${theme} ${menuStyle}`}>
             {children}
         </div>
     )

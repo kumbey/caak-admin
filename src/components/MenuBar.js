@@ -1,4 +1,4 @@
-import React from "react";
+import {useEffect} from "react";
 import {
   hideMenuDetail,
   hideOverlay,
@@ -9,25 +9,22 @@ import { useTheme } from "../context/ThemeContext";
 
 export default function MenuBar({ menuBarRef, menuItemsRef }) {
 
-  const {menu} = useTheme()
+  const {menuStyle , menu ,setMenu} = useTheme()
 
-  const mType = "menu-icons-only";
-
-  // const menuType = localStorage.getItem("menuType");
-  React.useEffect(() => {
+  useEffect(() => {
     showActivePage();
-    if (mType) {
-      document.documentElement.classList.add(mType);
-    }
-    document.addEventListener("click", (event) => {
-      if (
-        !event.target.closest(".menu-items a") &&
-        !event.target.closest(".menu-detail") &&
-        !menuBarRef.current.classList.contains("menu-wide")
-      ) {
-        hideMenuDetail(menuBarRef);
-      }
-    });
+    // if (iconOnly) {
+    //   document.documentElement.classList.add(iconOnly);
+    // }
+    // document.addEventListener("click", (event) => {
+    //   if (
+    //     !event.target.closest(".menu-items a") &&
+    //     !event.target.closest(".menu-detail") &&
+    //     !menuBarRef.current.classList.contains("menu-wide")
+    //   ) {
+    //     hideMenuDetail(menuBarRef);
+    //   }
+    // });
   }, [menuBarRef]);
 
   const subMenuOpen = (e) => {
@@ -55,7 +52,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
   return (
     <aside
       ref={menuBarRef}
-      className={`menu-bar menu-sticky ${menu} ${mType ? mType : ""}`}
+      className={`menu-bar menu-sticky ${menuStyle}`}
     >
       <div
         ref={menuItemsRef}
@@ -406,7 +403,13 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
           </div>
           <hr />
           <h6 className="uppercase">Menu Types</h6>
-          <a href="#no-link" data-toggle="menu-type" data-value="default">
+          <a href="#no-link" data-toggle="menu-type" data-value="default" 
+              onClick={() => setMenu({
+                hidden: false,
+                icons: false,
+                wide: false
+              })}
+          >
             <span className="la la-hand-point-right" />
             Default
           </a>
@@ -414,7 +417,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
             <span className="la la-hand-point-left" />
             Hidden
           </a>
-          <a href="#no-link" data-toggle="menu-type" data-value="icon-only">
+          <a href="#no-link" data-toggle="menu-type" data-value="icon-only" onClick={() => setMenu({...menu, icons: true})}>
             <span className="la la-th-large" />
             Icons Only
           </a>

@@ -14,11 +14,36 @@ const useTheme = () => {
 function ThemeProvider(props) {
 
     const [theme, setTheme] = useState(localStorage.getItem("scheme") ? localStorage.getItem("scheme") : "light")
-    const [menu, setMenu] = useState("")
+    const [menu, setMenu] = useState(localStorage.getItem("menuType") ? JSON.parse(localStorage.getItem("menuType")) : {
+        hidden: false,
+        icons: false,
+        wide: false
+    })
+    const [menuStyle, setMenuStyle] = useState("")
 
     useEffect(() => {
         localStorage.setItem("scheme", theme);
     },[theme])
+
+    useEffect(() => {
+        let style = ""
+
+        if(menu.hidden){
+            style += "menu-hidden "
+        }
+
+        if(menu.icons){
+            style += "menu-icon-only "
+        }
+
+        if(menu.wide){
+            style += "menu-wide "
+        }
+
+        setMenuStyle(style)
+        localStorage.setItem("menuType", JSON.stringify(menu))
+
+    },[menu])
 
     const changeTheme = () => {
         if(theme === "dark"){
@@ -29,15 +54,19 @@ function ThemeProvider(props) {
     }
 
     const toggleMenu = () =>{
-        if(menu === "menu-hidden"){
-            setMenu("")
-        }else{
-            setMenu("menu-hidden")
-        }
+        setMenu({...menu, hidden: !menu.hidden})
     }
     
     // eslint-disable-next-line 
-    const value = useMemo(() => ({ theme, setTheme, changeTheme, menu, setMenu, toggleMenu}), [theme, menu])
+    const value = useMemo(() => ({ 
+        theme, 
+        setTheme, 
+        changeTheme, 
+        menu, 
+        setMenu, 
+        toggleMenu,
+        menuStyle
+    }), [theme, menu, menuStyle])
     return <ThemeContext.Provider value={value} {...props} />
 }
 
