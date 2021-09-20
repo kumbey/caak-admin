@@ -36,6 +36,7 @@ import Collapse from "./components/Collapse";
 import Layout from "./components/Layout";
 import Accordion from "./components/Accordion";
 import Modal from "./components/Modal";
+import Tabs from "./components/Tabs/Tabs";
 import CreateToast from "./components/Toast/CreateToast";
 import ToastProvider from "./components/Toast/ToastProvider";
 import Tabs from "./components/Tabs";
@@ -87,7 +88,9 @@ function App() {
       <CheckBox checked />
       <Collapse open closeCollapse={isOpen} setIsOpen={setIsOpen} />
       <Collapse closeCollapse={isOpen} setIsOpen={setIsOpen} />
-      <Button skin={"primary"} onClick={toggle} uppercase>Close all collapses</Button>
+      <Button skin={"primary"} onClick={toggle} uppercase>
+        Close all collapses
+      </Button>
       <DropDown
         split
         uppercase
@@ -182,6 +185,10 @@ function App() {
       <ToastProvider>
         <CreateToast content="Toast Content is here" />
       </ToastProvider>*/}
+      <ToastProvider title="asdsd">
+        <CreateToast content="Toast Content" />
+      </ToastProvider>
+      <Tabs />
     </React.Fragment>
   );
 }
