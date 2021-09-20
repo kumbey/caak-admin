@@ -1,25 +1,19 @@
 import React from "react";
 import fullScreen from "../assets/js/full_screen";
-import toggleDarkMode from "../assets/js/dark_mode";
-import { toggleMenu } from "../assets/js/menu";
 import Tippy from "@tippyjs/react";
+import { useTheme } from "../context/ThemeContext";
 
-export default function TopBar({ darkModeRef, menuBarRef }) {
-  const scheme = localStorage.getItem("scheme");
+export default function TopBar() {
 
-  React.useEffect(() => {
-    scheme && document.documentElement.classList.add(scheme);
-    if (scheme === "dark") {
-      darkModeRef.current.checked = "checked";
-    }
-  }, [darkModeRef, scheme]);
+  const {theme, changeTheme, menu, toggleMenu} = useTheme()
+
   return (
     <header className="top-bar">
       <button
         type="button"
-        className="menu-toggler la la-bars"
+        className={`menu-toggler la la-bars ${menu}`}
         data-toggle="menu"
-        onClick={() => toggleMenu(menuBarRef)}
+        onClick={() => toggleMenu()}
       />
 
       <span className="brand">Yeti</span>
@@ -50,8 +44,9 @@ export default function TopBar({ darkModeRef, menuBarRef }) {
           <label className="switch switch_outlined">
             <input
               id="darkModeToggler"
-              ref={darkModeRef}
-              onClick={() => toggleDarkMode(darkModeRef)}
+              checked={(theme === "dark") ? true : false}
+              readOnly
+              onClick={() => changeTheme()}
               type="checkbox"
             />
             <span />

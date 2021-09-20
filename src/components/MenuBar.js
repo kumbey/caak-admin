@@ -5,9 +5,14 @@ import {
   showActivePage,
   showOverlay,
 } from "../assets/js/menu";
+import { useTheme } from "../context/ThemeContext";
 
 export default function MenuBar({ menuBarRef, menuItemsRef }) {
+
+  const {menu} = useTheme()
+
   const mType = "menu-icons-only";
+
   // const menuType = localStorage.getItem("menuType");
   React.useEffect(() => {
     showActivePage();
@@ -50,7 +55,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
   return (
     <aside
       ref={menuBarRef}
-      className={`menu-bar menu-sticky menu-hidden ${mType ? mType : ""}`}
+      className={`menu-bar menu-sticky ${menu} ${mType ? mType : ""}`}
     >
       <div
         ref={menuItemsRef}

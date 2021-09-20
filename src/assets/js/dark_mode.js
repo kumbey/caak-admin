@@ -1,15 +1,15 @@
 const toggleDarkMode = () => {
     const enableDarkMode = () => {
-        document.documentElement.classList.remove("light");
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("scheme", "dark");
+        // document.documentElement.classList.remove("light");
+        // document.documentElement.classList.add("dark");
+        // localStorage.setItem("scheme", "dark");
     };
 
 // Disable Dark Mode
     const disableDarkMode = () => {
-        document.documentElement.classList.remove("dark");
-        document.documentElement.classList.add("light");
-        localStorage.removeItem("scheme");
+        // document.documentElement.classList.remove("dark");
+        // document.documentElement.classList.add("light");
+        // localStorage.removeItem("scheme");
     };
 
 // Check Dark Mode

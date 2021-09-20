@@ -1,4 +1,4 @@
-export default function Button(props) {
+export default function Button({icon, type, className, large, outlined, children, uppercase, ...props}) {
     if (props.icon) {
         return (
             <button
@@ -9,7 +9,8 @@ export default function Button(props) {
                 ${props.icon ? "btn-icon" : ""}
                 ${props.large ? "btn-icon_large" : ""}
                 ${props.outlined ? "btn_outlined" : ""} 
-            `}
+                `}
+                {...props}
             >
                 <span className={`${props.icon}`} />
             </button>
@@ -26,7 +27,7 @@ export default function Button(props) {
                 ${props.outlined ? "btn_outlined" : ""} 
             `}
         >
-            {props.children}
+            {children}
         </button>
     );
 }
