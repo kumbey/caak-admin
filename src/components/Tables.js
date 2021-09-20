@@ -1,6 +1,6 @@
 export default function Tables(props) {
     return (
-        <table className={`table table_${props.styles} ${props.fullWidth ? "w-full" : ""}`}>
+        <table className={`table table_${props.styles} ${props.fullWidth ? "w-full" : ""} mt-20`}>
                         <thead>
                             <tr>
                                 <th className="text-left uppercase">#</th>

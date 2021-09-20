@@ -38,6 +38,7 @@ import Accordion from "./components/Accordion";
 import Modal from "./components/Modal";
 import CreateToast from "./components/Toast/CreateToast";
 import ToastProvider from "./components/Toast/ToastProvider";
+import Tabs from "./components/Tabs";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -49,7 +50,7 @@ function App() {
   return (
     <React.Fragment>
       <TopBar darkModeRef={darkModeRef} />
-      <Login />
+      {/*<Login />
       <Register />
       <Blog />
       <Accordion />
@@ -178,9 +179,9 @@ function App() {
           onClose={() => setIsModalVisible(false)}
         />
       </div>
-      <ToastProvider title="asdsd">
-        <CreateToast content="Toast Content" />
-      </ToastProvider>
+      <ToastProvider>
+        <CreateToast content="Toast Content is here" />
+      </ToastProvider>*/}
     </React.Fragment>
   );
 }

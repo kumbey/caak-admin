@@ -1,6 +1,6 @@
 import React from "react"
 
-const Tabs = () => {
+export default function Tabs  ()  {
     React.useEffect(() => {
         
     })
@@ -53,5 +53,3 @@ const Tabs = () => {
         </div>
     )
 }
-
-export default Tabs
