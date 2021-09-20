@@ -39,7 +39,6 @@ import Modal from "./components/Modal";
 import Tabs from "./components/Tabs/Tabs";
 import CreateToast from "./components/Toast/CreateToast";
 import ToastProvider from "./components/Toast/ToastProvider";
-import Tabs from "./components/Tabs";
 
 function App() {
   const darkModeRef = React.createRef();
@@ -184,11 +183,11 @@ function App() {
       </div>
       <ToastProvider>
         <CreateToast content="Toast Content is here" />
-      </ToastProvider>*/}
+      </ToastProvider>
       <ToastProvider title="asdsd">
         <CreateToast content="Toast Content" />
       </ToastProvider>
-      <Tabs />
+      <Tabs />*/}
     </React.Fragment>
   );
 }
