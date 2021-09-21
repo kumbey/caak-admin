@@ -1,73 +1,80 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-const ThemeContext = createContext()
+const ThemeContext = createContext();
 
 const useTheme = () => {
-    const context = useContext(ThemeContext)
-    if(!context){
-        throw new Error(`useTheme must be used within a ThemeProvider`)
-    }
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error(`useTheme must be used within a ThemeProvider`);
+  }
 
-    return context
-}
+  return context;
+};
 
 function ThemeProvider(props) {
-
-    const [theme, setTheme] = useState(localStorage.getItem("scheme") ? localStorage.getItem("scheme") : "light")
-    const [menu, setMenu] = useState(localStorage.getItem("menuType") ? JSON.parse(localStorage.getItem("menuType")) : {
-        hidden: false,
-        icons: false,
-        wide: false
-    })
-    const [menuStyle, setMenuStyle] = useState("")
-
-    useEffect(() => {
-        localStorage.setItem("scheme", theme);
-    },[theme])
-
-    useEffect(() => {
-        let style = ""
-
-        if(menu.hidden){
-            style += "menu-hidden "
+  const [theme, setTheme] = useState(
+    localStorage.getItem("scheme") ? localStorage.getItem("scheme") : "light"
+  );
+  const [menu, setMenu] = useState(
+    localStorage.getItem("menuType")
+      ? JSON.parse(localStorage.getItem("menuType"))
+      : {
+          hidden: false,
+          icons: false,
+          wide: false,
         }
+  );
+  const [menuStyle, setMenuStyle] = useState("");
 
-        if(menu.icons){
-            style += "menu-icon-only "
-        }
+  useEffect(() => {
+    localStorage.setItem("scheme", theme);
+  }, [theme]);
 
-        if(menu.wide){
-            style += "menu-wide "
-        }
+  useEffect(() => {
+    let style = "";
 
-        setMenuStyle(style)
-        localStorage.setItem("menuType", JSON.stringify(menu))
-
-    },[menu])
-
-    const changeTheme = () => {
-        if(theme === "dark"){
-            setTheme("light")
-        }else{
-            setTheme("dark")
-        }
+    if (menu.hidden) {
+      style += "menu-hidden ";
     }
 
-    const toggleMenu = () =>{
-        setMenu({...menu, hidden: !menu.hidden})
+    if (menu.icons) {
+      style += "menu-icon-only ";
     }
-    
-    // eslint-disable-next-line 
-    const value = useMemo(() => ({ 
-        theme, 
-        setTheme, 
-        changeTheme, 
-        menu, 
-        setMenu, 
-        toggleMenu,
-        menuStyle
-    }), [theme, menu, menuStyle])
-    return <ThemeContext.Provider value={value} {...props} />
+
+    if (menu.wide) {
+      style += "menu-wide ";
+    }
+
+    setMenuStyle(style);
+    localStorage.setItem("menuType", JSON.stringify(menu));
+  }, [menu]);
+
+  const changeTheme = () => {
+    if (theme === "dark") {
+      setTheme("light");
+    } else {
+      setTheme("dark");
+    }
+  };
+
+  const toggleMenu = () => {
+    setMenu({ ...menu, hidden: !menu.hidden });
+  };
+
+  const value = useMemo(
+    () => ({
+      theme,
+      setTheme,
+      changeTheme,
+      menu,
+      setMenu,
+      toggleMenu,
+      menuStyle,
+    }),
+    // eslint-disable-next-line
+    [theme, menu, menuStyle]
+  );
+  return <ThemeContext.Provider value={value} {...props} />;
 }
 
-export {ThemeProvider, useTheme}
+export { ThemeProvider, useTheme };

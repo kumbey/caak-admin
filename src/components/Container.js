@@ -1,15 +1,17 @@
-import { useTheme } from "../context/ThemeContext"
+import { useTheme } from "../context/ThemeContext";
 
+const Container = ({ children, ...props }) => {
+  const { theme, menuStyle } = useTheme();
 
-const Container = ({children, ...props}) => {
+  return (
+    <div
+      {...props}
+      className={`${theme} ${menuStyle}`}
+      style={{ display: "flex" }}
+    >
+      {children}
+    </div>
+  );
+};
 
-    const {theme, menuStyle} = useTheme()
-
-    return(
-        <div {...props} className={`${theme} ${menuStyle}`}>
-            {children}
-        </div>
-    )
-}
-
-export default Container
+export default Container;

@@ -59,7 +59,7 @@ const Tabs = ({ ...props }) => {
                     toggleCollapse={toggleCollapse}
                     collapseRef={collapseRef}
                     activeIndex={activeIndex}
-                    onClick={setActiveIndex}
+                    onClick={() => setActiveIndex(index)}
                     key={index}
                     index={index}
                     label={item.label}

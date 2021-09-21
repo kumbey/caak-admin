@@ -1,8 +1,8 @@
-import React from "react";
+import { createRef } from "react";
 import animateCSS from "../assets/js/animateCSS";
 
 const Alerts = (props) => {
-  const alertRef = React.createRef();
+  const alertRef = createRef();
   const closeAlert = (alert) => {
     alert.style.overflowY = "hidden";
     alert.style.height = alert.offsetHeight + "px";

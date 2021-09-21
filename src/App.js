@@ -1,4 +1,4 @@
-import React from "react";
+import { createRef, useState } from "react";
 import TopBar from "./components/TopBar";
 // import Avatar from "./components/Avatar";
 // import Badges from "./components/Badges";
@@ -36,30 +36,41 @@ import TopBar from "./components/TopBar";
 // import Layout from "./components/Layout";
 // import Accordion from "./components/Accordion";
 // import Modal from "./components/Modal";
-// import Tabs from "./components/Tabs/Tabs";
-// import CreateToast from "./components/Toast/CreateToast";
-// import ToastProvider from "./components/Toast/ToastProvider";
-import MenuBar from './components/MenuBar'
+import Tabs from "./components/Tabs/Tabs";
+import CreateToast from "./components/Toast/CreateToast";
+import ToastProvider from "./components/Toast/ToastProvider";
+import MenuBar from "./components/MenuBar";
 import { ThemeProvider } from "./context/ThemeContext";
 import Container from "./components/Container";
 
 function App() {
-  const darkModeRef = React.createRef();
-  const menuBarRef = React.createRef();
-  const menuItemsRef = React.createRef();
-  const [isOpen, setIsOpen] = React.useState(false);
+  const darkModeRef = createRef();
+  const menuBarRef = createRef();
+  const menuItemsRef = createRef();
+  const [isOpen, setIsOpen] = useState(false);
   // const [isModalVisible, setIsModalVisible] = React.useState(false);
-  
 
   const toggle = () => setIsOpen(true);
 
   return (
-    <ThemeProvider>
-      <Container>
-        <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef}/>
-        <MenuBar menuBarRef={menuBarRef} darkModeRef={darkModeRef} menuItemsRef={menuItemsRef} /> 
-      </Container>
-    </ThemeProvider>
+    <>
+      <ThemeProvider>
+        <Container>
+          <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef} />
+          <MenuBar
+            menuBarRef={menuBarRef}
+            darkModeRef={darkModeRef}
+            menuItemsRef={menuItemsRef}
+          />
+          <main className="workspace">
+            <Tabs />
+            <ToastProvider>
+              <CreateToast />
+            </ToastProvider>
+          </main>
+        </Container>
+      </ThemeProvider>
+    </>
   );
 }
 
