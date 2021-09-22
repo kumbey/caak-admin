@@ -45,7 +45,6 @@ export const showActivePage = () => {
   const pageLinkSelector = ".menu-bar a";
 
   const pageLinks = document.querySelectorAll(pageLinkSelector);
-  console.log("----", pageLinks);
 
   if (!pageLinks) return;
 

@@ -12,7 +12,6 @@ const Label = ({
     <button
       ref={ref}
       onClick={() => {
-        console.log(props.index);
         props.onClick(props.index);
         activeIndex !== props.index && toggleCollapse(collapseRef.current);
       }}

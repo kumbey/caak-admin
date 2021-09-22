@@ -1,4 +1,4 @@
-import { createRef, useState } from "react";
+import { createRef, useState, useEffect } from "react";
 import TopBar from "./components/TopBar";
 // import Avatar from "./components/Avatar";
 // import Badges from "./components/Badges";
@@ -47,10 +47,13 @@ function App() {
   const darkModeRef = createRef();
   const menuBarRef = createRef();
   const menuItemsRef = createRef();
-  const [isOpen, setIsOpen] = useState(false);
-  // const [isModalVisible, setIsModalVisible] = React.useState(false);
 
-  const toggle = () => setIsOpen(true);
+  const [overlay, setOverlay] = useState(false);
+  const [overlayStyle, setOverlayStyle] = useState("");
+
+  useEffect(() => {
+    overlay ? setOverlayStyle("overlay active") : setOverlayStyle("");
+  }, [overlay]);
 
   return (
     <>
@@ -58,11 +61,15 @@ function App() {
         <Container>
           <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef} />
           <MenuBar
+            overlay={overlay}
+            setOverlay={setOverlay}
+            overlayStyle={overlayStyle}
+            setOverlayStyle={setOverlayStyle}
             menuBarRef={menuBarRef}
             darkModeRef={darkModeRef}
             menuItemsRef={menuItemsRef}
           />
-          <main className="workspace">
+          <main className={`workspace ${overlayStyle}`}>
             <Tabs />
             <ToastProvider>
               <CreateToast />
