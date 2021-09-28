@@ -48,21 +48,21 @@ const Carousel = ({ show }) => {
       setCurrentIndex((prevState) => prevState - 1);
     }
   };
-  const handleDot = (i) => {
+  const handleDotClick = (i) => {
     setCurrentIndex(i);
   };
 
   let bullets = [];
 
   for (let i = 0; i <= len - show; i++) {
-    bullets.push(<Dots key={i} onClick={() => handleDot(i)} />);
+    bullets.push(<Dots key={i} onClick={() => handleDotClick(i)} />);
   }
 
   bullets[currentIndex] = (
     <Dots
       key={currentIndex}
       filled="rgba(20, 83, 136)"
-      onClick={() => handleDot(currentIndex)}
+      onClick={() => handleDotClick(currentIndex)}
     />
   );
 
@@ -76,13 +76,13 @@ const Carousel = ({ show }) => {
           onTouchMove={handleTouchMove}
         >
           <div
-            className={`carousel-content show-${show}`}
+            className={"carousel-content"}
             style={{
               transform: `translateX(-${currentIndex * (100 / show)}%)`,
             }}
           >
             {datas.map((data, i) => {
-              return <SlideItem key={data.id} data={data} />;
+              return <SlideItem key={data.id} data={data} show={show} />;
             })}
           </div>
           {currentIndex < datas.length - show && (

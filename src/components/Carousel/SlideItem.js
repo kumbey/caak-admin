@@ -1,8 +1,8 @@
 import React from "react";
 
-const SlideItem = ({ data }) => {
+const SlideItem = ({ data, show }) => {
   return (
-    <div className="glide__slide">
+    <div className="glide__slide" style={{ width: `calc(100% / ${show})` }}>
       <div className="border border-gray-300 dark:border-gray-900 rounded-lg px-4 py-8 text-center">
         <span
           className={`text-primary text-5xl leading-none ${data.icon}`}
