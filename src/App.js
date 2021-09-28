@@ -42,6 +42,7 @@ import ToastProvider from "./components/Toast/ToastProvider";
 import MenuBar from "./components/MenuBar";
 import { ThemeProvider } from "./context/ThemeContext";
 import Container from "./components/Container";
+import Carousel from "./components/Carousel/Carousel";
 
 function App() {
   const darkModeRef = createRef();
@@ -74,6 +75,7 @@ function App() {
             <ToastProvider>
               <CreateToast />
             </ToastProvider>
+            <Carousel show="4" />
           </main>
         </Container>
       </ThemeProvider>
