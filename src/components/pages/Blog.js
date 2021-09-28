@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Header from "../Header";
 import Pagination from "../partials/Pagination";
 import BlogRow from "../BlogRow";
@@ -6,7 +6,7 @@ import BlogCardList from "../BlogCardList";
 import BlogColumn from "../BlogColumn";
 
 const Blog = () => {
-  const [viewSortType, setViewSortType] = React.useState("list");
+  const [viewSortType, setViewSortType] = useState("list");
   const viewSort = () => {
     if (viewSortType === "list") {
       return <BlogCardList />;

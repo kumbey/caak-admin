@@ -1,9 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
 
 const Login = () => {
-  const [user, setUser] = React.useState({
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
@@ -59,10 +59,10 @@ const Login = () => {
               Forgot Password?
             </a>
             <Button
-                className={"ml-auto"}
-                uppercase
-                type={"submit"}
-                skin={"primary"}
+              className={"ml-auto"}
+              uppercase
+              type={"submit"}
+              skin={"primary"}
             >
               Login
             </Button>

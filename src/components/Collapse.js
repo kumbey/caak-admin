@@ -1,14 +1,14 @@
-import React from "react";
+import { useState, createRef, useEffect } from "react";
 
 const Collapse = (props) => {
-  const collapseRef = React.createRef();
-  const [isOpen, setIsOpen] = React.useState();
-  React.useEffect(() => {
+  const collapseRef = createRef();
+  const [isOpen, setIsOpen] = useState();
+  useEffect(() => {
     if (props.open) {
       setIsOpen(true);
     }
   }, [props.open]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.closeCollapse === true) {
       isOpen ? closeCollapse(collapseRef.current) : setIsOpen(false);
       props.setIsOpen(false);

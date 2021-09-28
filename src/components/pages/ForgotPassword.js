@@ -1,7 +1,7 @@
-import React from "react";
+import { useState } from "react";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = React.useState();
+  const [email, setEmail] = useState();
   const handleChange = (e) => {
     const { value } = e.target.value;
     setEmail(value);

@@ -1,8 +1,8 @@
-import React from "react";
+import { useEffect } from "react";
 import { hideOverlay, showOverlay } from "../assets/js/menu";
 
 export default function Modal(props) {
-  React.useEffect(() => {
+  useEffect(() => {
     props.show ? showOverlay(true) : hideOverlay();
   }, [props.show]);
 
@@ -19,9 +19,9 @@ export default function Modal(props) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className={`modal-dialog modal-dialog${
-          props.type ? "_" : ""
-        }${props.type} max-w-2xl`}
+        className={`modal-dialog modal-dialog${props.type ? "_" : ""}${
+          props.type
+        } max-w-2xl`}
       >
         <div className="modal-content">
           <div className="modal-header">
@@ -33,9 +33,7 @@ export default function Modal(props) {
               data-dismiss="modal"
             />
           </div>
-          <div className="modal-body">
-            {props.content}
-          </div>
+          <div className="modal-body">{props.content}</div>
           <div className="modal-footer">
             <div className="flex ml-auto">
               <button

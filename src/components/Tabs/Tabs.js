@@ -1,10 +1,10 @@
-import React, { useState, createRef } from "react";
+import { useState, createRef } from "react";
 import data from "./data";
 import Label from "./Label";
 
 const Tabs = ({ ...props }) => {
   const collapseRef = createRef();
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = useState(true);
 
   const [activeIndex, setActiveIndex] = useState(0);
 

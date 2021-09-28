@@ -1,9 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
 
 const Register = () => {
-  const [user, setUser] = React.useState({
+  const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",

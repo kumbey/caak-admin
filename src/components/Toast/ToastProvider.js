@@ -1,7 +1,7 @@
-import React, { useState, useContext, useCallback } from "react";
+import { useState, useContext, useCallback, createContext } from "react";
 import ToastContainer from "./ToastContainer";
 
-const ToastContext = React.createContext(null);
+const ToastContext = createContext(null);
 
 const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
