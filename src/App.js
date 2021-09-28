@@ -75,7 +75,7 @@ function App() {
             <ToastProvider>
               <CreateToast />
             </ToastProvider>
-            <Carousel show="3" />
+            <Carousel show="4" margin={10} />
           </main>
         </Container>
       </ThemeProvider>

@@ -6,7 +6,7 @@ import SlideItem from "./SlideItem";
 
 import "./style.css";
 
-const Carousel = ({ show }) => {
+const Carousel = ({ show, margin }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [touchPosition, setTouchPosition] = useState(null);
 
@@ -78,11 +78,18 @@ const Carousel = ({ show }) => {
           <div
             className={"carousel-content"}
             style={{
-              transform: `translateX(-${currentIndex * (100 / show)}%)`,
+              transform: `translateX(calc(-${currentIndex * (100 / show)}%))`,
             }}
           >
             {datas.map((data, i) => {
-              return <SlideItem key={data.id} data={data} show={show} />;
+              return (
+                <SlideItem
+                  key={data.id}
+                  data={data}
+                  show={show}
+                  margin={margin}
+                />
+              );
             })}
           </div>
           {currentIndex < datas.length - show && (
@@ -91,7 +98,9 @@ const Carousel = ({ show }) => {
           {currentIndex > 0 && (
             <Arrow direction="left" handleClick={prevSlide} />
           )}
-          <div style={{ textAlign: "center" }}>{bullets}</div>
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
+            {bullets}
+          </div>
         </div>
       </div>
     </div>
