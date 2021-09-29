@@ -43,7 +43,7 @@ import MenuBar from "./components/MenuBar";
 import { ThemeProvider } from "./context/ThemeContext";
 import Container from "./components/Container";
 import Carousel from "./components/Carousel/Carousel";
-import Login from "./components/pages/Login"
+import Login from "./components/pages/Login";
 
 function App() {
   const darkModeRef = createRef();
@@ -71,7 +71,7 @@ function App() {
             darkModeRef={darkModeRef}
             menuItemsRef={menuItemsRef}
           /> */}
-          <Login/>
+          <Login />
           {/* <main className={`workspace ${overlayStyle}`}>
             <Tabs />
             <ToastProvider>

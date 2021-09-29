@@ -1,0 +1,22 @@
+.Sortable {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.item {
+  max-width: 200px;
+  margin: 10px auto;
+  padding: 20px;
+  border-radius: 10px;
+  font-weight: bold;
+  background-color: black;
+  color: white;
+}
+
+.item:hover {
+  background-color: darkslategrey;
+}
+
+.item:active {
+  background-color: lightslategray;
+}
