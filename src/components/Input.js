@@ -1,13 +1,11 @@
-export default function Input(props) {
+export default function Input({title, ...props}) {
   return (
     <div>
       <label className="label block" htmlFor="input">
         {props.title}
       </label>
       <input
-        type={props.type || "text"}
-        className={`form-control ${props.invalid ? "is-invalid" : ""}`}
-        placeholder={props.placeholder}
+        {...props}
       />
       <small className="block">{props.helpText}</small>
       </div>

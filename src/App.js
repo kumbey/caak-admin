@@ -43,6 +43,7 @@ import MenuBar from "./components/MenuBar";
 import { ThemeProvider } from "./context/ThemeContext";
 import Container from "./components/Container";
 import Carousel from "./components/Carousel/Carousel";
+import Login from "./components/pages/Login"
 
 function App() {
   const darkModeRef = createRef();
@@ -60,8 +61,8 @@ function App() {
     <>
       <ThemeProvider>
         <Container>
-          <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef} />
-          <MenuBar
+          {/* <TopBar darkModeRef={darkModeRef} menuBarRef={menuBarRef} /> */}
+          {/* <MenuBar
             overlay={overlay}
             setOverlay={setOverlay}
             overlayStyle={overlayStyle}
@@ -69,14 +70,15 @@ function App() {
             menuBarRef={menuBarRef}
             darkModeRef={darkModeRef}
             menuItemsRef={menuItemsRef}
-          />
-          <main className={`workspace ${overlayStyle}`}>
+          /> */}
+          <Login/>
+          {/* <main className={`workspace ${overlayStyle}`}>
             <Tabs />
             <ToastProvider>
               <CreateToast />
             </ToastProvider>
             <Carousel show="4" margin={10} />
-          </main>
+          </main> */}
         </Container>
       </ThemeProvider>
     </>

@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "UserPostTotals:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

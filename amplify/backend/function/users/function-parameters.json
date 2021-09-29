@@ -1,0 +1,52 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "caakmn248efac3": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "caakmn": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "storage": {
+      "File:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "User:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Username:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Aura:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "FollowedUsers:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

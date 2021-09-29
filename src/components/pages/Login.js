@@ -1,19 +1,48 @@
-import { useState } from "react";
+import API from "@aws-amplify/api";
+import Auth from "@aws-amplify/auth";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
+import { useEffect, useState } from "react";
 import Button from "../Button";
 import Input from "../Input";
+import { getUser } from "../../graphql-custom/user/queries";
 
 const Login = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setUser({
-      ...user,
-      [id]: value,
-    });
-  };
+  
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  const doSignIn = async () => {
+      try{
+        let resp = await Auth.signIn(username, password)
+        console.log(resp)
+      }catch(ex){
+        console.log(ex)
+      }
+  }
+
+  async function printUser(){
+    const user =  await Auth.currentAuthenticatedUser();
+    const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
+
+    if(groups.includes('caak-admin')){
+      console.log(user.attributes.sub)
+      try{
+        let resp = await API.graphql(graphqlOperation(getUser, {id : user.attributes.sub}))
+        console.log(resp)
+      }catch(ex){
+        console.log(ex)
+      }
+
+    }else{
+      console.log("NORMAL USER")
+    }
+  }
+
+  useEffect(() => {
+    printUser()
+  },[])
+
+
   return (
     <div className="container flex h-screen items-center justify-center py-10 pt-20">
       <div className="w-full md:w-1/2 xl:w-1/3">
@@ -29,8 +58,9 @@ const Login = () => {
             <Input
               type="text"
               placeholder="example@example.com"
-              value={user.email}
-              onChange={handleChange}
+              value={username}
+              id="email"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="mb-5">
@@ -42,8 +72,8 @@ const Login = () => {
                 id="password"
                 type="password"
                 className="form-control border-none"
-                value={user.password}
-                onChange={handleChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <span className="flex items-center pr-4">
                 <button
@@ -63,6 +93,7 @@ const Login = () => {
               uppercase
               type={"submit"}
               skin={"primary"}
+              onClick={doSignIn}
             >
               Login
             </Button>
