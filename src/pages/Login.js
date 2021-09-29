@@ -1,36 +1,72 @@
+import API from "@aws-amplify/api";
+import Auth from "@aws-amplify/auth";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { useState } from "react";
-import Button from "../Button";
-import Input from "../Input";
+import Button from "../components/Button";
+import { getUser } from "../graphql-custom/user/queries";
+import Input from "../components/Input";
+import {useUser} from "../context/userContext";
+import {signIn} from "../utility/Authenty";
+import {useHistory} from "react-router-dom";
 
 const Login = () => {
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setUser({
-      ...user,
-      [id]: value,
-    });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const history = useHistory()
+const { setUser} = useUser();
+  const doSignIn = async () => {
+    try {
+      let resp = await Auth.signIn(username, password);
+      await signIn(setUser)
+      history.replace('/')
+      console.log(resp);
+    } catch (ex) {
+      console.log(ex);
+    }
   };
+
+  async function printUser() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      const groups =
+        user.signInUserSession.accessToken.payload["cognito:groups"];
+
+      if (groups.includes("caak-admin")) {
+        console.log(user.attributes.sub);
+        let resp = await API.graphql(
+          graphqlOperation(getUser, { id: user.attributes.sub })
+        );
+        console.log(resp);
+      } else {
+        console.log("NORMAL USER");
+      }
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
   return (
     <div className="container flex h-screen items-center justify-center py-10 pt-20">
       <div className="w-full md:w-1/2 xl:w-1/3">
         <div className="mx-5 md:mx-10">
-          <h2 className="uppercase">It’s Great To See You!</h2>
+          <h2 className="uppercase">ajks dshaj!</h2>
           <h4 className="uppercase">Login Here</h4>
         </div>
-        <form className="card mt-5 p-5 md:p-10" action="index.html">
-          <div className="mb-5">
-            <label className="label block mb-2" htmlFor="email">
+        <form
+          className="card mt-5 p-5 md:p-10"
+          onSubmit={(e) => e.preventDefault()}
+        >
+          <div className=" mb-5">
+            <label className=" label block mb-2" htmlFor=" email">
               Email
             </label>
             <Input
-              type="text"
-              placeholder="example@example.com"
-              value={user.email}
-              onChange={handleChange}
+              type=" text"
+              placeholder=" example
+                @example.com"
+              value={username}
+              id="email"
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
           <div className="mb-5">
@@ -42,8 +78,8 @@ const Login = () => {
                 id="password"
                 type="password"
                 className="form-control border-none"
-                value={user.password}
-                onChange={handleChange}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <span className="flex items-center pr-4">
                 <button
@@ -63,6 +99,7 @@ const Login = () => {
               uppercase
               type={"submit"}
               skin={"primary"}
+              onClick={doSignIn}
             >
               Login
             </Button>
