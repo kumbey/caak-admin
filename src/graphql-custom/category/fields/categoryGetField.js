@@ -1,8 +1,10 @@
 const categoriesGetField = /* GraphQL */ `
   {
     items {
-      id
+      updatedAt
+      createdAt
       icon
+      id
       name
     }
   }
