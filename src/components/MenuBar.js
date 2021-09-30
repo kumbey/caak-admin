@@ -3,21 +3,13 @@ import { showActivePage } from "../assets/js/menu";
 import { useTheme } from "../context/ThemeContext";
 import MenuData from "./MenuData";
 
-export default function MenuBar({ menuBarRef, menuItemsRef, setOverlay }) {
+export default function MenuBar({ menuBarRef, menuItemsRef }) {
   const { menuStyle, menu, setMenu } = useTheme();
   const [selectedMenu, setSelectedMenu] = useState("");
 
   useEffect(() => {
     showActivePage();
   }, [menuBarRef]);
-
-  useEffect(() => {
-    if (selectedMenu) {
-      setOverlay(true);
-    } else {
-      setOverlay(false);
-    } // eslint-disable-next-line
-  }, [selectedMenu]);
 
   const subMenuOpen = (e) => {
     setSelectedMenu(e);

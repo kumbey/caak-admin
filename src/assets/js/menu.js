@@ -1,18 +1,18 @@
-export const showOverlay = (workspace) => {
-  if (document.querySelector(".overlay")) return;
-
-  document.body.classList.add("overlay-show");
-
-  const overlay = document.createElement("div");
-  if (workspace) {
-    overlay.setAttribute("class", "overlay workspace");
-  } else {
-    overlay.setAttribute("class", "overlay");
-  }
-
-  document.body.appendChild(overlay);
-  overlay.classList.add("active");
-};
+// export const showOverlay = (workspace) => {
+//   if (document.querySelector(".overlay")) return;
+//
+//   document.body.classList.add("overlay-show");
+//
+//   const overlay = document.createElement("div");
+//   if (workspace) {
+//     overlay.setAttribute("class", "overlay workspace");
+//   } else {
+//     overlay.setAttribute("class", "overlay");
+//   }
+//
+//   document.body.appendChild(overlay);
+//   overlay.classList.add("active");
+// };
 
 // Hide
 export const hideOverlay = () => {

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { hideOverlay, showOverlay } from "../assets/js/menu";
+// import { hideOverlay, showOverlay } from "../assets/js/menu";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Modal({
   children,
@@ -11,10 +12,11 @@ export default function Modal({
   content,
   ...props
 }) {
+  const { setOverlay, overlay } = useTheme();
   useEffect(() => {
-    show ? showOverlay(true) : hideOverlay();
+    show ? setOverlay(true) : setOverlay(false);
   }, [show]);
-
+  console.log(`show: ${show}`)
   return (
     <div
       onClick={onClose}

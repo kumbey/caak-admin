@@ -1,21 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Tables from "../components/Tables";
 import { useTheme } from "../context/ThemeContext";
 import Modal from "../components/Modal";
+import Input from "../components/Input";
 
 const CreateCategory = () => {
-  const { setBackdrop, backdrop } = useTheme();
-  console.log(backdrop);
-  const [showModal, setShowModal] = useState(false);
 
-  const toggle = () => {
-    console.log("clicked");
-    setShowModal(!showModal);
-  };
+  const [isShowModal, setShowModal] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [iconName, setIconName] = useState("");
 
-  const handleChange = (e) => {
-    console.log("onchange ", e.target.value);
+  const toggleModal = () => {
+    setShowModal(!isShowModal);
   };
+  console.log(`modal: ${isShowModal}`)
   const onSubmit = (event) => {
     event.preventDefault(event);
     console.log(event.target.name.value);
@@ -32,17 +30,17 @@ const CreateCategory = () => {
               placeholder="Enter Category Name.."
               type="text"
             />
-            <button onClick={toggle}>
+            <button onClick={()=> toggleModal()}>
               <i className="las la-plus-circle text-4xl pl-2" />
             </button>
           </div>
         </div>
         <div className="mb-4">
           <Tables styles="striped" fullWidth="w-full"></Tables>
-          {showModal && (
+          {isShowModal && (
             <Modal
-              show={showModal}
-              title="Create Category"
+              show={isShowModal}
+              title="Шинэ категори үүсгэх"
               content="content"
               onClose={() => setShowModal(false)}
               type="static"
@@ -50,26 +48,16 @@ const CreateCategory = () => {
               <form onSubmit={onSubmit}>
                 <div className="mt-8 max-w-md">
                   <div className="grid grid-cols-1 gap-6">
-                    <label className="block">
-                      <span className="text-gray-700">Category name</span>
-                      <input
-                        id="name"
-                        type="text"
-                        className="mt-0 block w-full px-0.5 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-black"
-                        placeholder=""
-                        onChange={handleChange}
-                      />
-                    </label>
-
-                    <label className="block">
-                      <span className="text-gray-700">Icon name</span>
-                      <input
-                        id="icon"
-                        type="text"
-                        className="mt-0 block w-full px-0.5 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-black"
-                        placeholder=""
-                      />
-                    </label>
+                    <Input
+                      value={categoryName}
+                      onChange={(e) => setCategoryName(e.target.value)}
+                      label="Category Name"
+                    />
+                    <Input
+                      value={iconName}
+                      onChange={(e) => setIconName(e.target.value)}
+                      label="Category Icon Name"
+                    />
                   </div>
                 </div>
               </form>
