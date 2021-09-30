@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import Tables from "../components/Tables";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
 import Button from "../components/Button";
+import { getGroupList } from "../graphql-custom/group/queries";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
+import API from "@aws-amplify/api";
+import ConvertDateTime from "../components/ConvertDateTime";
 
 const CreateGroup = () => {
   const [isShowModal, setShowModal] = useState(false);
@@ -17,9 +21,16 @@ const CreateGroup = () => {
     event.preventDefault(event);
     console.log(groupName);
     console.log(iconName);
-    console.log("clicked");
   };
 
+  const [groups, setGroups] = useState([]);
+
+  useEffect(() => {
+    API.graphql(graphqlOperation(getGroupList)).then((group) => {
+      setGroups(group.data.listGroups.items);
+    });
+  }, []);
+  console.log("ARrr", groups);
   return (
     <div className="flex-col  h-screen w-screen flex  font-sans ">
       <div className=" p-6 m-4 w-full  lg:max-w-lg md:max-w-2xl">
@@ -32,7 +43,35 @@ const CreateGroup = () => {
           </div>
         </div>
         <div className="mb-4">
-          <Tables styles="striped" fullWidth="w-full"></Tables>
+          <Tables styles="striped" fullWidth="w-full">
+            {groups.map((group) => {
+              return (
+                <tr key={group.id}>
+                  <td>{group.name}</td>
+                  <td>{group.icon}</td>
+
+                  <td>
+                    <ConvertDateTime date={group.createdAt} />
+                  </td>
+                  <td>{`${
+                    group.createdAt !== group.updatedAt ? (
+                      <ConvertDateTime date={group.createdAt} />
+                    ) : (
+                      "Засвар ороогүй"
+                    )
+                  }`}</td>
+                  <td>
+                    <a href="#edit">
+                      <i className="las la-edit text-2xl "></i>
+                    </a>
+                    <a href="#del">
+                      <i className="las la-trash-alt text-2xl ml-4"></i>
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </Tables>
           <Modal
             show={isShowModal}
             title="Шинэ групп үүсгэх"
