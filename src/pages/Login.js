@@ -5,24 +5,29 @@ import { useState } from "react";
 import Button from "../components/Button";
 import { getUser } from "../graphql-custom/user/queries";
 import Input from "../components/Input";
-import {useUser} from "../context/userContext";
-import {signIn} from "../utility/Authenty";
-import {useHistory} from "react-router-dom";
+import { useUser } from "../context/userContext";
+import { signIn } from "../utility/Authenty";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const history = useHistory()
-const { setUser} = useUser();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const history = useHistory();
+  const { setUser } = useUser();
   const doSignIn = async () => {
     try {
       let resp = await Auth.signIn(username, password);
-      await signIn(setUser)
-      history.replace('/')
+      await signIn(setUser);
+      history.replace("/");
       console.log(resp);
     } catch (ex) {
       console.log(ex);
     }
+  };
+
+  const togglePasswordVisible = () => {
+    setIsPasswordVisible(isPasswordVisible ? false : true);
   };
 
   async function printUser() {
@@ -60,14 +65,17 @@ const { setUser} = useUser();
             <label className=" label block mb-2" htmlFor=" email">
               Email
             </label>
-            <Input
-              type=" text"
-              placeholder=" example
+            <label className="form-control-addon-within">
+              <input
+                id="email"
+                type=" text"
+                className="form-control border-none"
+                placeholder=" example
                 @example.com"
-              value={username}
-              id="email"
-              onChange={(e) => setUsername(e.target.value)}
-            />
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </label>
           </div>
           <div className="mb-5">
             <label className="label block mb-2" htmlFor="password">
@@ -76,16 +84,16 @@ const { setUser} = useUser();
             <label className="form-control-addon-within">
               <input
                 id="password"
-                type="password"
+                type={`${isPasswordVisible ? "text" : "password"}`}
                 className="form-control border-none"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               <span className="flex items-center pr-4">
                 <button
+                  onClick={togglePasswordVisible}
                   type="button"
                   className="btn btn-link text-gray-600 dark:text-gray-600 la la-eye text-xl leading-none"
-                  data-toggle="password-visibility"
                 />
               </span>
             </label>

@@ -1,3 +1,5 @@
+import CreateCategory from "../pages/CreateCategory";
+import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 
@@ -6,7 +8,7 @@ const Routes = [
     path: "/",
     exact: true,
     auth: true,
-    page: () => <h3>Root home</h3>,
+    page: () => <HomePage />,
   },
   {
     path: "/profile",
@@ -26,6 +28,13 @@ const Routes = [
     background: true,
     unAuth: true,
     page: () => <Login />,
+  },
+  {
+    path: "/category",
+    exact: true,
+    background: true,
+    unAuth: false,
+    page: () => <CreateCategory />,
   },
 ];
 
