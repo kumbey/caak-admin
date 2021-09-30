@@ -1,7 +1,6 @@
 import CreateCategory from "../pages/CreateCategory";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
-import Home from "../pages/Home";
 
 const Routes = [
   {
