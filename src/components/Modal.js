@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 // import { hideOverlay, showOverlay } from "../assets/js/menu";
 import { useTheme } from "../context/ThemeContext";
+import ReactDOM from "react-dom";
 
 export default function Modal({
   children,
@@ -16,8 +17,7 @@ export default function Modal({
   useEffect(() => {
     show ? setOverlay(true) : setOverlay(false);
   }, [show]);
-  console.log(`show: ${show}`)
-  return (
+  return ReactDOM.createPortal(
     <div
       onClick={onClose}
       className={`modal ${side ? "modal_aside" : ""} ${
@@ -54,15 +54,16 @@ export default function Modal({
                 className="btn btn_secondary uppercase"
                 data-dismiss="modal"
               >
-                Close
+                Хаах
               </button>
               <button type="button" className="btn btn_primary ml-2 uppercase">
-                Save Changes
+               Категори нэмэх
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
