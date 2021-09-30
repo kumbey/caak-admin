@@ -1,12 +1,11 @@
-import API from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
-import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { useState } from "react";
 import Button from "../components/Button";
-import { getUser } from "../graphql-custom/user/queries";
 import { useUser } from "../context/userContext";
-import { signIn } from "../utility/Authenty";
 import { useHistory } from "react-router-dom";
+import { graphqlOperation } from "aws-amplify";
+import { getUser } from "../graphql-custom/user/queries";
+import API from "@aws-amplify/api";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -14,40 +13,51 @@ const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const history = useHistory();
   const { setUser } = useUser();
-  const doSignIn = async () => {
-    try {
-      let resp = await Auth.signIn(username, password);
-      await signIn(setUser);
-      history.replace("/");
-      console.log(resp);
-    } catch (ex) {
-      console.log(ex);
-    }
+  const doSignIn = () => {
+    Auth.signIn(username, password)
+      .then((user) => {
+        const isAdmin =
+          user.signInUserSession.accessToken.payload["cognito:groups"];
+        if (isAdmin.includes("caak-admin")) {
+          API.graphql(
+            graphqlOperation(getUser, { id: user.attributes.sub })
+          ).then((r) => console.log(r));
+          setUser(user);
+          history.replace("/");
+          console.log("loging in");
+        } else {
+          console.error("No permission");
+          // signIn(setUser).then((r) => console.log(r));
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const togglePasswordVisible = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  async function printUser() {
-    try {
-      const user = await Auth.currentAuthenticatedUser();
-      const groups =
-        user.signInUserSession.accessToken.payload["cognito:groups"];
-
-      if (groups.includes("caak-admin")) {
-        console.log(user.attributes.sub);
-        let resp = await API.graphql(
-          graphqlOperation(getUser, { id: user.attributes.sub })
-        );
-        console.log(resp);
-      } else {
-        console.log("NORMAL USER");
-      }
-    } catch (ex) {
-      console.log(ex);
-    }
-  }
+  // async function printUser() {
+  //   try {
+  //     const user = await Auth.currentAuthenticatedUser();
+  //     const groups =
+  //       user.signInUserSession.accessToken.payload["cognito:groups"];
+  //     console.log(groups);
+  //     if (groups.includes("caak-aa")) {
+  //       console.log(user.attributes.sub);
+  //       let resp = await API.graphql(
+  //         graphqlOperation(getUser, { id: user.attributes.sub })
+  //       );
+  //       console.log(resp);
+  //     } else {
+  //       console.log("NORMAL USER");
+  //     }
+  //   } catch (ex) {
+  //     console.log(ex);
+  //   }
+  // }
 
   return (
     <div className="container flex h-screen items-center justify-center py-10 pt-20">
