@@ -19,10 +19,10 @@ export default function Tables(styles, fullWidth, children, ...props) {
           <td>Doe</td>
           <td>
             <a href="#edit">
-              <i class="las la-edit text-2xl "></i>
+              <i className="las la-edit text-2xl "></i>
             </a>
             <a href="#del">
-              <i class="las la-trash-alt text-2xl ml-4"></i>
+              <i className="las la-trash-alt text-2xl ml-4"></i>
             </a>
           </td>
         </tr>
@@ -32,10 +32,10 @@ export default function Tables(styles, fullWidth, children, ...props) {
           <td>Doe</td>
           <td>
             <a href="#edit">
-              <i class="las la-edit text-2xl "></i>
+              <i className="las la-edit text-2xl "></i>
             </a>
             <a href="#del">
-              <i class="las la-trash-alt text-2xl ml-4"></i>
+              <i className="las la-trash-alt text-2xl ml-4"></i>
             </a>
           </td>
         </tr>
@@ -45,10 +45,10 @@ export default function Tables(styles, fullWidth, children, ...props) {
           <td>Doe</td>
           <td>
             <a href="#edit">
-              <i class="las la-edit text-2xl "></i>
+              <i className="las la-edit text-2xl "></i>
             </a>
             <a href="#del">
-              <i class="las la-trash-alt text-2xl ml-4"></i>
+              <i className="las la-trash-alt text-2xl ml-4"></i>
             </a>
           </td>
         </tr>

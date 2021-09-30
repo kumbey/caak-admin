@@ -26,6 +26,8 @@ function ThemeProvider(props) {
   );
   const [menuStyle, setMenuStyle] = useState("");
 
+  const [overlay, setOverlay] = useState(false);
+
   useEffect(() => {
     localStorage.setItem("scheme", theme);
   }, [theme]);
@@ -70,9 +72,11 @@ function ThemeProvider(props) {
       setMenu,
       toggleMenu,
       menuStyle,
+      overlay,
+      setOverlay,
     }),
     // eslint-disable-next-line
-    [theme, menu, menuStyle]
+    [theme, menu, menuStyle, overlay]
   );
   return <ThemeContext.Provider value={value} {...props} />;
 }

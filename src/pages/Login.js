@@ -4,7 +4,6 @@ import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { useState } from "react";
 import Button from "../components/Button";
 import { getUser } from "../graphql-custom/user/queries";
-import Input from "../components/Input";
 import { useUser } from "../context/userContext";
 import { signIn } from "../utility/Authenty";
 import { useHistory } from "react-router-dom";
@@ -27,7 +26,7 @@ const Login = () => {
   };
 
   const togglePasswordVisible = () => {
-    setIsPasswordVisible(isPasswordVisible ? false : true);
+    setIsPasswordVisible(!isPasswordVisible);
   };
 
   async function printUser() {
