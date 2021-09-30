@@ -58,7 +58,7 @@ const CreateCategory = () => {
 
   return (
     <div className="flex flex-col w-screen h-screen font-sans">
-      <div className="p-6 m-4 w-full lg:max-w-lg md:max-w-2xl">
+      <div className="p-6 m-4 w-full lg:max-w-full ">
         <div className="mb-4">
           <h1>Категориуд</h1>
           <div className="flex mt-4">
@@ -75,7 +75,11 @@ const CreateCategory = () => {
                   <td>{cat.name}</td>
                   <td>{cat.icon}</td>
                   <td>{convertDateTime(cat.createdAt)}</td>
-                  <td>{cat.updatedAt}</td>
+                  <td>{`${
+                    cat.createdAt !== cat.updatedAt
+                      ? convertDateTime(cat.updatedAt)
+                      : "Засвар ороогүй"
+                  }`}</td>
                   <td>
                     <a href="#edit">
                       <i className="las la-edit text-2xl "></i>
