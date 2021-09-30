@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "set PORT=3006 && set HTTPS=true&&craco start",
-    "startm": "HTTPS=true craco start",
+    "startm": "PORT=3006 HTTPS=true craco start",
     "build": "NODE_ENV=production craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

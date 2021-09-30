@@ -13,26 +13,13 @@ const Login = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const history = useHistory();
   const { setUser } = useUser();
-  const doSignIn = () => {
-    Auth.signIn(username, password)
-      .then((user) => {
-        const isAdmin =
-          user.signInUserSession.accessToken.payload["cognito:groups"];
-        if (isAdmin.includes("caak-admin")) {
-          API.graphql(
-            graphqlOperation(getUser, { id: user.attributes.sub })
-          ).then((r) => console.log(r));
-          setUser(user);
-          history.replace("/");
-          console.log("loging in");
-        } else {
-          console.error("No permission");
-          // signIn(setUser).then((r) => console.log(r));
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+
+  const doSignIn = async () => {
+      try{
+        await Auth.signIn(username, password)
+      }catch(ex){
+        console.log(ex)
+      }
   };
 
   const togglePasswordVisible = () => {
