@@ -4,9 +4,8 @@ import { getUser } from "../graphql-custom/user/queries";
 export async function isLogged(user, setUser) {
   try {
     const usr = await Auth.currentAuthenticatedUser();
-    const groups = user.signInUserSession.accessToken.payload["cognito:groups"];
 
-    if(!groups.includes('caak-admin')){
+    if(!await isAdmin()){
       setUser(null)
       return false
     }
@@ -36,9 +35,8 @@ export async function isLogged(user, setUser) {
 export async function signIn(setUser) {
   try {
     const usr = await Auth.currentAuthenticatedUser();
-    const groups = usr.signInUserSession.accessToken.payload["cognito:groups"];
 
-    if(!groups.includes('caak-admin')){
+    if(!await isAdmin()){
       setUser(null)
       return false
     }
@@ -49,9 +47,25 @@ export async function signIn(setUser) {
     let data = resp.data.getUser;
 
     setUser({ ...usr, sysUser: data });
-    
+
     return true
   } catch (ex) {
     console.log(ex);
+  }
+}
+
+export async function isAdmin(){
+  try {
+    const usr = await Auth.currentAuthenticatedUser();
+    const groups = usr.signInUserSession.accessToken.payload["cognito:groups"];
+
+    if(!groups.includes('caak-admin')){
+      return false
+    }
+
+    return true
+  } catch (ex) {
+    console.log(ex);
+    return false
   }
 }

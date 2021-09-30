@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { graphqlOperation } from "aws-amplify";
 import { getUser } from "../graphql-custom/user/queries";
 import API from "@aws-amplify/api";
+import { isAdmin } from "../utility/Authenty";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -17,6 +18,9 @@ const Login = () => {
   const doSignIn = async () => {
       try{
         await Auth.signIn(username, password)
+        if(!await isAdmin()){
+          alert("YOU ARE NOT ADMIN")
+        }
       }catch(ex){
         console.log(ex)
       }
