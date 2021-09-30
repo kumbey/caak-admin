@@ -6,13 +6,13 @@ import { createCategory } from "../graphql-custom/category/mutation";
 // import { getCategoryList } from "../graphql-custom/category/queries";
 import { Auth } from "aws-amplify";
 import { useTheme } from "../context/ThemeContext";
+import { useEffect } from "react";
 
 const Home = () => {
   const createNewCategory = async (data) => {
     return API.graphql({
       query: createCategory,
-      variables: { input: data },
-      authMode: "AWS_IAM",
+      variables: { input: data }
     });
   };
   // const getAllCategories = async () => {

@@ -10,41 +10,6 @@
       "StackName": "amplify-caakmn-devs-100650",
       "StackId": "arn:aws:cloudformation:ap-southeast-1:699925983689:stack/amplify-caakmn-devs-100650/1a5d1b70-0a00-11ec-ba81-023477035e84",
       "AmplifyAppId": "d3cv0kq0oa3k6b"
-    },
-    "categories": {
-      "auth": {
-        "caakmn248efac3": {
-          "userPoolId": "ap-southeast-1_aPFBL1JrG",
-          "userPoolName": "caakauth",
-          "webClientId": "513vv9i9nrnd4glini11ips7bt",
-          "nativeClientId": "2ifs9p3e5kpvk26esr45sqmh5p",
-          "identityPoolId": "ap-southeast-1:761b8e04-4eed-48bc-bd42-09320bb21645",
-          "identityPoolName": "caakiam",
-          "allowUnauthenticatedIdentities": true,
-          "authRoleArn": "arn:aws:iam::699925983689:role/Cognito_caakiamAuth_Role",
-          "authRoleName": "Cognito_caakiamAuth_Role",
-          "unauthRoleArn": "arn:aws:iam::699925983689:role/Cognito_caakiamUnauth_Role",
-          "unauthRoleName": "Cognito_caakiamUnauth_Role"
-        }
-      },
-      "function": {
-        "userpoolpostconfirmation": {
-          "deploymentBucketName": "amplify-caakmn-devs-100650-deployment",
-          "s3Key": "amplify-builds/userpoolpostconfirmation-6b7a5232433258332f4b-build.zip"
-        },
-        "users": {
-          "deploymentBucketName": "amplify-caakmn-devs-100650-deployment",
-          "s3Key": "amplify-builds/users-3132674b4c6766324f59-build.zip"
-        },
-        "post": {
-          "deploymentBucketName": "amplify-caakmn-devs-100650-deployment",
-          "s3Key": "amplify-builds/post-596265723242476f7674-build.zip"
-        },
-        "usersTrigger": {
-          "deploymentBucketName": "amplify-caakmn-devs-100650-deployment",
-          "s3Key": "amplify-builds/usersTrigger-6e664161744f35517856-build.zip"
-        }
-      }
     }
   }
 }
