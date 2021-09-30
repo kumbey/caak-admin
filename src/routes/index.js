@@ -1,5 +1,4 @@
 import CreateCategory from "../pages/CreateCategory";
-import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 
@@ -8,7 +7,7 @@ const Routes = [
     path: "/",
     exact: true,
     auth: true,
-    page: () => <HomePage />,
+    page: () => <Home />,
   },
   {
     path: "/profile",
