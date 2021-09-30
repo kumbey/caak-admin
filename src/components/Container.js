@@ -1,12 +1,12 @@
 import { useTheme } from "../context/ThemeContext";
 
 const Container = ({ children, ...props }) => {
-  const { theme, menuStyle } = useTheme();
+  const { theme, menuStyle, overlay } = useTheme();
 
   return (
     <div
       {...props}
-      className={`${theme} ${menuStyle}`}
+      className={`${theme} ${menuStyle} ${overlay ? "overlay active" : ""}`}
       style={{ display: "flex" }}
     >
       {children}

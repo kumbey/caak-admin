@@ -1,13 +1,16 @@
 import CreateCategory from "../pages/CreateCategory";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
+import Home from "../pages/Home";
+import HomePage from "../pages/HomePage";
+import CreateGroup from "../pages/CreateGroup";
 
 const Routes = [
   {
     path: "/",
     exact: true,
     auth: true,
-    page: () => <Home />,
+    page: () => <HomePage />,
   },
   {
     path: "/profile",
@@ -29,11 +32,18 @@ const Routes = [
     page: () => <Login />,
   },
   {
-    path: "/category",
+    path: "/categories",
     exact: true,
     background: true,
-    unAuth: false,
+    auth: true,
     page: () => <CreateCategory />,
+  },
+  {
+    path: "/groups",
+    exact: true,
+    background: true,
+    auth: true,
+    page: () => <CreateGroup />,
   },
 ];
 

@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import Tables from "../components/Tables";
-import { useTheme } from "../context/ThemeContext";
 import Modal from "../components/Modal";
+import Input from "../components/Input";
 
 const CreateCategory = () => {
-  const { setBackdrop, backdrop } = useTheme();
-  console.log(backdrop);
-  const [showModal, setShowModal] = useState(false);
+  const [isShowModal, setShowModal] = useState(false);
+  const [categoryName, setCategoryName] = useState("");
+  const [iconName, setIconName] = useState("");
 
-  const toggle = () => {
-    console.log("clicked");
-    setShowModal(!showModal);
-  };
-
-  const handleChange = (e) => {
-    console.log("onchange ", e.target.value);
+  const toggleModal = () => {
+    setShowModal(!isShowModal);
   };
   const onSubmit = (event) => {
     event.preventDefault(event);
@@ -22,59 +17,43 @@ const CreateCategory = () => {
     console.log(event.target.email.value);
   };
   return (
-    <div className="flex-col  h-screen w-screen flex  font-sans ">
-      <div className=" p-6 m-4 w-full  lg:max-w-lg md:max-w-2xl">
+    <div className="flex flex-col w-screen h-screen font-sans">
+      <div className="p-6 m-4 w-full lg:max-w-lg md:max-w-2xl">
         <div className="mb-4">
           <h1>Add Category</h1>
           <div className="flex mt-4">
-            <input
-              className="border-blue-200 border-2"
-              placeholder="Enter Category Name.."
-              type="text"
-            />
-            <button onClick={toggle}>
-              <i className="las la-plus-circle text-4xl pl-2" />
+            <Input label={"Enter Category Name.."} />
+            <button onClick={() => toggleModal()}>
+              <i className="pl-2 text-4xl las la-plus-circle" />
             </button>
           </div>
         </div>
         <div className="mb-4">
           <Tables styles="striped" fullWidth="w-full"></Tables>
-          {showModal && (
-            <Modal
-              show={showModal}
-              title="Create Category"
-              content="content"
-              onClose={() => setShowModal(false)}
-              type="static"
-            >
-              <form onSubmit={onSubmit}>
-                <div className="mt-8 max-w-md">
-                  <div className="grid grid-cols-1 gap-6">
-                    <label className="block">
-                      <span className="text-gray-700">Category name</span>
-                      <input
-                        id="name"
-                        type="text"
-                        className="mt-0 block w-full px-0.5 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-black"
-                        placeholder=""
-                        onChange={handleChange}
-                      />
-                    </label>
-
-                    <label className="block">
-                      <span className="text-gray-700">Icon name</span>
-                      <input
-                        id="icon"
-                        type="text"
-                        className="mt-0 block w-full px-0.5 border-0 border-b-2 border-gray-200 focus:ring-0 focus:border-black"
-                        placeholder=""
-                      />
-                    </label>
-                  </div>
+          <Modal
+            show={isShowModal}
+            title="Шинэ категори үүсгэх"
+            content="content"
+            onClose={() => setShowModal(false)}
+            type="basic"
+          >
+            <form onSubmit={onSubmit}>
+              <div className="mt-8 max-w-md">
+                <div className="grid grid-cols-1 gap-6">
+                  <Input
+                    value={categoryName}
+                    onChange={(e) => setCategoryName(e.target.value)}
+                    label="Category Name"
+                  />
+                  <Input
+                    value={iconName}
+                    onChange={(e) => setIconName(e.target.value)}
+                    label="Category Icon Name"
+                  />
                 </div>
-              </form>
-            </Modal>
-          )}
+              </div>
+            </form>
+          </Modal>
         </div>
       </div>
     </div>

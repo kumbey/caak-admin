@@ -1,19 +1,20 @@
-import { useState, useEffect } from "react";
 import TopBar from "../components/TopBar";
 import MenuBar from "../components/MenuBar";
+import { useTheme } from "../context/ThemeContext";
 
 const HomePage = () => {
-  const [overlay, setOverlay] = useState(false);
-  const [overlayStyle, setOverlayStyle] = useState("");
-
-  useEffect(() => {
-    overlay ? setOverlayStyle("overlay active") : setOverlayStyle("");
-  }, [overlay]);
+  const { overlay, setOverlay } = useTheme();
   return (
-    <>
+    <div>
       <TopBar />
-      <MenuBar setOverlay={setOverlay} />
-    </>
+      <div
+        onClick={() => setOverlay(!overlay)}
+        className={"absolute top-1/2 left-1/2 z-30"}
+      >
+        sdadsavdjs
+      </div>
+      <MenuBar />
+    </div>
   );
 };
 

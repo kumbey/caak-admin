@@ -4,8 +4,7 @@ import Tippy from "@tippyjs/react";
 import { useTheme } from "../context/ThemeContext";
 
 export default function TopBar() {
-
-  const {theme, changeTheme, menu, toggleMenu} = useTheme()
+  const { theme, changeTheme, menu, toggleMenu } = useTheme();
 
   return (
     <header className="top-bar">
@@ -44,7 +43,7 @@ export default function TopBar() {
           <label className="switch switch_outlined">
             <input
               id="darkModeToggler"
-              checked={(theme === "dark") ? true : false}
+              checked={theme === "dark"}
               readOnly
               onClick={() => changeTheme()}
               type="checkbox"

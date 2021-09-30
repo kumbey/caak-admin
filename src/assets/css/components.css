@@ -1028,16 +1028,16 @@ Overlay
 }
 
 .overlay {
-  @apply fixed top-0 right-0 bottom-0 left-0 bg-black opacity-0 z-40;
+  @apply fixed top-0 right-0 bottom-0 left-0 opacity-0 z-40;
   @apply transition-opacity duration-200 ease-linear;
 
-  &.active {
-    @apply opacity-10;
-  }
+&.active {
+   @apply opacity-20;
+ }
 
-  &.workspace {
-    @apply z-10;
-  }
+&.workspace {
+   @apply z-10;
+ }
 }
 
 /*
@@ -1771,7 +1771,7 @@ Modal
   @apply hidden fixed top-0 right-0 bottom-0 left-0 w-full h-full overflow-y-auto z-50;
 
   .modal-dialog {
-    @apply flex mx-auto p-5;
+    @apply flex justify-center mx-auto p-5;
 
     &_centered {
       @apply items-center h-full;

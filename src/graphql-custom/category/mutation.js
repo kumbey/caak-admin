@@ -1,7 +1,7 @@
-import category0001 from "./fields/category0001";
+import categorySetField from "./fields/categorySetField";
 
 export const createCategory = /* GraphQL */ `
     mutation createCategory($input: CreateCategoryInput!) {
-        createCategory(input: $input) ${category0001}
+        createCategory(input: $input) ${categorySetField}
     }
 `;
