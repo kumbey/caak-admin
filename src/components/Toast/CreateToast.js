@@ -5,7 +5,6 @@ import { useToast } from "./ToastProvider";
 
 const CreateToast = (props) => {
   const { addToast } = useToast();
-
   return (
     <div className="animated infinite bounce mt-20" style={{ padding: "24px" }}>
       <Button
@@ -13,7 +12,10 @@ const CreateToast = (props) => {
         skin="primary"
         onClick={() => {
           addToast(props.content);
-        }}>Add Toast</Button>
+        }}
+      >
+        Add Toast
+      </Button>
     </div>
   );
 };

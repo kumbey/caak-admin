@@ -1,4 +1,4 @@
-import { useState, useContext, useCallback, createContext } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import ToastContainer from "./ToastContainer";
 
 const ToastContext = createContext(null);
@@ -7,9 +7,9 @@ const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback(
-    (content) => {
+    ({ content, title, autoClose }) => {
       let toast = toasts;
-      toast.push({ content: content });
+      toast.push({ content: content, title: title, autoClose: autoClose });
       setToasts([...toast]);
     },
     [setToasts, toasts]
@@ -43,9 +43,7 @@ const ToastProvider = ({ children }) => {
 };
 
 const useToast = () => {
-  const toastHelpers = useContext(ToastContext);
-
-  return toastHelpers;
+  return useContext(ToastContext);
 };
 
 export { ToastContext, useToast };

@@ -12,6 +12,7 @@ const MenuData = [
     id: "category",
     sections: null,
     sub: null,
+    path: "/categories"
   },
   {
     name: "Group",
@@ -19,6 +20,7 @@ const MenuData = [
     id: "group",
     sections: null,
     sub: null,
+    path: "/groups"
   },
 
   //     {

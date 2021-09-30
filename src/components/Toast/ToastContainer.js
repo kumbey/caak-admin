@@ -12,8 +12,6 @@ const ToastContainer = ({ toasts }) => {
           id={index}
           popOverPosition={"right"}
           skin={"primary"}
-          autoClose={false}
-          title={"Title"}
           {...toasts}
         />
       ))}

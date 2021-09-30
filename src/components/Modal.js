@@ -13,14 +13,15 @@ export default function Modal({
   modalType,
   title,
   content,
+  loading,
   ...props
 }) {
-  const { setOverlay, overlay } = useTheme();
+  const { setOverlay } = useTheme();
   useEffect(() => {
     show ? setOverlay(true) : setOverlay(false);
   }, [show]);
   return ReactDOM.createPortal(
-    <form onSubmit={onSubmit}>
+    <div>
       <div
         onClick={onClose}
         className={`modal ${side ? "modal_aside" : ""} ${
@@ -59,7 +60,12 @@ export default function Modal({
                 >
                   Хаах
                 </button>
-                <button type={type} className="btn btn_primary ml-2 uppercase">
+                <button
+                  disabled={loading}
+                  onClick={onSubmit}
+                  type={type}
+                  className="btn btn_primary ml-2 uppercase"
+                >
                   {submitBtnName}
                 </button>
               </div>
@@ -67,7 +73,7 @@ export default function Modal({
           </div>
         </div>
       </div>
-    </form>,
+    </div>,
     document.body
   );
 }

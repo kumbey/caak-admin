@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import { showActivePage } from "../assets/js/menu";
 import { useTheme } from "../context/ThemeContext";
 import MenuData from "./MenuData";
+import { useHistory } from "react-router-dom";
 
 export default function MenuBar({ menuBarRef, menuItemsRef }) {
   const { menuStyle, menu, setMenu } = useTheme();
   const [selectedMenu, setSelectedMenu] = useState("");
+  const history = useHistory();
 
   useEffect(() => {
     showActivePage();
   }, [menuBarRef]);
 
-  const subMenuOpen = (e) => {
-    setSelectedMenu(e);
+  const subMenuOpen = (name, path) => {
+    history.push(path);
+    setSelectedMenu(name);
     if (menu.wide) {
       setMenu({ ...menu, wide: false });
     }
@@ -33,15 +36,14 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
 
         {MenuData.map((data, index) => {
           return (
-            <a
+            <span
               key={index}
-              href="#qwe"
-              className="link"
-              onClick={() => subMenuOpen(data.name)}
+              className="link cursor-pointer"
+              onClick={() => subMenuOpen(data.name, data.path)}
             >
               <span className={data.icon} />
               <span className="title">{data.name}</span>
-            </a>
+            </span>
           );
         })}
       </div>
@@ -50,7 +52,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
           <div
             key={i}
             className={`menu-detail ${
-              (selectedMenu === data.name) & (data.sections !== null)
+              (selectedMenu === data.name) && (data.sections !== null)
                 ? "open"
                 : ""
             }`}
