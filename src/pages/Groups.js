@@ -184,7 +184,7 @@ const Groups = () => {
                         name: e.target.value,
                       })
                     }
-                    title="Групп нэр"
+                    label="Групп нэр"
                     error={inputError}
                     errorMessage={`${
                       !currentEditingData ? "Групп нэрийг оруулна уу" : ""
@@ -192,7 +192,12 @@ const Groups = () => {
                   />
                   <Select
                     title="Категори сонгох"
-                    onChange={(e) => setSelectedCatID(e.target.value)}
+                    onChange={(e) =>
+                      setCurrentEditingData({
+                        ...currentEditingData,
+                        category_id: e.target.value,
+                      })
+                    }
                   >
                     <option disabled hidden>
                       songoh
@@ -278,7 +283,7 @@ const Groups = () => {
               <Input
                 value={groupName}
                 onChange={(e) => setGroupName(e.target.value)}
-                title="Групп нэр"
+                label="Групп нэр"
               />
 
               <Select
