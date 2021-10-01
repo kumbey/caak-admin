@@ -190,7 +190,7 @@ const Groups = () => {
                     title="Тухай"
                     row="4"
                     onChange={(e) => setGroupAbout(e.target.value)}
-                    value={groupAbout}
+                    value={groupAbout || ""}
                   />
                   {/* <Input
                       value={currentEditingData.icon || ""}
