@@ -11,32 +11,39 @@ import API from "@aws-amplify/api";
 import { convertDateTime } from "../components/utils";
 import { useToast } from "../components/Toast/ToastProvider";
 import Select from "../components/Select";
+import TextArea from "../components/TextArea";
+import Dropzone from "../components/Dropzone";
+import Auth from "@aws-amplify/auth";
 
 const Groups = () => {
   const [isShowModal, setShowModal] = useState(false);
   const [groupName, setGroupName] = useState("");
-  const [groupIconName, setGroupIconName] = useState("");
-  const [categoryID, setCategoryID] = useState("");
-  const [founderID, setFounderID] = useState("f_id123");
+  const [groupAbout, setGroupAbout] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { addToast } = useToast();
+  const [groups, setGroups] = useState([]);
+  const [catID, setCatID] = useState([]);
+  const [selectedCatID, setSelectedCatID] = useState("");
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
   };
 
   const onSubmit = async (event) => {
+    console.log(groupAbout);
     event.preventDefault(event);
     if (groupName) {
       setIsLoading(true);
+      const currentUser = await Auth.currentAuthenticatedUser();
       try {
         await API.graphql({
           query: createGroup,
           variables: {
             input: {
               name: groupName,
-              category_id: categoryID,
-              founder_id: founderID,
+              category_id: selectedCatID,
+              founder_id: currentUser.attributes.sub,
+              about: groupAbout,
             },
           },
         }).then((result) => {
@@ -47,7 +54,7 @@ const Groups = () => {
           });
           setIsLoading(false);
           setGroupName(null);
-          setGroupIconName(null);
+          setGroupAbout(null);
           console.log(
             `Successfully added ${result.data.createGroup.name} to groups`
           );
@@ -60,22 +67,18 @@ const Groups = () => {
     }
   };
 
-  const [groups, setGroups] = useState([]);
-  const [catID, setCatID] = useState([]);
-
   useEffect(() => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
       setGroups(group.data.listGroups.items);
     });
     API.graphql(graphqlOperation(getCategoryID)).then((cat) => {
       setCatID(cat.data.listCategories.items);
-      console.log("22222222222", cat.data.listCategories.items);
     });
   }, []);
-  console.log("ARrr", groups);
+
   return (
-    <div className="flex-col  h-screen w-screen flex  font-sans ">
-      <div className=" p-6 m-4 w-full  lg:max-w-lg md:max-w-2xl">
+    <div className="flex flex-col w-screen h-screen font-sans workspace">
+      <div className="">
         <div className="mb-4">
           <h1>Группууд</h1>
           <div className="flex mt-4">
@@ -125,7 +128,7 @@ const Groups = () => {
                 <Input
                   value={groupName}
                   onChange={(e) => setGroupName(e.target.value)}
-                  label="групп нэр"
+                  title="Групп нэр"
                 />
                 {/* <Input
                   value={groupIconName}
@@ -133,11 +136,26 @@ const Groups = () => {
                   label="Icon нэр"
                 /> */}
 
-                <Select>
+                <Select
+                  title="Категори сонгох"
+                  onChange={(e) => setSelectedCatID(e.target.value)}
+                >
+                  <option disabled selected>
+                    Сонгох...
+                  </option>
                   {catID.map((cat) => {
-                    return <option>{cat.name}</option>;
+                    return <option value={cat.id}>{cat.name}</option>;
                   })}
                 </Select>
+
+                <TextArea
+                  name="about"
+                  title="Тухай"
+                  row="4"
+                  onChange={(e) => setGroupAbout(e.target.value)}
+                  value={groupAbout}
+                />
+                <Dropzone />
               </div>
             </div>
           </Modal>
