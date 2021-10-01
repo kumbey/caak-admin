@@ -1,17 +1,20 @@
-import { useTheme } from "../context/ThemeContext";
+import {useTheme} from "../context/ThemeContext";
+import ToastProvider from "./Toast/ToastProvider";
 
-const Container = ({ children, ...props }) => {
-  const { theme, menuStyle, overlay } = useTheme();
+const Container = ({children, ...props}) => {
+    const {theme, menuStyle, overlay} = useTheme();
 
-  return (
-    <div
-      {...props}
-      className={`${theme} ${menuStyle} ${overlay ? "overlay active" : ""}`}
-      style={{ display: "flex" }}
-    >
-      {children}
-    </div>
-  );
+    return (
+        <ToastProvider>
+            <div
+                {...props}
+                className={`${theme} ${menuStyle} ${overlay ? "overlay active" : ""}`}
+                style={{display: "flex"}}
+            >
+                {children}
+            </div>
+        </ToastProvider>
+    );
 };
 
 export default Container;

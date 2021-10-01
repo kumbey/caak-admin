@@ -21,7 +21,7 @@ export default function Modal({
     show ? setOverlay(true) : setOverlay(false);
   }, [show]);
   return ReactDOM.createPortal(
-    <div>
+    <form onSubmit={onSubmit}>
       <div
         onClick={onClose}
         className={`modal ${side ? "modal_aside" : ""} ${
@@ -62,7 +62,7 @@ export default function Modal({
                 </button>
                 <button
                   disabled={loading}
-                  onClick={onSubmit}
+                  // onClick={onSubmit}
                   type={type}
                   className="btn btn_primary ml-2 uppercase"
                 >
@@ -73,7 +73,7 @@ export default function Modal({
           </div>
         </div>
       </div>
-    </div>,
+    </form>,
     document.body
   );
 }

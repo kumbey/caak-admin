@@ -1,9 +1,8 @@
-import CreateCategory from "../pages/CreateCategory";
+import Categories from "../pages/Categories";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
-import Home from "../pages/Home";
 import HomePage from "../pages/HomePage";
-import CreateGroup from "../pages/CreateGroup";
+import Groups from "../pages/Groups";
 
 const Routes = [
   {
@@ -36,14 +35,14 @@ const Routes = [
     exact: true,
     background: true,
     auth: true,
-    page: () => <CreateCategory />,
+    page: () => <Categories />,
   },
   {
     path: "/groups",
     exact: true,
     background: true,
     auth: true,
-    page: () => <CreateGroup />,
+    page: () => <Groups />,
   },
 ];
 

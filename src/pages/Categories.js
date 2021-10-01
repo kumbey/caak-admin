@@ -8,18 +8,20 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { getCategoryList } from "../graphql-custom/category/queries";
 import { useToast } from "../components/Toast/ToastProvider";
+import { convertDateTime } from "../components/utils";
 
-const CreateCategory = () => {
+const Categories = () => {
   const [isShowModal, setShowModal] = useState(false);
   const [categoryName, setCategoryName] = useState(null);
   const [categoryIconName, setCategoryIconName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [inputError, setInputError] = useState(false);
   const { addToast } = useToast();
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
   };
-  //TODO State hooson esehiig shalgah
+
   const onSubmit = async (event) => {
     event.preventDefault(event);
     if (categoryIconName && categoryName) {
@@ -45,32 +47,8 @@ const CreateCategory = () => {
         console.log(ex);
       }
     } else {
-      alert("Аль нэг талбар хоосон байна");
+      setInputError(true);
     }
-  };
-  const convertDateTime = (date) => {
-    let fullDate = new Date(date);
-
-    let twoDigitMonth =
-      fullDate.getMonth().toString().length === 1
-        ? `0${fullDate.getMonth()}`
-        : fullDate.getMonth();
-
-    let twoDigitDate =
-      fullDate.getDay().toString().length === 1
-        ? "0" + fullDate.getDay()
-        : fullDate.getDay();
-
-    let hour = `${fullDate.getHours() < 10 ? "0" : ""}${fullDate.getHours()}`;
-    let min = `${
-      fullDate.getMinutes() < 10 ? "0" : ""
-    }${fullDate.getMinutes()}`;
-
-    let sec = `${
-      fullDate.getSeconds() < 10 ? "0" : ""
-    }${fullDate.getSeconds()}`;
-
-    return `${fullDate.getFullYear()}/${twoDigitMonth}/${twoDigitDate} ${hour}:${min}:${sec}`;
   };
 
   const [categories, setCategories] = useState([]);
@@ -81,8 +59,8 @@ const CreateCategory = () => {
     });
   }, []);
   return (
-    <div className="flex flex-col w-screen h-screen font-sans">
-      <div className="p-6 m-4 w-full lg:max-w-full ">
+    <main className="flex flex-col w-screen h-screen font-sans workspace">
+      <div className="">
         <div className="mb-4">
           <h1>Категориуд</h1>
           <div className="flex mt-4">
@@ -132,19 +110,29 @@ const CreateCategory = () => {
                   value={categoryName || ""}
                   onChange={(e) => setCategoryName(e.target.value)}
                   label="Категори нэр"
+                  error={inputError}
+                  errorMessage={`${
+                    !categoryName ? "Категорийн нэрийг оруулна уу" : ""
+                  }`}
                 />
                 <Input
                   value={categoryIconName || ""}
                   onChange={(e) => setCategoryIconName(e.target.value)}
                   label="Категори Icon нэр"
+                  error={inputError}
+                  errorMessage={`${
+                    !categoryIconName
+                      ? "Категорийн айкон нэрийг оруулна уу"
+                      : ""
+                  }`}
                 />
               </div>
             </div>
           </Modal>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
-export default CreateCategory;
+export default Categories;

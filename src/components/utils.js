@@ -1,4 +1,4 @@
-const ConvertDateTime = ({ date }) => {
+export const convertDateTime = (date) => {
   let fullDate = new Date(date);
 
   let twoDigitMonth =
@@ -16,9 +16,6 @@ const ConvertDateTime = ({ date }) => {
 
   let sec = `${fullDate.getSeconds() < 10 ? "0" : ""}${fullDate.getSeconds()}`;
 
-  let currentDate = `${fullDate.getFullYear()}/${twoDigitMonth}/${twoDigitDate} ${hour}:${min}:${sec}`;
-
-  return currentDate;
+  return `${fullDate.getFullYear()}/${twoDigitMonth}/${twoDigitDate} ${hour}:${min}:${sec}`;
 };
 
-export default ConvertDateTime;

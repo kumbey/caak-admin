@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Tables from "../components/Tables";
 import Input from "../components/Input";
 import Modal from "../components/Modal";
@@ -6,9 +6,9 @@ import Button from "../components/Button";
 import { getGroupList } from "../graphql-custom/group/queries";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import API from "@aws-amplify/api";
-import ConvertDateTime from "../components/ConvertDateTime";
+import { convertDateTime } from "../components/utils";
 
-const CreateGroup = () => {
+const Groups = () => {
   const [isShowModal, setShowModal] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [iconName, setIconName] = useState("");
@@ -50,22 +50,18 @@ const CreateGroup = () => {
                   <td>{group.name}</td>
                   <td>{group.icon}</td>
 
-                  <td>
-                    <ConvertDateTime date={group.createdAt} />
-                  </td>
+                  <td>{convertDateTime(group.createdAt)}</td>
                   <td>{`${
-                    group.createdAt !== group.updatedAt ? (
-                      <ConvertDateTime date={group.createdAt} />
-                    ) : (
-                      "Засвар ороогүй"
-                    )
+                    group.createdAt !== group.updatedAt
+                      ? convertDateTime(group.createdAt)
+                      : "Засвар ороогүй"
                   }`}</td>
                   <td>
                     <a href="#edit">
-                      <i className="las la-edit text-2xl "></i>
+                      <i className="las la-edit text-2xl " />
                     </a>
                     <a href="#del">
-                      <i className="las la-trash-alt text-2xl ml-4"></i>
+                      <i className="las la-trash-alt text-2xl ml-4" />
                     </a>
                   </td>
                 </tr>
@@ -102,4 +98,4 @@ const CreateGroup = () => {
   );
 };
 
-export default CreateGroup;
+export default Groups;

@@ -2,24 +2,23 @@ import { useEffect, useState } from "react";
 import { showActivePage } from "../assets/js/menu";
 import { useTheme } from "../context/ThemeContext";
 import MenuData from "./MenuData";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function MenuBar({ menuBarRef, menuItemsRef }) {
   const { menuStyle, menu, setMenu } = useTheme();
   const [selectedMenu, setSelectedMenu] = useState("");
-  const history = useHistory();
 
   useEffect(() => {
     showActivePage();
   }, [menuBarRef]);
 
-  const subMenuOpen = (name, path) => {
-    history.push(path);
+  const subMenuOpen = (name) => {
     setSelectedMenu(name);
     if (menu.wide) {
       setMenu({ ...menu, wide: false });
     }
   };
+  //TODO MenuBar Sticky not working
   return (
     <aside ref={menuBarRef} className={`menu-bar menu-sticky ${menuStyle}`}>
       <div ref={menuItemsRef} className="menu-items">
@@ -36,14 +35,15 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
 
         {MenuData.map((data, index) => {
           return (
-            <span
+            <Link
+              to={data.path}
               key={index}
               className="link cursor-pointer"
-              onClick={() => subMenuOpen(data.name, data.path)}
+              onClick={() => subMenuOpen(data.name)}
             >
               <span className={data.icon} />
               <span className="title">{data.name}</span>
-            </span>
+            </Link>
           );
         })}
       </div>
@@ -52,9 +52,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
           <div
             key={i}
             className={`menu-detail ${
-              (selectedMenu === data.name) && (data.sections !== null)
-                ? "open"
-                : ""
+              selectedMenu === data.name && data.sections !== null ? "open" : ""
             }`}
           >
             {data.sections &&

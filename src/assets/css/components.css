@@ -875,7 +875,7 @@ Table
     tbody {
       tr {
         &:nth-of-type(odd) {
-          @apply bg-gray-100;
+          @apply bg-gray-200;
         }
       }
     }
