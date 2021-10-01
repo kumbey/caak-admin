@@ -2,9 +2,11 @@ import React from "react";
 import fullScreen from "../assets/js/full_screen";
 import Tippy from "@tippyjs/react";
 import { useTheme } from "../context/ThemeContext";
+import { Link, useHistory } from "react-router-dom";
 
 export default function TopBar() {
   const { theme, changeTheme, menu, toggleMenu } = useTheme();
+  const history = useHistory();
 
   return (
     <header className="top-bar">
@@ -15,7 +17,7 @@ export default function TopBar() {
         onClick={() => toggleMenu()}
       />
 
-      <span className="brand">Yeti</span>
+      <span className="brand">CAAK</span>
 
       <form className="hidden md:block ml-10" action="3">
         <label className="form-control-addon-within rounded-full">
@@ -216,13 +218,13 @@ export default function TopBar() {
                 </div>
                 <hr />
                 <div className="p-5">
-                  <a
-                    href="3"
+                  <Link
+                    to={"/logout"}
                     className="flex items-center text-gray-700 dark:text-gray-500 hover:text-primary dark:hover:text-primary"
                   >
                     <span className="la la-power-off text-2xl leading-none mr-2" />
-                    Logout
-                  </a>
+                    Гарах
+                  </Link>
                 </div>
               </div>
             }
