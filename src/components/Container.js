@@ -8,7 +8,7 @@ const Container = ({children, ...props}) => {
         <ToastProvider>
             <div
                 {...props}
-                className={`${theme} ${menuStyle} ${overlay ? "overlay active" : ""}`}
+                className={`containerDiv ${theme} ${menuStyle} ${overlay ? "overlay active" : ""}`}
                 style={{display: "flex"}}
             >
                 {children}

@@ -19,6 +19,7 @@ export default function Modal({
   const { setOverlay } = useTheme();
   useEffect(() => {
     show ? setOverlay(true) : setOverlay(false);
+    // eslint-disable-next-line
   }, [show]);
   return ReactDOM.createPortal(
     <form onSubmit={onSubmit}>

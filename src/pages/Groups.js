@@ -161,7 +161,7 @@ const Groups = () => {
         </div>
       </div>
       <div className="mb-4">
-        <Tables styles="striped" fullWidth="w-full">
+        <Tables styles="hoverable table_bordered" fullWidth="w-full">
           {currentEditingData && (
             <Modal
               modalType={"centered"}

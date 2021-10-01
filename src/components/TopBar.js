@@ -2,11 +2,10 @@ import React from "react";
 import fullScreen from "../assets/js/full_screen";
 import Tippy from "@tippyjs/react";
 import { useTheme } from "../context/ThemeContext";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function TopBar() {
   const { theme, changeTheme, menu, toggleMenu } = useTheme();
-  const history = useHistory();
 
   return (
     <header className="top-bar">
