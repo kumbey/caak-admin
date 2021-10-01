@@ -174,11 +174,15 @@ const Groups = () => {
                     title="Категори сонгох"
                     onChange={(e) => setSelectedCatID(e.target.value)}
                   >
-                    <option disabled selected>
+                    <option disabled hidden>
                       Сонгох...
                     </option>
-                    {catID.map((cat) => {
-                      return <option value={cat.id}>{cat.name}</option>;
+                    {catID.map((cat, index) => {
+                      return (
+                        <option key={index} value={cat.id}>
+                          {cat.name}
+                        </option>
+                      );
                     })}
                   </Select>
                   <TextArea
@@ -208,9 +212,9 @@ const Groups = () => {
               </div>
             </Modal>
           )}
-          {groups.map((group) => {
+          {groups.map((group, index) => {
             return (
-              <tr key={group.id}>
+              <tr key={index}>
                 <td>{group.name}</td>
 
                 <td>{convertDateTime(group.createdAt)}</td>

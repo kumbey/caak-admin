@@ -6,6 +6,7 @@ const groupsGetField = /* GraphQL */ `
       name
       createdAt
       updatedAt
+      id
     }
   }
 `;
