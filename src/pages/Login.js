@@ -7,10 +7,14 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const doSignIn = async () => {
+    setLoading(true);
     try {
-      await Auth.signIn(username, password);
+      await Auth.signIn(username, password).then(() => {
+        setLoading(false);
+      });
       if (!(await isAdmin())) {
         alert("YOU ARE NOT ADMIN");
       }
@@ -74,6 +78,7 @@ const Login = () => {
               Нууц үгээ мартсан уу?
             </a>
             <Button
+              loading={loading}
               className={"ml-auto"}
               uppercase
               type={"submit"}

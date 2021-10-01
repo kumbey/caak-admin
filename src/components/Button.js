@@ -1,3 +1,5 @@
+import Spinner from "./Spinner";
+
 export default function Button({
   icon,
   skin,
@@ -6,6 +8,7 @@ export default function Button({
   outlined,
   children,
   uppercase,
+  loading,
   ...props
 }) {
   if (props.icon) {
@@ -34,7 +37,7 @@ export default function Button({
             `}
       {...props}
     >
-      {children}
+      {loading ? <Spinner /> : children}
     </button>
   );
 }

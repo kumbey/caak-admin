@@ -39,9 +39,6 @@ const Categories = () => {
           setIsLoading(false);
           setCategoryName(null);
           setCategoryIconName(null);
-          console.log(
-            `Successfully added ${result.data.createCategory.name} to categories`
-          );
         });
       } catch (ex) {
         console.log(ex);
