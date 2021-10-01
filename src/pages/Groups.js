@@ -5,29 +5,71 @@ import Modal from "../components/Modal";
 import Button from "../components/Button";
 import { getGroupList } from "../graphql-custom/group/queries";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
+import { createGroup } from "../graphql-custom/group/mutation";
+import { getCategoryID } from "../graphql-custom/category/queries";
 import API from "@aws-amplify/api";
 import { convertDateTime } from "../components/utils";
+import { useToast } from "../components/Toast/ToastProvider";
+import Select from "../components/Select";
 
 const Groups = () => {
   const [isShowModal, setShowModal] = useState(false);
   const [groupName, setGroupName] = useState("");
-  const [iconName, setIconName] = useState("");
+  const [groupIconName, setGroupIconName] = useState("");
+  const [categoryID, setCategoryID] = useState("");
+  const [founderID, setFounderID] = useState("f_id123");
+  const [isLoading, setIsLoading] = useState(false);
+  const { addToast } = useToast();
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
   };
 
-  const onSubmit = (event) => {
+  const onSubmit = async (event) => {
     event.preventDefault(event);
-    console.log(groupName);
-    console.log(iconName);
+    if (groupName) {
+      setIsLoading(true);
+      try {
+        await API.graphql({
+          query: createGroup,
+          variables: {
+            input: {
+              name: groupName,
+              category_id: categoryID,
+              founder_id: founderID,
+            },
+          },
+        }).then((result) => {
+          addToast({
+            content: `${result.data.createGroup.name} амжилттай үүслээ`,
+            title: "Амжилттай",
+            autoClose: true,
+          });
+          setIsLoading(false);
+          setGroupName(null);
+          setGroupIconName(null);
+          console.log(
+            `Successfully added ${result.data.createGroup.name} to groups`
+          );
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
+    } else {
+      alert("Аль нэг талбар хоосон байна");
+    }
   };
 
   const [groups, setGroups] = useState([]);
+  const [catID, setCatID] = useState([]);
 
   useEffect(() => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
       setGroups(group.data.listGroups.items);
+    });
+    API.graphql(graphqlOperation(getCategoryID)).then((cat) => {
+      setCatID(cat.data.listCategories.items);
+      console.log("22222222222", cat.data.listCategories.items);
     });
   }, []);
   console.log("ARrr", groups);
@@ -75,6 +117,7 @@ const Groups = () => {
             onClose={() => setShowModal(false)}
             type="submit"
             onSubmit={onSubmit}
+            loading={isLoading}
             submitBtnName="Шинэ групп нэмэх"
           >
             <div className="mt-8 max-w-md">
@@ -84,11 +127,17 @@ const Groups = () => {
                   onChange={(e) => setGroupName(e.target.value)}
                   label="групп нэр"
                 />
-                <Input
-                  value={iconName}
-                  onChange={(e) => setIconName(e.target.value)}
+                {/* <Input
+                  value={groupIconName}
+                  onChange={(e) => setGroupIconName(e.target.value)}
                   label="Icon нэр"
-                />
+                /> */}
+
+                <Select>
+                  {catID.map((cat) => {
+                    return <option>{cat.name}</option>;
+                  })}
+                </Select>
               </div>
             </div>
           </Modal>

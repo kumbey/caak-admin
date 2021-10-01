@@ -1,9 +1,8 @@
-export default function Select(props) {
+export default function Select({ children, ...props }) {
   return (
     <div className="custom-select">
       <select className={`form-control ${props.invalid ? "is-invalid" : ""}`}>
-        <option>{props.default}</option>
-        <option>{props.second}</option>
+        {children}
       </select>
       <div className="custom-select-icon la la-caret-down" />
     </div>

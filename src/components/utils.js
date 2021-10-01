@@ -18,4 +18,3 @@ export const convertDateTime = (date) => {
 
   return `${fullDate.getFullYear()}/${twoDigitMonth}/${twoDigitDate} ${hour}:${min}:${sec}`;
 };
-

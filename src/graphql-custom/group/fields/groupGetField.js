@@ -1,13 +1,11 @@
 const groupsGetField = /* GraphQL */ `
   {
     items {
-      about
-      category {
-        icon
-        name
-        createdAt
-        updatedAt
-      }
+      category_id
+      founder_id
+      name
+      createdAt
+      updatedAt
     }
   }
 `;
