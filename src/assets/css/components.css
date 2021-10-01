@@ -724,6 +724,10 @@ Workspace
   }
 }
 
+.dark .workspace {
+  @apply bg-gray-900 text-gray-500;
+}
+
 /*
  Footer
 */
@@ -792,6 +796,7 @@ Table
   tbody {
     tr {
       @apply border-gray-900;
+      @apply bg-gray-800;
 
       &.row_selected {
         @apply bg-primary-900 bg-opacity-50;
@@ -909,7 +914,7 @@ Table
     tbody {
       tr {
         &:hover {
-          @apply bg-gray-100;
+          @apply bg-gray-200;
         }
       }
     }
