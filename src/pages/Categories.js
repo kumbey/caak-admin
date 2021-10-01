@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { createCategory } from "../graphql-custom/category/mutation";
+import {
+  createCategory,
+  deleteCategory,
+  updateCategory,
+} from "../graphql-custom/category/mutation";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import API from "@aws-amplify/api";
 import Tables from "../components/Tables";
@@ -16,10 +20,50 @@ const Categories = () => {
   const [categoryIconName, setCategoryIconName] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
+  const [isShowEdit, setIsShowEdit] = useState(false);
+  const [currentEditingData, setCurrentEditingData] = useState();
   const { addToast } = useToast();
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
+  };
+  const editCategoryModal = async (item) => {
+    setIsShowEdit(true);
+    setCurrentEditingData(item);
+  };
+
+  const editCategoryFunction = async (event) => {
+    event.preventDefault();
+    try {
+      await API.graphql({
+        query: updateCategory,
+        variables: {
+          input: {
+            id: currentEditingData.id,
+            icon: currentEditingData.icon,
+            name: currentEditingData.name,
+          },
+        },
+      }).then(() => {
+        addToast({ content: `${currentEditingData.name}`, title: "Амжилттай" });
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const deleteCategoryFunction = async (id) => {
+    if (window.confirm("Та устгахдаа итгэлтэй байна уу?"))
+      try {
+        await API.graphql({
+          query: deleteCategory,
+          variables: { input: { id: id } },
+        }).then(() => {
+          addToast({ content: `Устгалаа`, title: "Амжилттай" });
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
   };
 
   const onSubmit = async (event) => {
@@ -49,7 +93,6 @@ const Categories = () => {
   };
 
   const [categories, setCategories] = useState([]);
-
   useEffect(() => {
     API.graphql(graphqlOperation(getCategoryList)).then((cat) => {
       setCategories(cat.data.listCategories.items);
@@ -68,6 +111,57 @@ const Categories = () => {
         </div>
         <div className="mb-4">
           <Tables styles="striped" fullWidth="w-full">
+            {currentEditingData && (
+              <Modal
+                modalType={"centered"}
+                show={isShowEdit}
+                title={`Засвар оруулах`}
+                onClose={() => setIsShowEdit(false)}
+                type="submit"
+                onSubmit={editCategoryFunction}
+                loading={isLoading}
+                submitBtnName="Хадгалах"
+                content={currentEditingData}
+              >
+                <div className="mt-8 max-w-md">
+                  <div className="grid grid-cols-1 gap-6">
+                    <Input
+                      value={currentEditingData.name || ""}
+                      onChange={(e) =>
+                        setCurrentEditingData({
+                          ...currentEditingData,
+                          name: e.target.value,
+                        })
+                      }
+                      label="Категори нэр"
+                      error={inputError}
+                      errorMessage={`${
+                        !currentEditingData
+                          ? "Категорийн нэрийг оруулна уу"
+                          : ""
+                      }`}
+                    />
+                    <Input
+                      value={currentEditingData.icon || ""}
+                      onChange={(e) =>
+                        setCurrentEditingData({
+                          ...currentEditingData,
+                          icon: e.target.value,
+                        })
+                      }
+                      label="Категори Icon нэр"
+                      error={inputError}
+                      errorMessage={`${
+                        !currentEditingData
+                          ? "Категорийн айкон нэрийг оруулна уу"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+              </Modal>
+            )}
+
             {categories.map((cat) => {
               return (
                 <tr key={cat.id}>
@@ -80,12 +174,15 @@ const Categories = () => {
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>
-                    <a href="#edit">
+                    <span onClick={() => editCategoryModal(cat)}>
                       <i className="las la-edit text-2xl " />
-                    </a>
-                    <a href="#del">
+                    </span>
+                    <span
+                      className={"cursor-pointer"}
+                      onClick={() => deleteCategoryFunction(cat.id)}
+                    >
                       <i className="las la-trash-alt text-2xl ml-4" />
-                    </a>
+                    </span>
                   </td>
                 </tr>
               );
