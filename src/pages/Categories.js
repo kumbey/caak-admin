@@ -166,7 +166,6 @@ const Categories = () => {
               return (
                 <tr key={cat.id}>
                   <td>{cat.name}</td>
-                  <td>{cat.icon}</td>
                   <td>{convertDateTime(cat.createdAt)}</td>
                   <td>{`${
                     cat.createdAt !== cat.updatedAt

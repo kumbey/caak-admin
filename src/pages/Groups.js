@@ -212,7 +212,6 @@ const Groups = () => {
             return (
               <tr key={group.id}>
                 <td>{group.name}</td>
-                <td>{group.icon}</td>
 
                 <td>{convertDateTime(group.createdAt)}</td>
                 <td>{`${
