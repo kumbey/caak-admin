@@ -9,7 +9,10 @@ import API from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getGroupList } from "../graphql-custom/group/queries";
-import { getCategoryID } from "../graphql-custom/category/queries";
+import {
+  getCategoryID,
+  getCategoryByID,
+} from "../graphql-custom/category/queries";
 
 import { convertDateTime } from "../components/utils";
 import { useToast } from "../components/Toast/ToastProvider";
@@ -43,9 +46,20 @@ const Groups = () => {
   };
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
-    setCurrentEditingData(item);
+    const {
+      data: {
+        getCategory: { name },
+      },
+    } = await API.graphql({
+      query: getCategoryByID,
+      variables: { id: item.category_id },
+    });
+    setCurrentEditingData({
+      ...currentEditingData,
+      ...item,
+      category_name: name,
+    });
   };
-
   const editGroupFunction = async (event) => {
     event.preventDefault();
     try {
@@ -54,8 +68,12 @@ const Groups = () => {
         variables: {
           input: {
             id: currentEditingData.id,
-            icon: currentEditingData.icon,
+            category_id: currentEditingData.category_id,
             name: currentEditingData.name,
+            founder_id: currentEditingData.founder_id,
+            groupCoverId: currentEditingData.groupCoverId,
+            about: currentEditingData.about,
+            rating: currentEditingData.rating,
           },
         },
       }).then(() => {
@@ -73,6 +91,8 @@ const Groups = () => {
           query: deleteGroup,
           variables: { input: { id: id } },
         }).then(() => {
+          const filteredGroup = groups.filter((group) => group.id !== id);
+          setGroups(filteredGroup);
           addToast({ content: `Устгалаа`, title: "Амжилттай" });
         });
       } catch (ex) {
@@ -175,11 +195,18 @@ const Groups = () => {
                     onChange={(e) => setSelectedCatID(e.target.value)}
                   >
                     <option disabled hidden>
-                      Сонгох...
+                      songoh
                     </option>
                     {catID.map((cat, index) => {
                       return (
-                        <option key={index} value={cat.id}>
+                        <option
+                          key={index}
+                          selected={
+                            cat.id === currentEditingData.category_id &&
+                            currentEditingData.category_name
+                          }
+                          value={cat.id}
+                        >
                           {cat.name}
                         </option>
                       );
@@ -189,25 +216,20 @@ const Groups = () => {
                     name="about"
                     title="Тухай"
                     row="4"
-                    onChange={(e) => setGroupAbout(e.target.value)}
-                    value={groupAbout}
-                  />
-                  {/* <Input
-                      value={currentEditingData.icon || ""}
-                      onChange={(e) =>
-                        setCurrentEditingData({
-                          ...currentEditingData,
-                          icon: e.target.value,
-                        })
-                      }
-                      label="Категори Icon нэр"
-                      error={inputError}
-                      errorMessage={`${
-                        !currentEditingData
-                          ? "Категорийн айкон нэрийг оруулна уу"
-                          : ""
-                      }`}
-                    /> */}
+                    onChange={(e) =>
+                      setCurrentEditingData({
+                        ...currentEditingData,
+                        about: e.target.value,
+                      })
+                    }
+                  >
+                    {currentEditingData.about}
+                  </TextArea>
+
+                  <h4>Cover image upload</h4>
+                  <DropZone title={"Drop it here"} onUpload={setCoverImage} />
+                  <h4>Profile image upload</h4>
+                  <DropZone title={"Drop it here"} onUpload={setProfileImage} />
                 </div>
               </div>
             </Modal>
