@@ -23,8 +23,11 @@ const DropZone = ({
     multiple: false,
   });
 
-  useEffect(() => {
+  useEffect(()=> {
     setPreviewImg(previewImage);
+  },[previewImage])
+
+  useEffect(() => {
     dropZoneFile.map((file) => {
       let fileData = {
         title: "",

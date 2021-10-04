@@ -48,8 +48,9 @@ const Groups = () => {
   };
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
-    const generatedCoverImage = await generateFileUrl(item.cover);
-    const generatedProfileImage = await generateFileUrl(item.profile);
+    const generatedCoverImage = generateFileUrl(item.cover);
+    const generatedProfileImage = generateFileUrl(item.profile);
+    console.log(generatedCoverImage);
     const {
       data: {
         getCategory: { name },
