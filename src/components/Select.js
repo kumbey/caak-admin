@@ -1,10 +1,10 @@
-export default function Select({ children, ...props }) {
+export default function Select({ children, title, invalid, ...props }) {
   return (
     <div className="custom-select">
-      <h4>{props.title}</h4>
+      <h4>{title}</h4>
       <select
-        onChange={props.onChange}
-        className={`form-control ${props.invalid ? "is-invalid" : ""}`}
+        className={`form-control ${invalid ? "is-invalid" : ""}`}
+        {...props}
       >
         {children}
       </select>

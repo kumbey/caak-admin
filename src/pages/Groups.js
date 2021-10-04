@@ -10,8 +10,8 @@ import Auth from "@aws-amplify/auth";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getGroupList } from "../graphql-custom/group/queries";
 import {
-  getCategoryID,
   getCategoryByID,
+  getCategoryID,
 } from "../graphql-custom/category/queries";
 
 import { convertDateTime } from "../components/utils";
@@ -198,20 +198,14 @@ const Groups = () => {
                         category_id: e.target.value,
                       })
                     }
+                    value={currentEditingData.category_id || "DEFAULT"}
                   >
-                    <option disabled hidden>
-                      songoh
+                    <option value={"DEFAULT"} disabled hidden>
+                      СОНГОХ
                     </option>
                     {catID.map((cat, index) => {
                       return (
-                        <option
-                          key={index}
-                          selected={
-                            cat.id === currentEditingData.category_id &&
-                            currentEditingData.category_name
-                          }
-                          value={cat.id}
-                        >
+                        <option key={index} value={cat.id}>
                           {cat.name}
                         </option>
                       );
@@ -221,15 +215,14 @@ const Groups = () => {
                     name="about"
                     title="Тухай"
                     row="4"
+                    value={currentEditingData.about}
                     onChange={(e) =>
                       setCurrentEditingData({
                         ...currentEditingData,
                         about: e.target.value,
                       })
                     }
-                  >
-                    {currentEditingData.about}
-                  </TextArea>
+                  />
 
                   <h4>Cover image upload</h4>
                   <DropZone title={"Drop it here"} onUpload={setCoverImage} />
@@ -289,8 +282,11 @@ const Groups = () => {
               <Select
                 title="Категори сонгох"
                 onChange={(e) => setSelectedCatID(e.target.value)}
+                value={"DEFAULT"}
               >
-                <option hidden>Сонгох...</option>
+                <option value={"DEFAULT"} hidden>
+                  Сонгох...
+                </option>
                 {catID.map((cat) => {
                   return (
                     <option key={cat.id} value={cat.id}>
