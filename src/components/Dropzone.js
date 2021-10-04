@@ -10,8 +10,10 @@ const DropZone = ({
   titleStyle,
   icon,
   onUpload,
+  previewImage,
 }) => {
   const [dropZoneFile, setDropZoneFile] = useState([]);
+  const [previewImg, setPreviewImg] = useState();
   const [uploadedFile, setUploadedFile] = useState();
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: setDropZoneFile,
@@ -22,6 +24,7 @@ const DropZone = ({
   });
 
   useEffect(() => {
+    setPreviewImg(previewImage);
     dropZoneFile.map((file) => {
       let fileData = {
         title: "",
@@ -77,6 +80,7 @@ const DropZone = ({
           <h3>Drop File</h3>
           <input {...getInputProps()} />
           {icon && icon}
+          <img className={"max-h-full"} alt={previewImg} src={previewImg} />
           <span className={`${titleStyle}`}>{title}</span>
           <span className={`${subTitleStyle}`}>{subTitle}</span>
         </Fragment>

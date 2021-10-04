@@ -8,6 +8,20 @@ const groupsGetField = /* GraphQL */ `
       updatedAt
       id
       about
+      cover {
+        id
+        bucket
+        ext
+        level
+        region
+      }
+      profile {
+        id
+        bucket
+        ext
+        level
+        region
+      }
     }
   }
 `;

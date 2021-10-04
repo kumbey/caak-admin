@@ -133,7 +133,7 @@ const Categories = () => {
                           name: e.target.value,
                         })
                       }
-                      title="Категори нэр"
+                      label="Категори нэр"
                       error={inputError}
                       errorMessage={`${
                         !currentEditingData
@@ -149,7 +149,7 @@ const Categories = () => {
                           icon: e.target.value,
                         })
                       }
-                      title="Категори Icon нэр"
+                      label="Категори Icon нэр"
                       error={inputError}
                       errorMessage={`${
                         !currentEditingData

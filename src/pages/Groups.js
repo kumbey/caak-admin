@@ -26,6 +26,8 @@ import TextArea from "../components/TextArea";
 import DropZone from "../components/Dropzone";
 import { ApiFileUpload } from "../utility/ApiHelper";
 
+import { generateFileUrl } from "../utility/Util";
+
 const Groups = () => {
   const { addToast } = useToast();
   const [isShowModal, setShowModal] = useState(false);
@@ -46,6 +48,7 @@ const Groups = () => {
   };
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
+    const generatedCoverImage = await generateFileUrl(item.cover);
     const {
       data: {
         getCategory: { name },
@@ -58,6 +61,9 @@ const Groups = () => {
       ...currentEditingData,
       ...item,
       category_name: name,
+      cover: {
+        url: generatedCoverImage,
+      },
     });
   };
   const editGroupFunction = async (event) => {
@@ -147,7 +153,6 @@ const Groups = () => {
       setCatID(cat.data.listCategories.items);
     });
   }, []);
-
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">
@@ -227,12 +232,15 @@ const Groups = () => {
                         about: e.target.value,
                       })
                     }
-                  >
-                    {currentEditingData.about}
-                  </TextArea>
+                    value={currentEditingData.about}
+                  />
 
                   <h4>Cover image upload</h4>
-                  <DropZone title={"Drop it here"} onUpload={setCoverImage} />
+                  <DropZone
+                    title={"Drop it here"}
+                    previewImage={currentEditingData.cover.url}
+                    onUpload={setCoverImage}
+                  />
                   <h4>Profile image upload</h4>
                   <DropZone title={"Drop it here"} onUpload={setProfileImage} />
                 </div>
