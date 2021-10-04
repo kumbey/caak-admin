@@ -49,6 +49,7 @@ const Groups = () => {
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
     const generatedCoverImage = await generateFileUrl(item.cover);
+    const generatedProfileImage = await generateFileUrl(item.profile);
     const {
       data: {
         getCategory: { name },
@@ -63,6 +64,9 @@ const Groups = () => {
       category_name: name,
       cover: {
         url: generatedCoverImage,
+      },
+      profile: {
+        url: generatedProfileImage,
       },
     });
   };
@@ -236,7 +240,11 @@ const Groups = () => {
                     onUpload={setCoverImage}
                   />
                   <h4>Profile image upload</h4>
-                  <DropZone title={"Drop it here"} onUpload={setProfileImage} />
+                  <DropZone
+                    title={"Drop it here"}
+                    previewImage={currentEditingData.profile.url}
+                    onUpload={setProfileImage}
+                  />
                 </div>
               </div>
             </Modal>
