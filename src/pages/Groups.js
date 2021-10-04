@@ -212,7 +212,7 @@ const Groups = () => {
       <div className="mb-4">
         {currentEditingData && (
           <Modal
-              className={"w-96"}
+            className={"w-96"}
             show={isShowEdit}
             title={`Засвар оруулах`}
             onClose={() => setIsShowEdit(false)}
@@ -292,6 +292,7 @@ const Groups = () => {
           <thead>
             <tr>
               <th className="text-left uppercase">Нэр</th>
+              <th className="text-left uppercase">Категори нэр</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
               <th className="text-left uppercase">Засах</th>
@@ -302,6 +303,7 @@ const Groups = () => {
               return (
                 <tr key={index}>
                   <td>{group.name}</td>
+                  <td>{group.category.name}</td>
 
                   <td>{convertDateTime(group.createdAt)}</td>
                   <td>{`${

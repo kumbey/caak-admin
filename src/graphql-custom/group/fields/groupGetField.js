@@ -22,6 +22,10 @@ const groupsGetField = /* GraphQL */ `
         level
         region
       }
+      category {
+        id
+        name
+      }
     }
   }
 `;

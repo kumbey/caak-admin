@@ -182,7 +182,7 @@ const Categories = () => {
                     }`}</td>
                     <td>
                       <span onClick={() => editCategoryModal(cat)}>
-                        <i className="las la-edit text-2xl " />
+                        <i className="las la-edit text-2xl cursor-pointer" />
                       </span>
                       <span
                         className={"cursor-pointer"}
