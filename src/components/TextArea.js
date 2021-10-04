@@ -1,14 +1,13 @@
-export default function TextArea(props) {
+export default function TextArea({ children, invalid, title, ...props }) {
   return (
     <div>
-      <h4>{props.title}</h4>
+      <h4>{title}</h4>
       <textarea
-        onChange={props.onChange}
-        value={props.value}
-        className={`form-control ${props.invalid ? "is-invalid" : ""}`}
-        rows={props.rows}
+        className={`form-control ${invalid ? "is-invalid" : ""}`}
         {...props}
-      />
+      >
+        {/*{children}*/}
+      </textarea>
     </div>
   );
 }
