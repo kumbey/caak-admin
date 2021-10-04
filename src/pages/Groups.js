@@ -74,14 +74,11 @@ const Groups = () => {
         url: generatedProfileImage,
       },
     });
-
-    currentEditingData && console.log("edit modal ", currentEditingData.cover);
   };
 
   const editGroupFunction = async (event) => {
     event.preventDefault();
-    console.log("qqqqq", currentEditingData);
-    if (coverImage) {
+    if (coverImage.file) {
       try {
         const newCoverImage = await ApiFileUpload(coverImage.file);
 
@@ -107,7 +104,7 @@ const Groups = () => {
               id: currentEditingData.cover.id,
             },
           },
-        }).then((e) => console.log("qweqweqwe", e));
+        });
       } catch (ex) {
         console.log(ex);
       }
@@ -121,7 +118,6 @@ const Groups = () => {
               category_id: currentEditingData.category_id,
               name: currentEditingData.name,
               founder_id: currentEditingData.founder_id,
-              groupCoverId: currentEditingData.groupCoverId,
               about: currentEditingData.about,
               rating: currentEditingData.rating,
             },
@@ -214,113 +210,123 @@ const Groups = () => {
         </div>
       </div>
       <div className="mb-4">
-        <Tables styles="hoverable table_bordered" fullWidth="w-full">
-          {currentEditingData && (
-            <Modal
-              modalType={"centered"}
-              show={isShowEdit}
-              title={`Засвар оруулах`}
-              onClose={() => setIsShowEdit(false)}
-              type="submit"
-              onSubmit={editGroupFunction}
-              loading={isLoading}
-              submitBtnName="Хадгалах"
-              content={currentEditingData}
-            >
-              <div className="mt-8 max-w-md">
-                <div className="grid grid-cols-1 gap-6">
-                  <Input
-                    value={currentEditingData.name || ""}
-                    onChange={(e) =>
-                      setCurrentEditingData({
-                        ...currentEditingData,
-                        name: e.target.value,
-                      })
-                    }
-                    label="Групп нэр"
-                    error={inputError}
-                    errorMessage={`${
-                      !currentEditingData ? "Групп нэрийг оруулна уу" : ""
-                    }`}
-                  />
-                  <Select
-                    title="Категори сонгох"
-                    onChange={(e) =>
-                      setCurrentEditingData({
-                        ...currentEditingData,
-                        category_id: e.target.value,
-                      })
-                    }
-                    value={currentEditingData.category_id || "DEFAULT"}
-                  >
-                    <option value={"DEFAULT"} disabled hidden>
-                      СОНГОХ
-                    </option>
-                    {catID.map((cat, index) => {
-                      return (
-                        <option key={index} value={cat.id}>
-                          {cat.name}
-                        </option>
-                      );
-                    })}
-                  </Select>
-                  <TextArea
-                    name="about"
-                    title="Тухай"
-                    row="4"
-                    value={currentEditingData.about}
-                    onChange={(e) =>
-                      setCurrentEditingData({
-                        ...currentEditingData,
-                        about: e.target.value,
-                      })
-                    }
-                  />
+        {currentEditingData && (
+          <Modal
+            modalType={"centered"}
+            show={isShowEdit}
+            title={`Засвар оруулах`}
+            onClose={() => setIsShowEdit(false)}
+            type="submit"
+            onSubmit={editGroupFunction}
+            loading={isLoading}
+            submitBtnName="Хадгалах"
+            content={currentEditingData}
+          >
+            <div className="mt-8 max-w-md">
+              <div className="grid grid-cols-1 gap-6">
+                <Input
+                  value={currentEditingData.name || ""}
+                  onChange={(e) =>
+                    setCurrentEditingData({
+                      ...currentEditingData,
+                      name: e.target.value,
+                    })
+                  }
+                  label="Групп нэр"
+                  error={inputError}
+                  errorMessage={`${
+                    !currentEditingData ? "Групп нэрийг оруулна уу" : ""
+                  }`}
+                />
+                <Select
+                  title="Категори сонгох"
+                  onChange={(e) =>
+                    setCurrentEditingData({
+                      ...currentEditingData,
+                      category_id: e.target.value,
+                    })
+                  }
+                  value={currentEditingData.category_id || "DEFAULT"}
+                >
+                  <option value={"DEFAULT"} disabled hidden>
+                    СОНГОХ
+                  </option>
+                  {catID.map((cat, index) => {
+                    return (
+                      <option key={index} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    );
+                  })}
+                </Select>
+                <TextArea
+                  name="about"
+                  title="Тухай"
+                  row="4"
+                  value={currentEditingData.about}
+                  onChange={(e) =>
+                    setCurrentEditingData({
+                      ...currentEditingData,
+                      about: e.target.value,
+                    })
+                  }
+                />
 
-                  <h4>Cover image upload</h4>
-                  <DropZone
-                    title={"Drop it here"}
-                    previewImage={currentEditingData.cover.url}
-                    onUpload={setCoverImage}
-                  />
-                  <h4>Profile image upload</h4>
-                  <DropZone
-                    title={"Drop it here"}
-                    previewImage={currentEditingData.profile.url}
-                    onUpload={setProfileImage}
-                  />
-                </div>
+                <h4>Cover image upload</h4>
+                <DropZone
+                  title={"Drop it here"}
+                  previewImage={currentEditingData.cover.url}
+                  onUpload={setCoverImage}
+                />
+                <h4>Profile image upload</h4>
+                <DropZone
+                  title={"Drop it here"}
+                  previewImage={currentEditingData.profile.url}
+                  onUpload={setProfileImage}
+                />
               </div>
-            </Modal>
-          )}
-          {groups.map((group, index) => {
-            return (
-              <tr key={index}>
-                <td>{group.name}</td>
+            </div>
+          </Modal>
+        )}
+        <Tables styles="hoverable table_bordered" fullWidth="w-full">
+          <thead>
+            <tr>
+              <th className="text-left uppercase">Нэр</th>
+              <th className="text-left uppercase">Үүссэн огноо</th>
+              <th className="text-left uppercase">Зассан огноо</th>
+              <th className="text-left uppercase">Засах</th>
+            </tr>
+          </thead>
+          <tbody>
+            {groups.map((group, index) => {
+              return (
+                <tr key={index}>
+                  <td>{group.name}</td>
 
-                <td>{convertDateTime(group.createdAt)}</td>
-                <td>{`${
-                  group.createdAt !== group.updatedAt
-                    ? convertDateTime(group.createdAt)
-                    : "Засвар ороогүй"
-                }`}</td>
-                <td>
-                  <span
-                    onClick={() => editGroupModal(group)}
-                    className={"cursor-pointer"}
-                  >
-                    <i className="las la-edit text-2xl " />
-                  </span>
-                  <span
-                    onClick={() => deleteGroupFunction(group.id)}
-                    className={"cursor-pointer"}
-                  >
-                    <i className="las la-trash-alt text-2xl ml-4" />
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
+                  <td>{convertDateTime(group.createdAt)}</td>
+                  <td>{`${
+                    group.createdAt !== group.updatedAt
+                      ? convertDateTime(group.createdAt)
+                      : "Засвар ороогүй"
+                  }`}</td>
+                  <td>
+                    <span
+                      onClick={() => editGroupModal(group)}
+                      className={"cursor-pointer"}
+                    >
+                      <i className="las la-edit text-2xl " />
+                    </span>
+                    <span
+                      onClick={() => deleteGroupFunction(group.id)}
+                      className={"cursor-pointer"}
+                    >
+                      <i className="las la-trash-alt text-2xl ml-4" />
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
         </Tables>
         <Modal
           show={isShowModal}
@@ -343,9 +349,9 @@ const Groups = () => {
               <Select
                 title="Категори сонгох"
                 onChange={(e) => setSelectedCatID(e.target.value)}
-                value={"DEFAULT"}
+                defaultValue={"DEFAULT"}
               >
-                <option value={"DEFAULT"} hidden>
+                <option value={"DEFAULT"} disabled hidden>
                   Сонгох...
                 </option>
                 {catID.map((cat) => {

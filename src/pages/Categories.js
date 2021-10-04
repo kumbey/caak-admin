@@ -161,31 +161,40 @@ const Categories = () => {
                 </div>
               </Modal>
             )}
-
-            {categories.map((cat) => {
-              return (
-                <tr key={cat.id}>
-                  <td>{cat.name}</td>
-                  <td>{convertDateTime(cat.createdAt)}</td>
-                  <td>{`${
-                    cat.createdAt !== cat.updatedAt
-                      ? convertDateTime(cat.updatedAt)
-                      : "Засвар ороогүй"
-                  }`}</td>
-                  <td>
-                    <span onClick={() => editCategoryModal(cat)}>
-                      <i className="las la-edit text-2xl " />
-                    </span>
-                    <span
-                      className={"cursor-pointer"}
-                      onClick={() => deleteCategoryFunction(cat.id)}
-                    >
-                      <i className="las la-trash-alt text-2xl ml-4" />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
+            <thead>
+              <tr>
+                <th className="text-left uppercase">Нэр</th>
+                <th className="text-left uppercase">Үүссэн огноо</th>
+                <th className="text-left uppercase">Зассан огноо</th>
+                <th className="text-left uppercase">Засах</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((cat) => {
+                return (
+                  <tr key={cat.id}>
+                    <td>{cat.name}</td>
+                    <td>{convertDateTime(cat.createdAt)}</td>
+                    <td>{`${
+                      cat.createdAt !== cat.updatedAt
+                        ? convertDateTime(cat.updatedAt)
+                        : "Засвар ороогүй"
+                    }`}</td>
+                    <td>
+                      <span onClick={() => editCategoryModal(cat)}>
+                        <i className="las la-edit text-2xl " />
+                      </span>
+                      <span
+                        className={"cursor-pointer"}
+                        onClick={() => deleteCategoryFunction(cat.id)}
+                      >
+                        <i className="las la-trash-alt text-2xl ml-4" />
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
           </Tables>
           <Modal
             show={isShowModal}

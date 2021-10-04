@@ -14,6 +14,7 @@ export default function Modal({
   title,
   content,
   loading,
+  className,
   ...props
 }) {
   const { setOverlay } = useTheme();
@@ -38,9 +39,9 @@ export default function Modal({
           onClick={(e) => e.stopPropagation()}
           className={`modal-dialog modal-dialog${
             modalType ? "_" : ""
-          }${modalType} max-w-2xl`}
+          }${modalType}`}
         >
-          <div className="modal-content">
+          <div className={`modal-content ${className ?? className}`}>
             <div className="modal-header">
               <h2 className="modal-title">{title}</h2>
               <button
