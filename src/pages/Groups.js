@@ -126,6 +126,7 @@ const Groups = () => {
           addToast({
             content: `${currentEditingData.name}`,
             title: "Амжилттай",
+            autoClose: true,
           });
         });
       } catch (ex) {
@@ -143,7 +144,11 @@ const Groups = () => {
         }).then(() => {
           const filteredGroup = groups.filter((group) => group.id !== id);
           setGroups(filteredGroup);
-          addToast({ content: `Устгалаа`, title: "Амжилттай" });
+          addToast({
+            content: `Устгалаа`,
+            title: "Амжилттай",
+            autoClose: true,
+          });
         });
       } catch (ex) {
         console.log(ex);
