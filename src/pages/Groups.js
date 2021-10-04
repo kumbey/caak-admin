@@ -5,6 +5,8 @@ import {
   updateGroup,
 } from "../graphql-custom/group/mutation";
 
+import { deleteFile } from "../graphql-custom/file/mutation";
+
 import API from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
@@ -50,7 +52,7 @@ const Groups = () => {
     setIsShowEdit(true);
     const generatedCoverImage = generateFileUrl(item.cover);
     const generatedProfileImage = generateFileUrl(item.profile);
-    console.log(generatedCoverImage);
+
     const {
       data: {
         getCategory: { name },
@@ -64,34 +66,75 @@ const Groups = () => {
       ...item,
       category_name: name,
       cover: {
+        ...item.cover,
         url: generatedCoverImage,
       },
       profile: {
+        ...item.profile,
         url: generatedProfileImage,
       },
     });
+
+    currentEditingData && console.log("edit modal ", currentEditingData.cover);
   };
+
   const editGroupFunction = async (event) => {
     event.preventDefault();
-    try {
-      await API.graphql({
-        query: updateGroup,
-        variables: {
-          input: {
-            id: currentEditingData.id,
-            category_id: currentEditingData.category_id,
-            name: currentEditingData.name,
-            founder_id: currentEditingData.founder_id,
-            groupCoverId: currentEditingData.groupCoverId,
-            about: currentEditingData.about,
-            rating: currentEditingData.rating,
+    console.log("qqqqq", currentEditingData);
+    if (coverImage) {
+      try {
+        const newCoverImage = await ApiFileUpload(coverImage.file);
+
+        await API.graphql({
+          query: updateGroup,
+          variables: {
+            input: {
+              id: currentEditingData.id,
+              category_id: currentEditingData.category_id,
+              name: currentEditingData.name,
+              founder_id: currentEditingData.founder_id,
+              groupCoverId: newCoverImage.id,
+              about: currentEditingData.about,
+              rating: currentEditingData.rating,
+            },
           },
-        },
-      }).then(() => {
-        addToast({ content: `${currentEditingData.name}`, title: "Амжилттай" });
-      });
-    } catch (ex) {
-      console.log(ex);
+        });
+        await API.graphql({
+          query: deleteFile,
+
+          variables: {
+            input: {
+              id: currentEditingData.cover.id,
+            },
+          },
+        }).then((e) => console.log("qweqweqwe", e));
+      } catch (ex) {
+        console.log(ex);
+      }
+    } else {
+      try {
+        await API.graphql({
+          query: updateGroup,
+          variables: {
+            input: {
+              id: currentEditingData.id,
+              category_id: currentEditingData.category_id,
+              name: currentEditingData.name,
+              founder_id: currentEditingData.founder_id,
+              groupCoverId: currentEditingData.groupCoverId,
+              about: currentEditingData.about,
+              rating: currentEditingData.rating,
+            },
+          },
+        }).then(() => {
+          addToast({
+            content: `${currentEditingData.name}`,
+            title: "Амжилттай",
+          });
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
     }
   };
 
