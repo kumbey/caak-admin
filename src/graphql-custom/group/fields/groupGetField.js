@@ -1,7 +1,10 @@
 const groupsGetField = /* GraphQL */ `
   {
     items {
-      category_id
+      category {
+        id
+        name
+      }
       founder_id
       name
       createdAt

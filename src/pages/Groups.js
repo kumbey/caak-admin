@@ -11,10 +11,7 @@ import API from "@aws-amplify/api";
 import Auth from "@aws-amplify/auth";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getGroupList } from "../graphql-custom/group/queries";
-import {
-  getCategoryByID,
-  getCategoryID,
-} from "../graphql-custom/category/queries";
+import { getCategoryList } from "../graphql-custom/category/queries";
 
 import { convertDateTime } from "../components/utils";
 import { useToast } from "../components/Toast/ToastProvider";
@@ -37,7 +34,7 @@ const Groups = () => {
   const [groupAbout, setGroupAbout] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [groups, setGroups] = useState([]);
-  const [catID, setCatID] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCatID, setSelectedCatID] = useState("");
   const [isShowEdit, setIsShowEdit] = useState(false);
   const [currentEditingData, setCurrentEditingData] = useState();
@@ -50,34 +47,23 @@ const Groups = () => {
   };
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
-    const generatedCoverImage = generateFileUrl(item.cover);
-    const generatedProfileImage = generateFileUrl(item.profile);
 
-    const {
-      data: {
-        getCategory: { name },
-      },
-    } = await API.graphql({
-      query: getCategoryByID,
-      variables: { id: item.category_id },
-    });
     setCurrentEditingData({
-      ...currentEditingData,
       ...item,
-      category_name: name,
       cover: {
         ...item.cover,
-        url: generatedCoverImage,
+        url: generateFileUrl(item.cover),
       },
       profile: {
         ...item.profile,
-        url: generatedProfileImage,
+        url: generateFileUrl(item.profile),
       },
     });
   };
 
   const editGroupFunction = async (event) => {
     event.preventDefault();
+    setIsLoading(true);
     if (coverImage.file) {
       try {
         const newCoverImage = await ApiFileUpload(coverImage.file);
@@ -90,9 +76,9 @@ const Groups = () => {
               category_id: currentEditingData.category_id,
               name: currentEditingData.name,
               founder_id: currentEditingData.founder_id,
-              groupCoverId: newCoverImage.id,
               about: currentEditingData.about,
               rating: currentEditingData.rating,
+              groupCoverId: newCoverImage.id,
             },
           },
         });
@@ -102,6 +88,35 @@ const Groups = () => {
           variables: {
             input: {
               id: currentEditingData.cover.id,
+            },
+          },
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
+    } else if (profileImage.file) {
+      try {
+        const newProfileImage = await ApiFileUpload(coverImage.file);
+
+        await API.graphql({
+          query: updateGroup,
+          variables: {
+            input: {
+              id: currentEditingData.id,
+              category_id: currentEditingData.category_id,
+              name: currentEditingData.name,
+              founder_id: currentEditingData.founder_id,
+              about: currentEditingData.about,
+              rating: currentEditingData.rating,
+              groupCoverId: newProfileImage.id,
+            },
+          },
+        });
+        await API.graphql({
+          query: deleteFile,
+          variables: {
+            input: {
+              id: currentEditingData.profile.id,
             },
           },
         });
@@ -122,17 +137,18 @@ const Groups = () => {
               rating: currentEditingData.rating,
             },
           },
-        }).then(() => {
-          addToast({
-            content: `${currentEditingData.name}`,
-            title: "Амжилттай",
-            autoClose: true,
-          });
         });
       } catch (ex) {
         console.log(ex);
       }
     }
+    addToast({
+      content: `${currentEditingData.name} -д өөрчлөлт орууллаа`,
+      title: "Амжилттай",
+    });
+    setIsShowEdit(false)
+    setCurrentEditingData(null)
+    setIsLoading(false);
   };
 
   const deleteGroupFunction = async (id) => {
@@ -198,8 +214,8 @@ const Groups = () => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
       setGroups(group.data.listGroups.items);
     });
-    API.graphql(graphqlOperation(getCategoryID)).then((cat) => {
-      setCatID(cat.data.listCategories.items);
+    API.graphql(graphqlOperation(getCategoryList)).then((category) => {
+      setCategories(category.data.listCategories.items);
     });
   }, []);
   return (
@@ -251,12 +267,12 @@ const Groups = () => {
                       category_id: e.target.value,
                     })
                   }
-                  value={currentEditingData.category_id || "DEFAULT"}
+                  value={currentEditingData.category.id}
                 >
-                  <option value={"DEFAULT"} disabled hidden>
+                  <option disabled hidden>
                     СОНГОХ
                   </option>
-                  {catID.map((cat, index) => {
+                  {categories.map((cat, index) => {
                     return (
                       <option key={index} value={cat.id}>
                         {cat.name}
@@ -361,7 +377,7 @@ const Groups = () => {
                 <option value={"DEFAULT"} disabled hidden>
                   Сонгох...
                 </option>
-                {catID.map((cat) => {
+                {categories.map((cat) => {
                   return (
                     <option key={cat.id} value={cat.id}>
                       {cat.name}

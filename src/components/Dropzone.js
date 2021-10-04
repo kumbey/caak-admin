@@ -23,9 +23,9 @@ const DropZone = ({
     multiple: false,
   });
 
-  useEffect(()=> {
+  useEffect(() => {
     setPreviewImg(previewImage);
-  },[previewImage])
+  }, [previewImage]);
 
   useEffect(() => {
     dropZoneFile.map((file) => {
@@ -47,10 +47,8 @@ const DropZone = ({
       onUpload(fileData);
       return false;
     });
-
     // eslint-disable-next-line
   }, [dropZoneFile]);
-
   const getFileExt = (fileName) => {
     return fileName.substring(fileName.lastIndexOf(".") + 1);
   };
