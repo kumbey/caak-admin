@@ -212,7 +212,7 @@ const Groups = () => {
       <div className="mb-4">
         {currentEditingData && (
           <Modal
-            modalType={"centered"}
+              className={"w-96"}
             show={isShowEdit}
             title={`Засвар оруулах`}
             onClose={() => setIsShowEdit(false)}
