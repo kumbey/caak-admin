@@ -23,6 +23,7 @@ import Button from "../components/Button";
 import Select from "../components/Select";
 import TextArea from "../components/TextArea";
 import DropZone from "../components/Dropzone";
+import ConfirmAlert from "../components/ConfirmAlert/ConfirmAlert";
 import { ApiFileUpload } from "../utility/ApiHelper";
 
 import { generateFileUrl } from "../utility/Util";
@@ -41,9 +42,15 @@ const Groups = () => {
   const [inputError, setInputError] = useState(false);
   const [coverImage, setCoverImage] = useState({});
   const [profileImage, setProfileImage] = useState({});
+  const [isShowConfirmAlert, setIsShowConfirmAlert] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
+  };
+  const deleteAlertModal = (item) => {
+    setIsShowConfirmAlert(true);
+    setDeleteItem(item);
   };
   const editGroupModal = async (item) => {
     setIsShowEdit(true);
@@ -146,29 +153,30 @@ const Groups = () => {
       content: `${currentEditingData.name} -д өөрчлөлт орууллаа`,
       title: "Амжилттай",
     });
-    setIsShowEdit(false)
-    setCurrentEditingData(null)
+    setIsShowEdit(false);
+    setCurrentEditingData(null);
     setIsLoading(false);
   };
 
   const deleteGroupFunction = async (id) => {
-    if (window.confirm("Та устгахдаа итгэлтэй байна уу?"))
-      try {
-        await API.graphql({
-          query: deleteGroup,
-          variables: { input: { id: id } },
-        }).then(() => {
-          const filteredGroup = groups.filter((group) => group.id !== id);
-          setGroups(filteredGroup);
-          addToast({
-            content: `Устгалаа`,
-            title: "Амжилттай",
-            autoClose: true,
-          });
+    // if (window.confirm("Та устгахдаа итгэлтэй байна уу?"))
+    try {
+      await API.graphql({
+        query: deleteGroup,
+        variables: { input: { id: id } },
+      }).then(() => {
+        const filteredGroup = groups.filter((group) => group.id !== id);
+        setGroups(filteredGroup);
+        addToast({
+          content: `Устгалаа`,
+          title: "Амжилттай",
+          autoClose: true,
         });
-      } catch (ex) {
-        console.log(ex);
-      }
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+    setIsShowConfirmAlert(false);
   };
 
   const onSubmit = async (event) => {
@@ -231,6 +239,12 @@ const Groups = () => {
         </div>
       </div>
       <div className="mb-4">
+        <ConfirmAlert
+          show={isShowConfirmAlert}
+          title="Та устгахдаа итгэлтэй байна уу?"
+          onClose={() => setIsShowConfirmAlert(false)}
+          onSubmit={() => deleteGroupFunction(deleteItem)}
+        />
         {currentEditingData && (
           <Modal
             className={"w-96"}
@@ -340,7 +354,7 @@ const Groups = () => {
                       <i className="las la-edit text-2xl " />
                     </span>
                     <span
-                      onClick={() => deleteGroupFunction(group.id)}
+                      onClick={() => deleteAlertModal(group.id)}
                       className={"cursor-pointer"}
                     >
                       <i className="las la-trash-alt text-2xl ml-4" />

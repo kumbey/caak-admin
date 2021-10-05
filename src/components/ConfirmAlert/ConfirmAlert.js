@@ -2,15 +2,7 @@ import { useEffect } from "react";
 import { useTheme } from "../../context/ThemeContext";
 import ReactDOM from "react-dom";
 
-const ConfirmAlert = ({
-  onSubmit,
-  show,
-  onClose,
-  side,
-  title,
-  setIsShowConfirmAlert,
-  ...props
-}) => {
+const ConfirmAlert = ({ onSubmit, show, onClose, side, title, ...props }) => {
   const { setOverlay } = useTheme();
   useEffect(() => {
     show ? setOverlay(true) : setOverlay(false);

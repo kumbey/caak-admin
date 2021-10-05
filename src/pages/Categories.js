@@ -87,7 +87,6 @@ const Categories = () => {
     }
     setIsShowConfirmAlert(false);
   };
-  <ConfirmAlert />;
   const onSubmit = async (event) => {
     event.preventDefault(event);
 
@@ -139,8 +138,7 @@ const Categories = () => {
               show={isShowConfirmAlert}
               title="Та устгахдаа итгэлтэй байна уу?"
               onClose={() => setIsShowConfirmAlert(false)}
-              onSubmit={(e) => deleteCategoryFunction(deleteItem)}
-              setIsShowConfirmAlert={setIsShowConfirmAlert}
+              onSubmit={() => deleteCategoryFunction(deleteItem)}
             />
             {currentEditingData && (
               <Modal
