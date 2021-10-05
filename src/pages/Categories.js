@@ -13,6 +13,9 @@ import Button from "../components/Button";
 import { getCategoryList } from "../graphql-custom/category/queries";
 import { useToast } from "../components/Toast/ToastProvider";
 import { convertDateTime } from "../components/utils";
+import Validate from "../utility/Validate";
+import Consts from "../utility/Consts";
+import ConfirmAlert from "../components/ConfirmAlert/ConfirmAlert";
 
 const Categories = () => {
   const [isShowModal, setShowModal] = useState(false);
@@ -21,13 +24,20 @@ const Categories = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [inputError, setInputError] = useState(false);
   const [isShowEdit, setIsShowEdit] = useState(false);
+  const [isShowConfirmAlert, setIsShowConfirmAlert] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
   const [currentEditingData, setCurrentEditingData] = useState();
   const { addToast } = useToast();
 
   const toggleModal = () => {
     setShowModal(!isShowModal);
   };
-  const editCategoryModal = async (item) => {
+
+  const deleteAlertModal = (item) => {
+    setIsShowConfirmAlert(true);
+    setDeleteItem(item);
+  };
+  const editCategoryModal = (item) => {
     setIsShowEdit(true);
     setCurrentEditingData(item);
   };
@@ -45,7 +55,11 @@ const Categories = () => {
           },
         },
       }).then(() => {
-        addToast({ content: `${currentEditingData.name}`, title: "Амжилттай" });
+        addToast({
+          content: `${currentEditingData.name}`,
+          title: "Амжилттай",
+          autoClose: true,
+        });
       });
     } catch (ex) {
       console.log(ex);
@@ -53,21 +67,30 @@ const Categories = () => {
   };
 
   const deleteCategoryFunction = async (id) => {
-    if (window.confirm("Та устгахдаа итгэлтэй байна уу?"))
-      try {
-        await API.graphql({
-          query: deleteCategory,
-          variables: { input: { id: id } },
-        }).then(() => {
-          addToast({ content: `Устгалаа`, title: "Амжилттай" });
-        });
-      } catch (ex) {
-        console.log(ex);
-      }
-  };
+    // if (window.confirm("Та устгахдаа итгэлтэй байна уу?"))
 
+    try {
+      await API.graphql({
+        query: deleteCategory,
+        variables: { input: { id: id } },
+      }).then(() => {
+        const filteredCategory = categories.filter((cat) => cat.id !== id);
+        setCategories(filteredCategory);
+        addToast({
+          content: `Устгалаа`,
+          title: "Амжилттай",
+          autoClose: true,
+        });
+      });
+    } catch (ex) {
+      console.log(ex);
+    }
+    setIsShowConfirmAlert(false);
+  };
+  <ConfirmAlert />;
   const onSubmit = async (event) => {
     event.preventDefault(event);
+
     if (categoryIconName && categoryName) {
       setIsLoading(true);
       try {
@@ -84,6 +107,7 @@ const Categories = () => {
           setCategoryName(null);
           setCategoryIconName(null);
         });
+        setInputError(false);
       } catch (ex) {
         console.log(ex);
       }
@@ -111,6 +135,13 @@ const Categories = () => {
         </div>
         <div className="mb-4">
           <Tables styles="striped" fullWidth="w-full">
+            <ConfirmAlert
+              show={isShowConfirmAlert}
+              title="Та устгахдаа итгэлтэй байна уу?"
+              onClose={() => setIsShowConfirmAlert(false)}
+              onSubmit={(e) => deleteCategoryFunction(deleteItem)}
+              setIsShowConfirmAlert={setIsShowConfirmAlert}
+            />
             {currentEditingData && (
               <Modal
                 modalType={"centered"}
@@ -134,7 +165,7 @@ const Categories = () => {
                         })
                       }
                       label="Категори нэр"
-                      error={inputError}
+                      error={!inputError}
                       errorMessage={`${
                         !currentEditingData
                           ? "Категорийн нэрийг оруулна уу"
@@ -186,7 +217,7 @@ const Categories = () => {
                       </span>
                       <span
                         className={"cursor-pointer"}
-                        onClick={() => deleteCategoryFunction(cat.id)}
+                        onClick={() => deleteAlertModal(cat.id)}
                       >
                         <i className="las la-trash-alt text-2xl ml-4" />
                       </span>
@@ -196,6 +227,7 @@ const Categories = () => {
               })}
             </tbody>
           </Tables>
+
           <Modal
             show={isShowModal}
             title="Шинэ категори үүсгэх"
@@ -209,6 +241,7 @@ const Categories = () => {
             <div className="mt-8 max-w-md">
               <div className="grid grid-cols-1 gap-6">
                 <Input
+                  required
                   value={categoryName || ""}
                   onChange={(e) => setCategoryName(e.target.value)}
                   label="Категори нэр"
@@ -218,6 +251,7 @@ const Categories = () => {
                   }`}
                 />
                 <Input
+                  required
                   value={categoryIconName || ""}
                   onChange={(e) => setCategoryIconName(e.target.value)}
                   label="Категори Icon нэр"
