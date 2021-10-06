@@ -4,6 +4,12 @@ const groupSetField = /* GraphQL */ `
     id
     name
     founder_id
+    createdAt
+    updatedAt
+    category {
+      id
+      name
+    }
   }
 `;
 

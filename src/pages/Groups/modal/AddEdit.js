@@ -16,7 +16,7 @@ import {
 import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
 
-const AddEdit = ({ editId, show, setShow }) => {
+const AddEdit = ({ editId, show, setShow, setGroups, currentIndex }) => {
   const initData = {
     name: "",
     about: "",
@@ -42,13 +42,13 @@ const AddEdit = ({ editId, show, setShow }) => {
     fetchGroup();
   }, [editId]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
-  useEffect(() => {
-    console.log(oldImageFiles);
-  }, [oldImageFiles]);
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [data]);
+  //
+  // useEffect(() => {
+  //   console.log(oldImageFiles);
+  // }, [oldImageFiles]);
 
   const fetchGroup = async () => {
     try {
@@ -71,7 +71,6 @@ const AddEdit = ({ editId, show, setShow }) => {
       console.log(ex);
     }
   };
-
   const updateGroupData = async (e) => {
     e.preventDefault();
 
@@ -80,44 +79,65 @@ const AddEdit = ({ editId, show, setShow }) => {
     };
 
     setLoading(true);
-    const coverImage =
-      data.cover && !data.cover.id ? await uploadFile(data.cover) : data.cover;
-    const profileImage =
-      data.profile && !data.profile.id
-        ? await uploadFile(data.profile)
-        : data.profile;
-    setData({ ...data, cover: coverImage, profile: profileImage });
+    try {
+      const coverImage =
+        data.cover && !data.cover.id
+          ? await uploadFile(data.cover)
+          : data.cover;
+      const profileImage =
+        data.profile && !data.profile.id
+          ? await uploadFile(data.profile)
+          : data.profile;
+      setData({ ...data, cover: coverImage, profile: profileImage });
 
-    const postData = {
-      name: data.name,
-      category_id: data.category.id,
-      about: data.about,
-      groupCoverId: coverImage.id,
-      groupProfileId: profileImage.id,
-    };
+      const postData = {
+        name: data.name,
+        category_id: data.category.id,
+        about: data.about,
+        groupCoverId: coverImage.id,
+        groupProfileId: profileImage.id,
+      };
 
-    if (editId === "new") {
-      postData.founder_id = user.sysUser.id;
-      const resp = await API.graphql(
-        graphqlOperation(createGroup, {
-          input: postData,
-        })
-      );
-      addToast({
-        content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
-      });
-    } else if (editId !== "new" && editId !== "init") {
-      postData.id = data.id;
-      const resp = await API.graphql(
-        graphqlOperation(updateGroup, {
-          input: postData,
-        })
-      );
-      addToast({
-        content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
-      });
+      if (editId === "new") {
+        postData.founder_id = user.sysUser.id;
+        const resp = await API.graphql(
+          graphqlOperation(createGroup, {
+            input: postData,
+          })
+        );
+        setGroups((prevState) => [...prevState, resp.data.createGroup]);
+        addToast({
+          content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
+        });
+      } else if (editId !== "new" && editId !== "init") {
+        postData.id = data.id;
+
+        const resp = await API.graphql(
+          graphqlOperation(updateGroup, {
+            input: postData,
+          })
+        );
+        setGroups((prevState) => {
+          let arr = [prevState];
+          arr[currentIndex] = resp.data.updateGroup;
+        });
+        addToast({
+          content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
+        });
+
+        // if (
+        //   oldImageFiles.cover.id !== data.cover.id &&
+        //   oldImageFiles.profile.id !== data.profile.id
+        // ) {
+        //   await API.graphql(
+        //     graphqlOperation(deleteFile, { input: oldImageFiles.cover.id })
+        //   );
+        // }
+      }
+      setLoading(false);
+    } catch (ex) {
+      console.log(ex);
     }
-    setLoading(false);
   };
 
   const getCategories = async () => {
@@ -151,12 +171,18 @@ const AddEdit = ({ editId, show, setShow }) => {
     <Modal
       onSubmit={updateGroupData}
       show={show}
-      title="Шинэ групп үүсгэх"
+      title={
+        editId !== "new" && editId !== "init"
+          ? "Өөрчлөлт оруулах"
+          : "Шинэ бүлэг үүсгэх"
+      }
       content="content"
       onClose={() => setShow(false)}
       type="submit"
       loading={loading}
-      submitBtnName="Шинэ групп нэмэх"
+      submitBtnName={
+        editId !== "new" && editId !== "init" ? "Хадгалах" : "Шинэ бүлэг үүсгэх"
+      }
     >
       <div className="mt-8 max-w-md">
         <div className="grid grid-cols-1 gap-6">

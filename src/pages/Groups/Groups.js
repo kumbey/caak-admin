@@ -1,20 +1,45 @@
 import { useEffect, useState } from "react";
-
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
-
 import { convertDateTime } from "../../components/utils";
-
 import Tables from "../../components/Tables";
 import Button from "../../components/Button";
-import {getGroupList} from "../../graphql-custom/group/queries";
+import { getGroupList } from "../../graphql-custom/group/queries";
 import AddEdit from "./modal/AddEdit";
+import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
+import { deleteGroup } from "../../graphql-custom/group/mutation";
 
 const Groups = () => {
   // const { addToast } = useToast();
   const [isShowModal, setIsShowModal] = useState(false);
   const [groups, setGroups] = useState([]);
   const [editId, setEditId] = useState("init");
+  const [currentIndex, setCurrentIndex] = useState("init");
+  const [deleteId, setDeleteId] = useState("init");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const editHandler = (id, index) => {
+    setEditId(id);
+    setCurrentIndex(index);
+  };
+
+  const deleteGroupData = async (id) => {
+    try {
+      const resp = await API.graphql(
+        graphqlOperation(deleteGroup, {
+          input: { id },
+        })
+      );
+      setShowAlert(false);
+      //Removing item from local state after removed from the server.
+      const filteredArray = groups.filter(
+        (item) => item.id !== resp.data.deleteGroup.id
+      );
+      setGroups(filteredArray);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
@@ -23,17 +48,28 @@ const Groups = () => {
   }, []);
 
   useEffect(() => {
-    if(editId !== "init"){
+    if (editId !== "init") {
       setIsShowModal(true);
     }
   }, [editId]);
 
   useEffect(() => {
-    if(!isShowModal){
+    if (!isShowModal) {
       setEditId("init");
     }
   }, [isShowModal]);
 
+  useEffect(() => {
+    if (!showAlert) {
+      setDeleteId("init");
+    }
+  }, [showAlert]);
+
+  useEffect(() => {
+    if (deleteId !== "init") {
+      setShowAlert(true);
+    }
+  }, [deleteId]);
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">
@@ -72,13 +108,16 @@ const Groups = () => {
                   }`}</td>
                   <td>
                     <span
-                      onClick={() => setEditId(group.id)}
+                      onClick={() => editHandler(group.id, index)}
                       className={"cursor-pointer"}
                     >
-                      <i className="las la-edit text-2xl " />
+                      <i className="text-2xl las la-edit" />
                     </span>
-                    <span onClick={() => {}} className={"cursor-pointer"}>
-                      <i className="las la-trash-alt text-2xl ml-4" />
+                    <span
+                      onClick={() => setDeleteId(group.id)}
+                      className={"cursor-pointer"}
+                    >
+                      <i className="ml-4 text-2xl las la-trash-alt" />
                     </span>
                   </td>
                 </tr>
@@ -87,7 +126,19 @@ const Groups = () => {
           </tbody>
         </Tables>
       </div>
-      <AddEdit editId={editId} show={isShowModal} setShow={setIsShowModal}/>
+      <AddEdit
+        currentIndex={currentIndex}
+        setGroups={setGroups}
+        editId={editId}
+        show={isShowModal}
+        setShow={setIsShowModal}
+      />
+      <ConfirmAlert
+        title={"Та устгахдаа итгэлтэй байна уу"}
+        show={showAlert}
+        onClose={() => setShowAlert(false)}
+        onSubmit={() => deleteGroupData(deleteId)}
+      />
     </div>
   );
 };

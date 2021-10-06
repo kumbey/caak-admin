@@ -1,6 +1,6 @@
 const MenuData = [
   {
-    name: "Dashboard",
+    name: "Дашбоард",
     icon: "icon la la-laptop",
     id: "dash",
     sections: null,
@@ -8,7 +8,7 @@ const MenuData = [
     path: "/",
   },
   {
-    name: "Category",
+    name: "Категори",
     icon: "icon la la-stack-overflow",
     id: "category",
     sections: null,
@@ -16,7 +16,7 @@ const MenuData = [
     path: "/categories",
   },
   {
-    name: "Group",
+    name: "Бүлэг",
     icon: "icon la la-layer-group",
     id: "group",
     sections: null,
