@@ -9,10 +9,15 @@ import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getCategoryList } from "../../../graphql-custom/category/queries";
 import { getGroup } from "../../../graphql-custom/group/queries";
 import { ApiFileUpload } from "../../../utility/ApiHelper";
-import { updateGroup } from "../../../graphql-custom/group/mutation";
+import {
+  createGroup,
+  updateGroup,
+} from "../../../graphql-custom/group/mutation";
+import { useUser } from "../../../context/userContext";
+import { useToast } from "../../../components/Toast/ToastProvider";
 
 const AddEdit = ({ editId, show, setShow }) => {
-  const [data, setData] = useState({
+  const initData = {
     name: "",
     about: "",
     category: {
@@ -20,18 +25,21 @@ const AddEdit = ({ editId, show, setShow }) => {
     },
     profile: null,
     cover: null,
-  });
+  };
+
+  const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
   const [categories, setCategories] = useState([]);
   const [oldImageFiles, setOldImageFiles] = useState({});
+  const { user } = useUser();
+  const { addToast } = useToast();
 
   useEffect(() => {
     getCategories();
-    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    fetchGroup(editId);
+    fetchGroup();
   }, [editId]);
 
   useEffect(() => {
@@ -42,16 +50,20 @@ const AddEdit = ({ editId, show, setShow }) => {
     console.log(oldImageFiles);
   }, [oldImageFiles]);
 
-  const fetchGroup = async (id) => {
+  const fetchGroup = async () => {
     try {
       setLoading(true);
-      if (id !== "new" && id !== "init") {
-        const resp = await API.graphql(graphqlOperation(getGroup, { id: id }));
+      if (editId !== "new" && editId !== "init") {
+        const resp = await API.graphql(
+          graphqlOperation(getGroup, { id: editId })
+        );
         setData(resp.data.getGroup);
         setOldImageFiles({
           profile: resp.data.getGroup.profile,
           cover: resp.data.getGroup.cover,
         });
+      } else {
+        setData(initData);
       }
       setLoading(false);
     } catch (ex) {
@@ -63,37 +75,48 @@ const AddEdit = ({ editId, show, setShow }) => {
   const updateGroupData = async (e) => {
     e.preventDefault();
 
-    setLoading(true);
-    const newCoverImage =
-      data.cover && !data.cover.id
-        ? await ApiFileUpload(data.cover)
-        : data.cover;
-    const newProfileImage =
-      data.profile && !data.profile.id
-        ? await ApiFileUpload(data.profile)
-        : data.profile;
+    const uploadFile = async (image) => {
+      return await ApiFileUpload(image);
+    };
 
-    setData({
-      ...data,
-      cover: newCoverImage ?? (data.cover && newCoverImage),
-      profile: newProfileImage ?? (data.profile && newProfileImage),
-    });
-    const uploadData = data;
-    delete uploadData.category;
-    delete uploadData.cover;
-    delete uploadData.profile;
-    delete uploadData.createdAt;
-    delete uploadData.updatedAt;
-    await API.graphql(
-      graphqlOperation(updateGroup, {
-        input: {
-          ...uploadData,
-          category_id: data.category.id,
-          groupCoverId: data.cover.id,
-          groupProfileId: data.profile.id,
-        },
-      })
-    );
+    setLoading(true);
+    const coverImage =
+      data.cover && !data.cover.id ? await uploadFile(data.cover) : data.cover;
+    const profileImage =
+      data.profile && !data.profile.id
+        ? await uploadFile(data.profile)
+        : data.profile;
+    setData({ ...data, cover: coverImage, profile: profileImage });
+
+    const postData = {
+      name: data.name,
+      category_id: data.category.id,
+      about: data.about,
+      groupCoverId: coverImage.id,
+      groupProfileId: profileImage.id,
+    };
+
+    if (editId === "new") {
+      postData.founder_id = user.sysUser.id;
+      const resp = await API.graphql(
+        graphqlOperation(createGroup, {
+          input: postData,
+        })
+      );
+      addToast({
+        content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
+      });
+    } else if (editId !== "new" && editId !== "init") {
+      postData.id = data.id;
+      const resp = await API.graphql(
+        graphqlOperation(updateGroup, {
+          input: postData,
+        })
+      );
+      addToast({
+        content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
+      });
+    }
     setLoading(false);
   };
 
@@ -147,7 +170,7 @@ const AddEdit = ({ editId, show, setShow }) => {
           <Select
             name={"category"}
             title="Категори сонгох"
-            value={data.category.id}
+            value={data.category.id || "DEFAULT"}
             onChange={handleCategoryChange}
           >
             <option value={"DEFAULT"} disabled hidden>
