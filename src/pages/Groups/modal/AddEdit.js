@@ -116,6 +116,7 @@ const AddEdit = ({
         setGroups((prevState) => [...prevState, resp.data.createGroup]);
         addToast({
           content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
+          autoClose: true,
         });
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
@@ -130,6 +131,7 @@ const AddEdit = ({
         setGroups(arr);
         addToast({
           content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
+          autoClose: true,
         });
 
         // if (

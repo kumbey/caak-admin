@@ -10,7 +10,15 @@ import {
   updateCategory,
 } from "../../../graphql-custom/category/mutation";
 
-const AddEdit = ({ editId, show, setShow, addToast }) => {
+const AddEdit = ({
+  editId,
+  show,
+  setShow,
+  addToast,
+  categories,
+  setCategories,
+  currentIndex,
+}) => {
   const initData = {
     name: "",
     icon: "",
@@ -19,8 +27,7 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
   const [loading, setLoading] = useState();
 
   useEffect(() => {
-    fetchCategory(editId);
-    // eslint-disable-next-line
+    fetchCategory(editId); // eslint-disable-next-line
   }, [editId]);
 
   const fetchCategory = async (id) => {
@@ -30,6 +37,7 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
         const resp = await API.graphql(
           graphqlOperation(getCategoryByID, { id: id })
         );
+
         setData(resp.data.getCategory);
       } else if (id === "new") {
         setData(initData);
@@ -42,45 +50,40 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault(event);
+    event.preventDefault();
 
     setLoading(true);
 
-    if (editId !== "new" && editId !== "init") {
-      try {
-        const result = await API.graphql({
-          query: updateCategory,
-          variables: { input: data },
-        });
-        addToast({
-          content: `${result.data.updateCategory.name} амжилттай өөрчиллөө`,
-          title: "Амжилттай",
-          autoClose: true,
-        });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (editId === "new") {
-      try {
-        setLoading(true);
-        const result = await API.graphql({
-          query: createCategory,
-          variables: { input: data },
-        });
-        setLoading(false);
-        addToast({
-          content: `${result.data.createCategory.name} амжилттай үүслээ`,
-          title: "Амжилттай",
-          autoClose: true,
-        });
+    if (editId === "new") {
+      setLoading(true);
 
-        setData({
-          name: "",
-          icon: "",
-        });
-      } catch (error) {
-        console.log(error);
-      }
+      const resp = await API.graphql(
+        graphqlOperation(createCategory, { input: data })
+      );
+
+      setCategories((prev) => [...prev, resp.data.createCategory]);
+
+      addToast({
+        content: `${resp.data.createCategory.name} амжилттай үүслээ.`,
+        title: "Амжилттай",
+        autoClose: true,
+      });
+      setLoading(false);
+    } else if (editId !== "new" && editId !== "init") {
+      delete data.createdAt;
+      delete data.updatedAt;
+      const resp = await API.graphql(
+        graphqlOperation(updateCategory, { input: data })
+      );
+
+      let arr = categories;
+      arr[currentIndex] = resp.data.updateCategory;
+      setCategories(arr);
+      addToast({
+        content: `өөрчлөлтийг хадгаллаа.`,
+        title: "Амжилттай",
+        autoClose: true,
+      });
     }
   };
 
@@ -88,16 +91,14 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  // useEffect(() => {
-  //   console.log("data===> ", data);
-  // }, [data]);
 
   return (
     <Modal
       show={show}
-      //   title="Шинэ категори үүсгэх"
       title={`${
-        editId === "new" ? "Шинэ категори үүсгэх" : "Категори өөрчлөх"
+        editId !== "new" && editId !== "init"
+          ? "Өөрчлөлт оруулах"
+          : "Шинэ категори үүсгэх"
       } `}
       content="content"
       onClose={() => setShow(false)}
@@ -105,7 +106,7 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
       type="submit"
       loading={loading}
       submitBtnName={`${
-        editId === "new" ? "Шинэ категори үүсгэх" : "Категори өөрчлөх"
+        editId !== "new" && editId !== "init" ? "Хадгалах" : "Шинэ бүлэг үүсгэх"
       } `}
     >
       <div className="mt-8 max-w-md">

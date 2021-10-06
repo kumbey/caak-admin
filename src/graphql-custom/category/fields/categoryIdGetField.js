@@ -3,6 +3,8 @@ const categoriesIdGetField = /* GraphQL */ `
     items {
       name
       id
+      createdAt
+      updatedAt
     }
   }
 `;

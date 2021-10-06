@@ -37,7 +37,6 @@ function UserProvider(props) {
   }, []);
 
   useEffect(() => {
-    console.log(user);
     if (user) {
       SessionStorageUtil.set(Consts.SS_UserKey, user);
     } else {

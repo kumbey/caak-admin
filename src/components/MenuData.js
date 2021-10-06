@@ -23,6 +23,14 @@ const MenuData = [
     sub: null,
     path: "/groups",
   },
+  {
+    name: "Бүлгийн хэрэглэгчид",
+    icon: "icon la la-layer-group",
+    id: "groupusers",
+    sections: null,
+    sub: null,
+    path: "/groupusers",
+  },
 
   //     {
   //       name: "Blog",

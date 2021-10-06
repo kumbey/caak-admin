@@ -3,6 +3,7 @@ import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import HomePage from "../pages/HomePage";
 import Groups from "../pages/Groups/Groups";
+import GroupUsers from "../pages/GroupUsers/GroupUsers";
 
 const Routes = [
   {
@@ -43,6 +44,13 @@ const Routes = [
     background: true,
     auth: true,
     page: () => <Groups />,
+  },
+  {
+    path: "/groupusers",
+    exact: true,
+    background: true,
+    auth: true,
+    page: () => <GroupUsers />,
   },
 ];
 

@@ -19,8 +19,33 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [editId, setEditId] = useState("init");
 
-  const [isShowConfirmAlert, setIsShowConfirmAlert] = useState(false);
-  const [deleteItem, setDeleteItem] = useState();
+  const [deleteId, setDeleteId] = useState("init");
+  const [currentIndex, setCurrentIndex] = useState("init");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const editHandler = (id, index) => {
+    setEditId(id);
+    setCurrentIndex(index);
+  };
+
+  const deleteCategoryFunction = async (id) => {
+    try {
+      const resp = await API.graphql(
+        graphqlOperation(deleteCategory, { input: { id } })
+      );
+      setShowAlert(false);
+      setCategories(
+        categories.filter((cat) => cat.id !== resp.data.deleteCategory.id)
+      );
+      addToast({
+        content: `Устгалаа`,
+        title: "Амжилттай",
+        autoClose: true,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     API.graphql(graphqlOperation(getCategoryList)).then((cat) => {
@@ -40,28 +65,17 @@ const Categories = () => {
     }
   }, [isShowModal]);
 
-  const deleteAlertModal = (item) => {
-    setIsShowConfirmAlert(true);
-    setDeleteItem(item);
-  };
-
-  const deleteCategoryFunction = async (id) => {
-    try {
-      await API.graphql({
-        query: deleteCategory,
-        variables: { input: { id: id } },
-      });
-      setCategories(categories.filter((cat) => cat.id !== id));
-      addToast({
-        content: `Устгалаа`,
-        title: "Амжилттай",
-        autoClose: true,
-      });
-      setIsShowConfirmAlert(false);
-    } catch (error) {
-      console.log(error);
+  useEffect(() => {
+    if (!showAlert) {
+      setDeleteId("init");
     }
-  };
+  }, [showAlert]);
+
+  useEffect(() => {
+    if (deleteId !== "init") {
+      setShowAlert(true);
+    }
+  }, [deleteId]);
 
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
@@ -99,14 +113,14 @@ const Categories = () => {
                   }`}</td>
                   <td>
                     <span
-                      onClick={() => setEditId(cat.id)}
+                      onClick={() => editHandler(cat.id, index)}
                       className={"cursor-pointer"}
                     >
                       <i className="las la-edit text-2xl " />
                     </span>
                     <span
                       onClick={() => {
-                        deleteAlertModal(cat.id);
+                        setDeleteId(cat.id);
                       }}
                       className={"cursor-pointer"}
                     >
@@ -120,17 +134,19 @@ const Categories = () => {
         </Tables>
       </div>
       <AddEdit
+        categories={categories}
+        currentIndex={currentIndex}
+        setCategories={setCategories}
         editId={editId}
         show={isShowModal}
         setShow={setIsShowModal}
         addToast={addToast}
-        setCategories={setCategories}
       />
       <ConfirmAlert
-        show={isShowConfirmAlert}
+        show={showAlert}
         title="Та устгахдаа итгэлтэй байна уу?"
-        onClose={() => setIsShowConfirmAlert(false)}
-        onSubmit={() => deleteCategoryFunction(deleteItem)}
+        onClose={() => setShowAlert(false)}
+        onSubmit={() => deleteCategoryFunction(deleteId)}
       />
     </div>
   );

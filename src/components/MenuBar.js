@@ -63,7 +63,7 @@ export default function MenuBar({ menuBarRef, menuItemsRef }) {
                     {section.sub &&
                       section.sub.map((sub, i) => {
                         return (
-                          <a key={i} href="#qwe">
+                          <a key={i} href="#">
                             <span className={sub.icon} />
                             {sub.name}
                           </a>
