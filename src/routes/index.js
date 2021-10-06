@@ -2,7 +2,7 @@ import Categories from "../pages/Categories";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import HomePage from "../pages/HomePage";
-import Groups from "../pages/Groups";
+import Groups from "../pages/Groups/Groups";
 
 const Routes = [
   {

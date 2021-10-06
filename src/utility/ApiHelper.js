@@ -14,6 +14,6 @@ export const ApiFileUpload = async (file) => {
         await Storage.put(resp.id +"."+ resp.ext, fileObj)
         return resp
     }catch(ex){
-        console.log("File Uploader Catch: ",ex)
+        console.log("ApiFileUpload: ",ex)
     }
 }

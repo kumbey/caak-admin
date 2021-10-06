@@ -71,83 +71,37 @@ const Groups = () => {
   const editGroupFunction = async (event) => {
     event.preventDefault();
     setIsLoading(true);
-    if (coverImage.file) {
-      try {
-        const newCoverImage = await ApiFileUpload(coverImage.file);
 
-        await API.graphql({
-          query: updateGroup,
-          variables: {
-            input: {
-              id: currentEditingData.id,
-              category_id: currentEditingData.category_id,
-              name: currentEditingData.name,
-              founder_id: currentEditingData.founder_id,
-              about: currentEditingData.about,
-              rating: currentEditingData.rating,
-              groupCoverId: newCoverImage.id,
-            },
-          },
-        });
-        await API.graphql({
-          query: deleteFile,
+    try {
+      const newCoverImage = await ApiFileUpload(coverImage.file);
+      const newProfileImage = await ApiFileUpload(profileImage.file);
 
-          variables: {
-            input: {
-              id: currentEditingData.cover.id,
-            },
+      await API.graphql({
+        query: updateGroup,
+        variables: {
+          input: {
+            id: currentEditingData.id,
+            category_id: currentEditingData.category_id,
+            name: currentEditingData.name,
+            founder_id: currentEditingData.founder_id,
+            about: currentEditingData.about,
+            rating: currentEditingData.rating,
+            ...(newCoverImage ?? { groupCoverId: newCoverImage.id }),
+            ...(newProfileImage ?? { groupProfileId: newProfileImage.id }),
           },
-        });
-      } catch (ex) {
-        console.log(ex);
-      }
-    } else if (profileImage.file) {
-      try {
-        const newProfileImage = await ApiFileUpload(coverImage.file);
+        },
+      });
+      await API.graphql({
+        query: deleteFile,
 
-        await API.graphql({
-          query: updateGroup,
-          variables: {
-            input: {
-              id: currentEditingData.id,
-              category_id: currentEditingData.category_id,
-              name: currentEditingData.name,
-              founder_id: currentEditingData.founder_id,
-              about: currentEditingData.about,
-              rating: currentEditingData.rating,
-              groupCoverId: newProfileImage.id,
-            },
+        variables: {
+          input: {
+            id: currentEditingData.cover.id,
           },
-        });
-        await API.graphql({
-          query: deleteFile,
-          variables: {
-            input: {
-              id: currentEditingData.profile.id,
-            },
-          },
-        });
-      } catch (ex) {
-        console.log(ex);
-      }
-    } else {
-      try {
-        await API.graphql({
-          query: updateGroup,
-          variables: {
-            input: {
-              id: currentEditingData.id,
-              category_id: currentEditingData.category_id,
-              name: currentEditingData.name,
-              founder_id: currentEditingData.founder_id,
-              about: currentEditingData.about,
-              rating: currentEditingData.rating,
-            },
-          },
-        });
-      } catch (ex) {
-        console.log(ex);
-      }
+        },
+      });
+    } catch (ex) {
+      console.log(ex);
     }
     addToast({
       content: `${currentEditingData.name} -д өөрчлөлт орууллаа`,
@@ -298,7 +252,7 @@ const Groups = () => {
                   name="about"
                   title="Тухай"
                   row="4"
-                  value={currentEditingData.about}
+                  value={currentEditingData.about || ""}
                   onChange={(e) =>
                     setCurrentEditingData({
                       ...currentEditingData,
@@ -405,7 +359,7 @@ const Groups = () => {
                 title="Тухай"
                 row="4"
                 onChange={(e) => setGroupAbout(e.target.value)}
-                value={groupAbout}
+                value={groupAbout || ""}
               />
               <h4>Cover image upload</h4>
               <DropZone title={"Drop it here"} onUpload={setCoverImage} />

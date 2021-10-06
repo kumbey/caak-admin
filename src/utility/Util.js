@@ -219,6 +219,18 @@ export function checkUsername(username) {
   return usrname;
 }
 
+export function getFileUrl(file) {
+  let retUrl = "";
+
+  if (file.url) {
+    retUrl = file.url;
+  } else {
+    retUrl = generateFileUrl(file);
+  }
+
+  return retUrl;
+}
+
 let object = {
   useQuery,
   mailNumber,
@@ -232,6 +244,7 @@ let object = {
   generateFileUrl,
   checkUser,
   closeModal,
+  getFileUrl
 };
 export default object;
 

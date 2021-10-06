@@ -1,0 +1,30 @@
+{
+  "about": "123",
+  "cover": {
+    "id": "83140912-bf7d-44e1-b15d-c9f9e267ef7d",
+    "name": "png-file-photos-app-5b75972f46e0fb002c692c03",
+    "bucket": "caakmn8fe6c2cb480d45cc8e0c9fac64b9f294100650-devs",
+    "createdAt": "2021-10-05T08:15:29.023Z",
+    "ext": "png",
+    "key": "png-file-photos-app-5b75972f46e0fb002c692c03.png",
+    "level": "public",
+    "owner": null,
+    "region": "ap-southeast-1",
+    "type": "image/png",
+    "updatedAt": "2021-10-05T08:15:29.023Z"
+  },
+  "founder_id": "371db1a9-b2f5-4d14-b1e1-097d026ba0de",
+  "id": "29e313c7-f21d-4a89-abd1-de15923fb094",
+  "name": "qq",
+  "profile": {
+    "bucket": "caakmn8fe6c2cb480d45cc8e0c9fac64b9f294100650-devs",
+    "ext": "jpg",
+    "key": "png-file-photos-app-5b75972f46e0fb002c692c03.png",
+    "level": "public",
+    "name": "png-file-photos-app-5b75972f46e0fb002c692c03",
+    "owner": null,
+    "region": "ap-southeast-1",
+    "type": "image/png"
+  },
+  "rating": 0
+}
