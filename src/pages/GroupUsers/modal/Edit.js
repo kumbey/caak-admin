@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "../../../components/Modal";
 import Select from "../../../components/Select";
 import API from "@aws-amplify/api";
 import { updateGroupUsers } from "../../../graphql-custom/group/mutation";
 import { useToast } from "../../../components/Toast/ToastProvider";
 
-const AddEdit = ({
+const Edit = ({
   editId,
   users,
   show,
@@ -16,8 +16,13 @@ const AddEdit = ({
   currentIndex,
 }) => {
   const roles = ["ADMIN", "MEMBER", "MODERATOR"];
-  const [selectedRole, setSelectedRole] = useState(userRole);
+  const [selectedRole, setSelectedRole] = useState();
+
   const { addToast } = useToast();
+
+  useEffect(() => {
+    setSelectedRole(userRole);
+  }, [userRole]);
 
   const updateRole = async (event) => {
     event.preventDefault(event);
@@ -82,4 +87,4 @@ const AddEdit = ({
   );
 };
 
-export default AddEdit;
+export default Edit;
