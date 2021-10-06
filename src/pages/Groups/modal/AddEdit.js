@@ -16,7 +16,14 @@ import {
 import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
 
-const AddEdit = ({ editId, show, setShow, setGroups, currentIndex }) => {
+const AddEdit = ({
+  editId,
+  show,
+  setShow,
+  setGroups,
+  currentIndex,
+  groups,
+}) => {
   const initData = {
     name: "",
     about: "",
@@ -42,9 +49,9 @@ const AddEdit = ({ editId, show, setShow, setGroups, currentIndex }) => {
     fetchGroup();
   }, [editId]);
 
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data]);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   //
   // useEffect(() => {
   //   console.log(oldImageFiles);
@@ -117,10 +124,9 @@ const AddEdit = ({ editId, show, setShow, setGroups, currentIndex }) => {
             input: postData,
           })
         );
-        setGroups((prevState) => {
-          let arr = [prevState];
-          arr[currentIndex] = resp.data.updateGroup;
-        });
+        let arr = groups;
+        arr[currentIndex] = resp.data.updateGroup;
+        setGroups(arr);
         addToast({
           content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
         });

@@ -127,6 +127,7 @@ const Groups = () => {
         </Tables>
       </div>
       <AddEdit
+        groups={groups}
         currentIndex={currentIndex}
         setGroups={setGroups}
         editId={editId}
