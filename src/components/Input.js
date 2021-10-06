@@ -7,7 +7,7 @@ export default function Input({
 }) {
   return (
     <div>
-      <h4>{label}</h4>
+      <h4 className="mb-2">{label}</h4>
       <input className="form-control" {...props} />
       {error && <small className={"text-red"}>{errorMessage}</small>}
       <small className="block">{helpText}</small>

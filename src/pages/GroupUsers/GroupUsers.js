@@ -52,28 +52,26 @@ const GroupUsers = () => {
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">
-        <div className="mb-4">
-          <h1>Группын хэрэглэгчид</h1>
+        <h1>Группын хэрэглэгчид</h1>
 
-          <div className="flex mt-4">
-            <Select
-              name="group_id"
-              title="Груп сонгох"
-              value={selectedGroup || "DEFAULT"}
-              onChange={handleChange}
-            >
-              <option value={"DEFAULT"} disabled hidden>
-                Сонгох...
-              </option>
-              {groups.map((group) => {
-                return (
-                  <option key={group.id} value={group.id}>
-                    {group.name}
-                  </option>
-                );
-              })}
-            </Select>
-          </div>
+        <div className="flex mt-6">
+          <Select
+            name="group_id"
+            // title="Груп сонгох"
+            value={selectedGroup || "DEFAULT"}
+            onChange={handleChange}
+          >
+            <option value={"DEFAULT"} disabled hidden>
+              Групп Сонгоно уу...
+            </option>
+            {groups.map((group) => {
+              return (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              );
+            })}
+          </Select>
         </div>
       </div>
       <div className="mb-4">
