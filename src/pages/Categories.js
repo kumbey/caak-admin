@@ -13,8 +13,6 @@ import Button from "../components/Button";
 import { getCategoryList } from "../graphql-custom/category/queries";
 import { useToast } from "../components/Toast/ToastProvider";
 import { convertDateTime } from "../components/utils";
-import Validate from "../utility/Validate";
-import Consts from "../utility/Consts";
 import ConfirmAlert from "../components/ConfirmAlert/ConfirmAlert";
 
 const Categories = () => {

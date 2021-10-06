@@ -47,15 +47,16 @@ const AddEdit = ({
 
   useEffect(() => {
     fetchGroup();
+    // eslint-disable-next-line
   }, [editId]);
 
   useEffect(() => {
     console.log(data);
   }, [data]);
   //
-  // useEffect(() => {
-  //   console.log(oldImageFiles);
-  // }, [oldImageFiles]);
+  useEffect(() => {
+    console.log(oldImageFiles);
+  }, [oldImageFiles]);
 
   const fetchGroup = async () => {
     try {

@@ -20,6 +20,7 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
 
   useEffect(() => {
     fetchCategory(editId);
+    // eslint-disable-next-line
   }, [editId]);
 
   const fetchCategory = async (id) => {
@@ -87,9 +88,9 @@ const AddEdit = ({ editId, show, setShow, addToast }) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  useEffect(() => {
-    console.log("data===> ", data);
-  }, [data]);
+  // useEffect(() => {
+  //   console.log("data===> ", data);
+  // }, [data]);
 
   return (
     <Modal
