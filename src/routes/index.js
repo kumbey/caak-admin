@@ -1,4 +1,4 @@
-import Categories from "../pages/Categories";
+import Categories from "../pages/Categories/Categories";
 import Login from "../pages/Login";
 import Logout from "../pages/Logout";
 import HomePage from "../pages/HomePage";

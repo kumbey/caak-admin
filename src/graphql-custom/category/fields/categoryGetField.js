@@ -1,11 +1,11 @@
 const categoriesGetField = /* GraphQL */ `
   {
     items {
-      updatedAt
-      createdAt
-      icon
       id
       name
+      icon
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -2,6 +2,7 @@ const categoriesByIdGetField = /* GraphQL */ `
   {
     id
     name
+    icon
   }
 `;
 
