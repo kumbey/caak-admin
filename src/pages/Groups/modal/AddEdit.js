@@ -8,20 +8,22 @@ import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getCategoryList } from "../../../graphql-custom/category/queries";
 import { getGroup } from "../../../graphql-custom/group/queries";
+import { ApiFileUpload } from "../../../utility/ApiHelper";
+import { updateGroup } from "../../../graphql-custom/group/mutation";
 
 const AddEdit = ({ editId, show, setShow }) => {
   const [data, setData] = useState({
-      name: "",
-      about: "",
-      category: {
-        id: ""
-      },
-      profile: null,
-      cover: null
+    name: "",
+    about: "",
+    category: {
+      id: "",
+    },
+    profile: null,
+    cover: null,
   });
   const [loading, setLoading] = useState();
   const [categories, setCategories] = useState([]);
-  const [oldFiles, setOldFiles] = useState({})
+  const [oldImageFiles, setOldImageFiles] = useState({});
 
   useEffect(() => {
     getCategories();
@@ -30,34 +32,69 @@ const AddEdit = ({ editId, show, setShow }) => {
 
   useEffect(() => {
     fetchGroup(editId);
-  },[editId])
+  }, [editId]);
 
   useEffect(() => {
-    console.log(data)
-  },[data])
+    console.log(data);
+  }, [data]);
 
   useEffect(() => {
-    console.log(oldFiles)
-  },[oldFiles])
+    console.log(oldImageFiles);
+  }, [oldImageFiles]);
 
   const fetchGroup = async (id) => {
     try {
       setLoading(true);
-      if(id !== "new" && id !== "init" ){
-        const resp = await API.graphql(
-            graphqlOperation(getGroup, {id: id })
-        );
+      if (id !== "new" && id !== "init") {
+        const resp = await API.graphql(graphqlOperation(getGroup, { id: id }));
         setData(resp.data.getGroup);
-        setOldFiles({
-            profile: resp.data.getGroup.profile,
-            cover: resp.data.getGroup.cover
-        })
+        setOldImageFiles({
+          profile: resp.data.getGroup.profile,
+          cover: resp.data.getGroup.cover,
+        });
       }
       setLoading(false);
     } catch (ex) {
       setLoading(false);
       console.log(ex);
     }
+  };
+
+  const updateGroupData = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    const newCoverImage =
+      data.cover && !data.cover.id
+        ? await ApiFileUpload(data.cover)
+        : data.cover;
+    const newProfileImage =
+      data.profile && !data.profile.id
+        ? await ApiFileUpload(data.profile)
+        : data.profile;
+
+    setData({
+      ...data,
+      cover: newCoverImage ?? (data.cover && newCoverImage),
+      profile: newProfileImage ?? (data.profile && newProfileImage),
+    });
+    const uploadData = data;
+    delete uploadData.category;
+    delete uploadData.cover;
+    delete uploadData.profile;
+    delete uploadData.createdAt;
+    delete uploadData.updatedAt;
+    await API.graphql(
+      graphqlOperation(updateGroup, {
+        input: {
+          ...uploadData,
+          category_id: data.category.id,
+          groupCoverId: data.cover.id,
+          groupProfileId: data.profile.id,
+        },
+      })
+    );
+    setLoading(false);
   };
 
   const getCategories = async () => {
@@ -80,7 +117,7 @@ const AddEdit = ({ editId, show, setShow }) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-  const handleCagegoryChange = (e) => {
+  const handleCategoryChange = (e) => {
     const { name, value } = e.target;
     let category = { ...data[name] };
     category.id = value;
@@ -89,6 +126,7 @@ const AddEdit = ({ editId, show, setShow }) => {
 
   return (
     <Modal
+      onSubmit={updateGroupData}
       show={show}
       title="Шинэ групп үүсгэх"
       content="content"
@@ -110,7 +148,7 @@ const AddEdit = ({ editId, show, setShow }) => {
             name={"category"}
             title="Категори сонгох"
             value={data.category.id}
-            onChange={handleCagegoryChange}
+            onChange={handleCategoryChange}
           >
             <option value={"DEFAULT"} disabled hidden>
               Сонгох...
@@ -128,21 +166,21 @@ const AddEdit = ({ editId, show, setShow }) => {
             name="about"
             title="Тухай"
             row="4"
-            value={data.about ? data.about : ""}
+            value={data.about || ""}
             onChange={handleChange}
           />
           <h4>Cover image upload</h4>
           <DropZone
             title={"Drop it here"}
-            keyName={"profile"}
-            file={data.profile}
+            keyName={"cover"}
+            file={data.cover}
             setFile={setFile}
           />
           <h4>Profile image upload</h4>
           <DropZone
             title={"Drop it here"}
-            keyName={"cover"}
-            file={data.cover}
+            keyName={"profile"}
+            file={data.profile}
             setFile={setFile}
           />
         </div>
