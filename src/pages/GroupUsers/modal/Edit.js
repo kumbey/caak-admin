@@ -5,14 +5,24 @@ import API from "@aws-amplify/api";
 import { updateGroupUsers } from "../../../graphql-custom/group/mutation";
 import { useToast } from "../../../components/Toast/ToastProvider";
 
-const AddEdit = ({ editId, users, show, setShow, userRole, selectedGroup }) => {
+const AddEdit = ({
+  editId,
+  users,
+  show,
+  setShow,
+  userRole,
+  selectedGroup,
+  setUsers,
+  currentIndex,
+}) => {
   const roles = ["ADMIN", "MEMBER", "MODERATOR"];
   const [selectedRole, setSelectedRole] = useState(userRole);
   const { addToast } = useToast();
 
   const updateRole = async (event) => {
     event.preventDefault(event);
-    await API.graphql({
+
+    const resp = await API.graphql({
       query: updateGroupUsers,
       variables: {
         input: {
@@ -22,6 +32,9 @@ const AddEdit = ({ editId, users, show, setShow, userRole, selectedGroup }) => {
         },
       },
     });
+    let arr = users;
+    arr[currentIndex] = resp.data.updateGroupUsers;
+    setUsers(arr);
     addToast({
       content: `Өөрчлөлтийг хадгаллаа.`,
       title: "Амжилттай",

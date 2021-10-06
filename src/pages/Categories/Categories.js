@@ -7,6 +7,7 @@ import Tables from "../../components/Tables";
 import Button from "../../components/Button";
 import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
 import AddEdit from "./modal/AddEdit";
+import { generateTimeAgo } from "../../utility/Util";
 
 import { convertDateTime } from "../../components/utils";
 import { useToast } from "../../components/Toast/ToastProvider";
@@ -108,7 +109,7 @@ const Categories = () => {
                   <td>{convertDateTime(cat.createdAt)}</td>
                   <td>{`${
                     cat.createdAt !== cat.updatedAt
-                      ? convertDateTime(cat.createdAt)
+                      ? convertDateTime(cat.updatedAt)
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>

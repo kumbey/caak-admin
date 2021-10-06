@@ -19,15 +19,17 @@ const GroupUsers = () => {
   const [editId, setEditId] = useState("");
   const [show, setShow] = useState(false);
   const [userRole, setUserRole] = useState("");
+  const [currentIndex, setCurrentIndex] = useState("");
 
   const handleChange = (e) => {
     const { value } = e.target;
     setSelectedGroup(value);
   };
-  const editHandler = (id, role) => {
+  const editHandler = (id, role, index) => {
     setEditId(id);
     setUserRole(role);
     setShow(true);
+    setCurrentIndex(index);
   };
   useEffect(() => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
@@ -96,7 +98,9 @@ const GroupUsers = () => {
                   <td>
                     <span
                       className={"cursor-pointer"}
-                      onClick={() => editHandler(user.user.id, user.role)}
+                      onClick={() =>
+                        editHandler(user.user.id, user.role, index)
+                      }
                     >
                       <i className="text-2xl las la-edit" />
                     </span>
@@ -108,11 +112,13 @@ const GroupUsers = () => {
         </Tables>
         <Edit
           users={users}
+          setUsers={setUsers}
           show={show}
           setShow={setShow}
           editId={editId}
           userRole={userRole}
           selectedGroup={selectedGroup}
+          currentIndex={currentIndex}
         />
       </div>
     </div>

@@ -106,7 +106,7 @@ const AddEdit = ({
       type="submit"
       loading={loading}
       submitBtnName={`${
-        editId !== "new" && editId !== "init" ? "Хадгалах" : "Шинэ бүлэг үүсгэх"
+        editId !== "new" && editId !== "init" ? "Хадгалах" : "Категори үүсгэх"
       } `}
     >
       <div className="mt-8 max-w-md">
