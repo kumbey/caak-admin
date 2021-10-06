@@ -101,8 +101,8 @@ const AddEdit = ({
         name: data.name,
         category_id: data.category.id,
         about: data.about,
-        groupCoverId: coverImage.id,
-        groupProfileId: profileImage.id,
+        groupCoverId: coverImage?.id,
+        groupProfileId: profileImage?.id,
       };
 
       if (editId === "new") {
