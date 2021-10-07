@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import fullScreen from "../assets/js/full_screen";
 import Tippy from "@tippyjs/react";
 import { useTheme } from "../context/ThemeContext";
 import { Link } from "react-router-dom";
+import { checkUser } from "../utility/Util";
+import { useUser } from "../context/userContext";
 
 export default function TopBar() {
   const { theme, changeTheme, menu, toggleMenu } = useTheme();
+  const { user } = useUser();
+
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      if (checkUser(user)) {
+        setUserName(user.sysUser.firstname);
+      }
+    }
+  }, [user]);
 
   return (
     <header className="top-bar">
@@ -195,7 +208,7 @@ export default function TopBar() {
             content={
               <div className="custom-dropdown-menu w-64">
                 <div className="p-5">
-                  <h5 className="uppercase">John Doe</h5>
+                  <h5 className="uppercase">{userName}</h5>
                   <p>Editor</p>
                 </div>
                 <hr />
