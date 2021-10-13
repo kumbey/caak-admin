@@ -37,13 +37,9 @@ const user0001 = /* GraphQL */ `{
       updatedAt
     }
     username {
-      items {
-        id
-      }
+      id_name
     }
-    aura {
-      point
-    }
+    aura 
     category{
       items{
         id
