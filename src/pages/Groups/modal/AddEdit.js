@@ -153,7 +153,7 @@ const AddEdit = ({
     try {
       setLoading(true);
       const resp = await API.graphql(graphqlOperation(getCategoryList));
-      setCategories(resp.data.listCategories.items);
+      setCategories(resp.data.listCategorys.items);
       setLoading(false);
     } catch (ex) {
       setLoading(false);

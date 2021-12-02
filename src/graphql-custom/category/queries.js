@@ -4,7 +4,7 @@ import categoriesByIdGetField from "./fields/categoryGetByIdField";
 
 export const getCategoryList = /* GraphQL */ `
     query GetCategoryList {
-        listCategories ${categoryGetField}
+        listCategorys ${categoryGetField}
     }
 `;
 export const getCategoryID = /* GraphQL */ `

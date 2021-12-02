@@ -11,7 +11,10 @@ export const ApiFileUpload = async (file) => {
         delete fileData["url"]
         let resp = await API.graphql(graphqlOperation(createFile, {input: fileData}))
         resp = resp.data.createFile
-        await Storage.put(resp.id +"."+ resp.ext, fileObj)
+        const options = {
+            ACL: 'public-read'
+        }
+        await Storage.put(resp.id +"."+ resp.ext, fileObj, options)
         return resp
     }catch(ex){
         console.log("ApiFileUpload: ",ex)

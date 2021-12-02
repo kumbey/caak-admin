@@ -7,7 +7,7 @@ import Tables from "../../components/Tables";
 import Button from "../../components/Button";
 import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
 import AddEdit from "./modal/AddEdit";
-import { generateTimeAgo } from "../../utility/Util";
+// import { generateTimeAgo } from "../../utility/Util";
 
 import { convertDateTime } from "../../components/utils";
 import { useToast } from "../../components/Toast/ToastProvider";
@@ -50,7 +50,7 @@ const Categories = () => {
 
   useEffect(() => {
     API.graphql(graphqlOperation(getCategoryList)).then((cat) => {
-      setCategories(cat.data.listCategories.items);
+      setCategories(cat.data.listCategorys.items);
     });
   }, []);
 
