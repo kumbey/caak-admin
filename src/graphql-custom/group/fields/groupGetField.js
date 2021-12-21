@@ -1,6 +1,7 @@
 const groupsGetField = /* GraphQL */ `
   {
     items {
+      featured
       category {
         id
         name

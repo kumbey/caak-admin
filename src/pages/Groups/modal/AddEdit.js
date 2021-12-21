@@ -15,6 +15,7 @@ import {
 } from "../../../graphql-custom/group/mutation";
 import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
+import CheckBox from "../../../components/CheckBox";
 
 const AddEdit = ({
   editId,
@@ -40,23 +41,7 @@ const AddEdit = ({
   const [oldImageFiles, setOldImageFiles] = useState({});
   const { user } = useUser();
   const { addToast } = useToast();
-
-  useEffect(() => {
-    getCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchGroup();
-    // eslint-disable-next-line
-  }, [editId]);
-
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-  //
-  useEffect(() => {
-    console.log(oldImageFiles);
-  }, [oldImageFiles]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const fetchGroup = async () => {
     try {
@@ -100,6 +85,7 @@ const AddEdit = ({
 
       const postData = {
         name: data.name,
+        featured: data.featured,
         category_id: data.category.id,
         about: data.about,
         groupCoverId: coverImage?.id,
@@ -144,6 +130,7 @@ const AddEdit = ({
         // }
       }
       setLoading(false);
+      setShow(false);
     } catch (ex) {
       console.log(ex);
     }
@@ -165,6 +152,12 @@ const AddEdit = ({
     setData({ ...data, [key]: file });
   };
 
+  const handleCheck = (e) => {
+    setIsChecked(e.target.checked);
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
@@ -176,6 +169,32 @@ const AddEdit = ({
     setData({ ...data, [name]: category });
   };
 
+  useEffect(() => {
+    getCategories();
+    console.log(groups);
+  }, []);
+
+  useEffect(() => {
+    fetchGroup();
+    // eslint-disable-next-line
+  }, [editId]);
+
+  useEffect(() => {
+    console.log(isChecked);
+  }, [data, isChecked]);
+  //
+  useEffect(() => {
+    console.log(oldImageFiles);
+  }, [oldImageFiles]);
+
+  useEffect(() => {
+    console.log(data.featured);
+  }, [show]);
+
+  const close = () => {
+    setIsChecked(false);
+    setShow(false);
+  };
   return (
     <Modal
       onSubmit={updateGroupData}
@@ -186,7 +205,7 @@ const AddEdit = ({
           : "Шинэ бүлэг үүсгэх"
       }
       content="content"
-      onClose={() => setShow(false)}
+      onClose={() => close()}
       type="submit"
       loading={loading}
       submitBtnName={
@@ -220,6 +239,14 @@ const AddEdit = ({
             })}
           </Select>
 
+          <CheckBox
+            title={"Санал болгох группд нэмэх"}
+            label={"Санал болгох"}
+            name="featured"
+            checked={isChecked}
+            value={data.featured || false}
+            onChange={(e) => handleCheck(e)}
+          />
           <TextArea
             name="about"
             title="Тухай"

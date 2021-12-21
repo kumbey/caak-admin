@@ -1,33 +1,34 @@
 const groupsGetField = /* GraphQL */ `
   {
-      category {
-        id
-        name
-      }
-      founder_id
-      name
-      createdAt
-      updatedAt
+    featured
+    category {
       id
-      about
-      cover {
-        id
-        bucket
-        ext
-        level
-        region
-      }
-      profile {
-        id
-        bucket
-        ext
-        level
-        region
-      }
-      category {
-        id
-        name
-      }
+      name
+    }
+    founder_id
+    name
+    createdAt
+    updatedAt
+    id
+    about
+    cover {
+      id
+      bucket
+      ext
+      level
+      region
+    }
+    profile {
+      id
+      bucket
+      ext
+      level
+      region
+    }
+    category {
+      id
+      name
+    }
   }
 `;
 
