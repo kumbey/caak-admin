@@ -1,0 +1,99 @@
+const comment0001 = /* GraphQL */ `
+  {
+    id
+    user_id
+    post_id
+    post_item_id
+    comment
+    status
+    type
+    on_to
+    parent_id
+    replyUserID
+    reacted
+    createdAt
+    updatedAt
+    user {
+      id
+      firstname
+      lastname
+      nickname
+      birthdate
+      age
+      gender
+      pic_id
+      cover_pic_id
+      about
+      aura
+      is_public
+      status
+      followed
+      verified
+      employed
+      meta
+      createdAt
+      updatedAt
+    }
+    replyTo {
+      id
+      firstname
+      lastname
+      nickname
+      birthdate
+      age
+      gender
+      pic_id
+      cover_pic_id
+      about
+      aura
+      is_public
+      status
+      followed
+      verified
+      employed
+      meta
+      createdAt
+      updatedAt
+    }
+    post {
+      id
+      title
+      description
+      f_text
+      commentType
+      status
+      user_id
+      updated_user_id
+      group_id
+      category_id
+      reacted
+      updatedAt
+      owned
+      createdAt
+      version
+    }
+    post_item {
+      id
+      post_id
+      user_id
+      file_id
+      title
+      description
+      f_text
+      order
+      reacted
+      createdAt
+      updatedAt
+    }
+    sub {
+      nextToken
+    }
+    totals {
+      comment_id
+      reactions
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export default comment0001;

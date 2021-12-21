@@ -113,12 +113,12 @@ const Groups = () => {
                     >
                       <i className="text-2xl las la-edit" />
                     </span>
-                    <span
+                    {/* <span
                       onClick={() => setDeleteId(group.id)}
                       className={"cursor-pointer"}
                     >
                       <i className="ml-4 text-2xl las la-trash-alt" />
-                    </span>
+                    </span> */}
                   </td>
                 </tr>
               );

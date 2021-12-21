@@ -3,6 +3,9 @@ import Consts from "./Consts";
 import CryptoJS from "crypto-js";
 import Configure from "../configure";
 import { DateTime } from "luxon";
+import maleImg from "../../src/assets/images/Man-Avatar.svg";
+import femaleImg from "../../src/assets/images/Female-Avatar.svg";
+import defaultImg from "../../src/assets/images/default.png";
 
 const regexEmail = "^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$";
 const regexNumber = "^[0-9]{8}$";
@@ -46,6 +49,29 @@ export function useQuery() {
   }
 
   return { getQuery, removeQuery, addQuery, addQuerys };
+}
+
+export function getReturnData(data, isSubscription) {
+  let retData = {};
+
+  if (isSubscription) {
+    retData = data.value.data;
+  } else {
+    retData = data.data;
+  }
+
+  retData = retData[Object.keys(retData)[0]];
+  return retData;
+}
+
+export function getGenderImage(gender) {
+  if (gender === "MALE") {
+    return maleImg;
+  } else if (gender === "FEMALE") {
+    return femaleImg;
+  } else {
+    return defaultImg;
+  }
 }
 
 export function mailNumber(mailNumber) {
@@ -231,6 +257,11 @@ export function getFileUrl(file) {
   return retUrl;
 }
 
+export const extractDate = (date) => {
+  const { year, month, day } = DateTime.fromISO(date);
+  return { year, month, day };
+};
+
 let object = {
   useQuery,
   mailNumber,
@@ -242,9 +273,11 @@ let object = {
   checkUsername,
   getRandomInt,
   generateFileUrl,
+  getReturnData,
+  getGenderImage,
   checkUser,
   closeModal,
-  getFileUrl
+  getFileUrl,
+  extractDate,
 };
 export default object;
-

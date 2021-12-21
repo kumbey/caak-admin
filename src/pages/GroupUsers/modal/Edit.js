@@ -31,8 +31,9 @@ const Edit = ({
       query: updateGroupUsers,
       variables: {
         input: {
-          group_id: selectedGroup,
-          user_id: editId,
+          id: `${selectedGroup}#${editId}`,
+          // group_id: selectedGroup,
+          // user_id: editId,
           role: selectedRole,
         },
       },

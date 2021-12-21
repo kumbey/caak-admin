@@ -1,5 +1,6 @@
 const groupSetField = /* GraphQL */ `
   {
+    featured
     category_id
     id
     name
