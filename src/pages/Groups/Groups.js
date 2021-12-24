@@ -86,6 +86,7 @@ const Groups = () => {
         <Tables styles="hoverable table_bordered" fullWidth="w-full">
           <thead>
             <tr>
+              <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
               <th className="text-left uppercase">Категори нэр</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
@@ -97,6 +98,7 @@ const Groups = () => {
             {groups.map((group, index) => {
               return (
                 <tr key={index}>
+                  <td>{index + 1}</td>
                   <td>{group.name}</td>
                   <td>{group.category.name}</td>
 

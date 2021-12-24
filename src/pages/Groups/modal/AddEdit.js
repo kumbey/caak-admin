@@ -31,17 +31,17 @@ const AddEdit = ({
     category: {
       id: "",
     },
+    featured: "",
     profile: null,
     cover: null,
   };
-
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
   const [categories, setCategories] = useState([]);
   const [oldImageFiles, setOldImageFiles] = useState({});
   const { user } = useUser();
   const { addToast } = useToast();
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState();
 
   const fetchGroup = async () => {
     try {
@@ -51,6 +51,7 @@ const AddEdit = ({
           graphqlOperation(getGroup, { id: editId })
         );
         setData(resp.data.getGroup);
+        setIsChecked(resp.data.getGroup.featured === "true" ? true : false);
         setOldImageFiles({
           profile: resp.data.getGroup.profile,
           cover: resp.data.getGroup.cover,
@@ -130,6 +131,8 @@ const AddEdit = ({
         // }
       }
       setLoading(false);
+      setIsChecked(false);
+
       setShow(false);
     } catch (ex) {
       console.log(ex);
@@ -154,12 +157,13 @@ const AddEdit = ({
 
   const handleCheck = (e) => {
     setIsChecked(e.target.checked);
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    const { name, checked } = e.target;
+    setData({ ...data, [name]: checked });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    value = JSON.stringify(value);
     setData({ ...data, [name]: value });
   };
   const handleCategoryChange = (e) => {
@@ -171,25 +175,13 @@ const AddEdit = ({
 
   useEffect(() => {
     getCategories();
-    console.log(groups);
+    console.log(data);
   }, []);
 
   useEffect(() => {
     fetchGroup();
     // eslint-disable-next-line
   }, [editId]);
-
-  useEffect(() => {
-    console.log(isChecked);
-  }, [data, isChecked]);
-  //
-  useEffect(() => {
-    console.log(oldImageFiles);
-  }, [oldImageFiles]);
-
-  useEffect(() => {
-    console.log(data.featured);
-  }, [show]);
 
   const close = () => {
     setIsChecked(false);
@@ -233,7 +225,7 @@ const AddEdit = ({
             {categories.map((cat) => {
               return (
                 <option key={cat.id} value={cat.id}>
-                  {cat.name}
+                  {`${cat.icon} ${cat.name}`}
                 </option>
               );
             })}
@@ -243,8 +235,8 @@ const AddEdit = ({
             title={"Санал болгох группд нэмэх"}
             label={"Санал болгох"}
             name="featured"
+            value={isChecked ? true : false}
             checked={isChecked}
-            value={data.featured || false}
             onChange={(e) => handleCheck(e)}
           />
           <TextArea

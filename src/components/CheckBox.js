@@ -1,7 +1,7 @@
 export default function Checkbox({
   id,
   handleClick,
-  isChecked,
+  checked,
   className,
   onClick,
   title,
@@ -16,7 +16,7 @@ export default function Checkbox({
           id={id}
           type="checkbox"
           onChange={handleClick}
-          checked={isChecked}
+          checked={checked}
           className={className}
           onClick={onClick}
           {...props}

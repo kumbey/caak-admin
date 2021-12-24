@@ -83,6 +83,7 @@ const Categories = () => {
       <div className="">
         <div className="mb-4">
           <h1>Категориуд</h1>
+
           <div className="flex mt-4">
             <Button className="bg-primary-400" onClick={() => setEditId("new")}>
               Шинэ категори үүсгэх
@@ -94,6 +95,7 @@ const Categories = () => {
         <Tables styles="hoverable table_bordered" fullWidth="w-full">
           <thead>
             <tr>
+              <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
@@ -104,7 +106,11 @@ const Categories = () => {
             {categories.map((cat, index) => {
               return (
                 <tr key={index}>
-                  <td>{cat.name}</td>
+                  <td>{index + 1}</td>
+                  <td>
+                    {cat.icon + " "}
+                    {cat.name}
+                  </td>
 
                   <td>{convertDateTime(cat.createdAt)}</td>
                   <td>{`${
@@ -140,7 +146,7 @@ const Categories = () => {
         setCategories={setCategories}
         editId={editId}
         show={isShowModal}
-        setShow={setIsShowModal}
+        setIsShowModal={setIsShowModal}
         addToast={addToast}
       />
       <ConfirmAlert

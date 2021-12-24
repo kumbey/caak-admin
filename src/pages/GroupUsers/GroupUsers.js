@@ -80,6 +80,7 @@ const GroupUsers = () => {
         <Tables styles="hoverable table_bordered" fullWidth="w-full">
           <thead>
             <tr>
+              <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
               <th className="text-left uppercase">Ник нэр</th>
               <th className="text-left uppercase">Эрх</th>
@@ -91,6 +92,7 @@ const GroupUsers = () => {
             {users.map((user, index) => {
               return (
                 <tr key={index}>
+                  <td>{index + 1}</td>
                   <td>{user.user.firstname}</td>
                   <td>{user.user.nickname}</td>
                   <td>{user.role}</td>

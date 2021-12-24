@@ -13,7 +13,7 @@ import {
 const AddEdit = ({
   editId,
   show,
-  setShow,
+  setIsShowModal,
   addToast,
   categories,
   setCategories,
@@ -69,6 +69,7 @@ const AddEdit = ({
         autoClose: true,
       });
       setLoading(false);
+      setIsShowModal(false);
     } else if (editId !== "new" && editId !== "init") {
       delete data.createdAt;
       delete data.updatedAt;
@@ -101,7 +102,7 @@ const AddEdit = ({
           : "Шинэ категори үүсгэх"
       } `}
       content="content"
-      onClose={() => setShow(false)}
+      onClose={() => setIsShowModal(false)}
       onSubmit={handleSubmit}
       type="submit"
       loading={loading}
