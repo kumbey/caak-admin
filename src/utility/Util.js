@@ -235,6 +235,16 @@ export function closeModal(history, state) {
   }
 }
 
+export function calculate_age(dob) {
+  //dob is like (1995-08-23)
+  let birthYear = dob.slice(0, 4);
+  let now = new Date();
+  let currentYear = now.getFullYear();
+  let age = currentYear - birthYear;
+
+  return age;
+}
+
 export function checkUsername(username) {
   let usrname = username;
 

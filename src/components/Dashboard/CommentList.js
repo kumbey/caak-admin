@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import Tables from "../Tables";
-import { getFileUrl } from "../../utility/Util";
-
+import { getFileUrl, getGenderImage } from "../../utility/Util";
+import defaultImg from "./../../../src/assets/images/default.png";
 import { convertDateTime } from "../utils";
 
-const CommentList = ({ posts, comments, getCommentsByPosts }) => {
+const CommentList = ({ comments }) => {
   const [loading, setLoading] = useState(false);
   const [arr, setArr] = useState([]);
 
   // const { year, month, day } = extractDate(post.createdAt);
-  const getComm = (id) => {
-    setArr([...arr, getCommentsByPosts(id)]);
-  };
+
   useEffect(() => {
     console.log(comments);
   }, []);
@@ -31,7 +29,7 @@ const CommentList = ({ posts, comments, getCommentsByPosts }) => {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post, index) => {
+            {comments.map((comment, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -39,16 +37,22 @@ const CommentList = ({ posts, comments, getCommentsByPosts }) => {
                     <img
                       height={64}
                       width={64}
-                      src={getFileUrl(post.items.items[0].file)}
+                      src={
+                        comment?.post?.items?.items[0]?.file
+                          ? getFileUrl(comment?.post?.items?.items[0]?.file)
+                          : getGenderImage("default")
+                      }
                       alt="image"
                     />
                   </td>
-                  <td className="break-all truncate-3 w-96">{post.title}</td>
+                  <td className="break-all truncate-3 w-96">
+                    {comment?.post?.title}
+                  </td>
 
-                  <td>{convertDateTime(post.createdAt)}</td>
+                  <td>{convertDateTime(comment.createdAt)}</td>
 
-                  <td></td>
-                  <td>{post.totals.comments}</td>
+                  <td>{comment.comment}</td>
+                  <td>{comment.user.nickname}</td>
                 </tr>
               );
             })}

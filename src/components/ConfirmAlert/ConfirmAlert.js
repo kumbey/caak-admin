@@ -30,13 +30,13 @@ const ConfirmAlert = ({ onSubmit, show, onClose, side, title, ...props }) => {
           <div className="flex items-center justify-center py-3  dark:bg-gray-700 rounded-bl rounded-br">
             <button
               onClick={onSubmit}
-              className="text-xs sm:text-sm font-medium leading-none text-indigo-700 focus:outline-none px-3 sm:px-5 py-3 bg-indigo-100 hover:bg-indigo-200 dark:hover:bg-indigo-100 dark:bg-indigo-200 border rounded"
+              className="text-xs sm:text-sm font-medium leading-none text-indigo-700 focus:outline-none px-3 sm:px-5 py-3  border rounded bg-green-50 hover:bg-green-100"
             >
               Тийм
             </button>
             <button
               onClick={onClose}
-              className="text-xs sm:text-sm font-medium leading-none text-gray-700 px-3 sm:px-5 py-3 bg-indigo-700 dark:bg-indigo-600 hover:bg-opacity-80 ml-3 focus:outline-none rounded"
+              className="text-xs sm:text-sm font-medium leading-none text-gray-700 px-3 sm:px-5 py-3  hover:bg-opacity-80 ml-3 focus:outline-none rounded bg-red-50 hover:bg-red-100"
             >
               Үгүй
             </button>

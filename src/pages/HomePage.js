@@ -1,11 +1,14 @@
 import API from "@aws-amplify/api";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
+
 import { useEffect, useState } from "react";
 import { getPostByStatus } from "../graphql-custom/post/queries";
-import { getCommentsByPost } from "../graphql-custom/comment/queries";
+import { listComments } from "../graphql-custom/comment/queries";
 import { getReturnData } from "../utility/Util";
 import DashList from "../components/Dashboard/DashList";
 import CommentList from "../components/Dashboard/CommentList";
 import UserList from "../components/Dashboard/UserList";
+import { listUsers } from "../graphql-custom/user/queries";
 
 const HomePage = () => {
   const menus = [
@@ -28,6 +31,7 @@ const HomePage = () => {
   ];
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]);
 
   const getPostsByStatus = async () => {
     try {
@@ -45,18 +49,20 @@ const HomePage = () => {
       console.log(ex);
     }
   };
-  const getCommentsByPosts = async (postId) => {
-    try {
-      let resp = await API.graphql({
-        query: getCommentsByPost,
-        sortDirection: "DESC",
-        variables: {
-          post_id: postId,
-        },
-      });
 
-      resp = getReturnData(resp);
-      setComments(resp.items);
+  const getAllComments = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(listComments));
+      setComments(getReturnData(resp).items);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const getAllUsers = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(listUsers));
+      setUsers(getReturnData(resp).items);
     } catch (ex) {
       console.log(ex);
     }
@@ -64,9 +70,10 @@ const HomePage = () => {
 
   useEffect(() => {
     getPostsByStatus();
-    getCommentsByPosts();
+    getAllComments();
+    getAllUsers();
 
-    console.log(posts);
+    console.log(comments);
   }, []);
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -80,7 +87,9 @@ const HomePage = () => {
           {menus.map((menu, index) => {
             return (
               <div
-                className="px-4 my-4 border-2  hover:bg-primary-200"
+                className={`flex items-center px-4 my-4 border-2 h-10   hover:bg-primary-200 ${
+                  activeIndex === index ? "bg-green-200" : ""
+                }`}
                 key={index}
                 onClick={() => setActiveIndex(index)}
               >
@@ -97,13 +106,9 @@ const HomePage = () => {
         {activeIndex === 0 ? (
           <DashList posts={posts} />
         ) : activeIndex === 1 ? (
-          <CommentList
-            posts={posts}
-            comments={comments}
-            getCommentsByPosts={getCommentsByPosts}
-          />
+          <CommentList comments={comments} />
         ) : activeIndex === 2 ? (
-          <UserList posts={posts} />
+          <UserList users={users} />
         ) : null}
       </div>
     </div>

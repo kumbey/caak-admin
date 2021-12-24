@@ -1,4 +1,5 @@
-const user0001 = /* GraphQL */ `{
+const user0001 = /* GraphQL */ `
+  {
     id
     firstname
     lastname
@@ -39,12 +40,13 @@ const user0001 = /* GraphQL */ `{
     username {
       id_name
     }
-    aura 
-    category{
-      items{
+    aura
+    category {
+      items {
         id
       }
     }
-  }`
+  }
+`;
 
-  export default user0001
+export default user0001;

@@ -1,4 +1,5 @@
 import comment0001 from "./fields/comment0001.js";
+import comment0002 from "./fields/comment0002.js";
 
 export const getCommentsByPost = /* GraphQL */ `
   query GetCommentsByPost(
@@ -22,5 +23,11 @@ export const getCommentsByPost = /* GraphQL */ `
       }
       nextToken
     }
+  }
+`;
+
+export const listComments = /* GraphQL */ `
+  query ListComments {
+    listComments ${comment0002}
   }
 `;
