@@ -1,13 +1,21 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
+
 import Tables from "../Tables";
-import { getFileUrl } from "../../utility/Util";
+import { getFileUrl, getGenderImage } from "../../utility/Util";
+import placeholder from "./../../../src/assets/images/placeholder.png";
 
 import { convertDateTime } from "../utils";
 
 const DashList = ({ posts }) => {
-  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  let PageSize = 10;
 
-  // const { year, month, day } = extractDate(post.createdAt);
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return posts.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
   return (
     <>
       <div className="mb-4">
@@ -26,15 +34,23 @@ const DashList = ({ posts }) => {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post, index) => {
+            {currentTableData.map((post, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>
                     <img
-                      height={64}
-                      width={64}
-                      src={getFileUrl(post.items.items[0].file)}
+                      width="64"
+                      height="64"
+                      src={
+                        (post?.items?.items[0]?.file?.type?.startsWith(
+                          "video"
+                        ) &&
+                          placeholder) ||
+                        (post?.items?.items[0]?.file
+                          ? getFileUrl(post.items.items[0].file)
+                          : getGenderImage("default"))
+                      }
                       alt="image"
                     />
                   </td>

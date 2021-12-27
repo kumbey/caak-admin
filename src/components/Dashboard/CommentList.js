@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Tables from "../Tables";
 import { getFileUrl, getGenderImage } from "../../utility/Util";
-import defaultImg from "./../../../src/assets/images/default.png";
+import placeholder from "./../../../src/assets/images/placeholder.png";
+
 import { convertDateTime } from "../utils";
 
 const CommentList = ({ comments }) => {
@@ -35,9 +36,13 @@ const CommentList = ({ comments }) => {
                   <td>{index + 1}</td>
                   <td>
                     <img
-                      height={64}
-                      width={64}
+                      width="64"
+                      height="64"
                       src={
+                        (comment?.post?.items?.items[0]?.file?.type?.startsWith(
+                          "video"
+                        ) &&
+                          placeholder) ||
                         comment?.post?.items?.items[0]?.file
                           ? getFileUrl(comment?.post?.items?.items[0]?.file)
                           : getGenderImage("default")
