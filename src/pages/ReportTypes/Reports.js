@@ -30,7 +30,7 @@ const Reports = () => {
     setCurrentIndex(index);
   };
 
-  const deleteReportFunction = async (id) => {
+  const deleteReportTypeFunction = async (id) => {
     try {
       const resp = await API.graphql(
         graphqlOperation(deleteReportType, { input: { id } })
@@ -156,7 +156,7 @@ const Reports = () => {
         show={showAlert}
         title="Та устгахдаа итгэлтэй байна уу?"
         onClose={() => setShowAlert(false)}
-        onSubmit={() => deleteReportFunction(deleteId)}
+        onSubmit={() => deleteReportTypeFunction(deleteId)}
       />
     </div>
   );

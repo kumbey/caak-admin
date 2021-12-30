@@ -9,6 +9,8 @@ import DashList from "../components/Dashboard/DashList";
 import CommentList from "../components/Dashboard/CommentList";
 import UserList from "../components/Dashboard/UserList";
 import { listUsers } from "../graphql-custom/user/queries";
+import { listReportedPosts } from "../graphql-custom/report/queries";
+import ReportList from "../components/Dashboard/ReportList";
 
 const HomePage = () => {
   const menus = [
@@ -29,9 +31,12 @@ const HomePage = () => {
       name: "Репортууд",
     },
   ];
+
+  const [activeIndex, setActiveIndex] = useState(0);
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [users, setUsers] = useState([]);
+  const [reportedPosts, setReportedPosts] = useState([]);
 
   const getPostsByStatus = async () => {
     try {
@@ -68,15 +73,22 @@ const HomePage = () => {
     }
   };
 
+  const getAllReportedPosts = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(listReportedPosts));
+      setReportedPosts(getReturnData(resp).items);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   useEffect(() => {
     getPostsByStatus();
     getAllComments();
     getAllUsers();
-
-    console.log(comments);
+    getAllReportedPosts();
   }, []);
 
-  const [activeIndex, setActiveIndex] = useState(0);
   return (
     <div style={{ marginTop: "100px", marginLeft: "30px" }}>
       <div
@@ -88,7 +100,7 @@ const HomePage = () => {
             return (
               <div
                 className={`flex items-center px-4 my-4 border-2 h-10   hover:bg-primary-200 ${
-                  activeIndex === index ? "bg-green-200" : ""
+                  activeIndex === index ? "bg-primary-300" : ""
                 }`}
                 key={index}
                 onClick={() => setActiveIndex(index)}
@@ -109,6 +121,11 @@ const HomePage = () => {
           <CommentList comments={comments} />
         ) : activeIndex === 2 ? (
           <UserList users={users} />
+        ) : activeIndex === 3 ? (
+          <ReportList
+            reportedPosts={reportedPosts}
+            setReportedPosts={setReportedPosts}
+          />
         ) : null}
       </div>
     </div>

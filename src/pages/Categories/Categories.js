@@ -123,7 +123,7 @@ const Categories = () => {
                       onClick={() => editHandler(cat.id, index)}
                       className={"cursor-pointer"}
                     >
-                      <i className="las la-edit text-2xl " />
+                      <i className="las la-edit text-2xl text-green" />
                     </span>
                     <span
                       onClick={() => {
@@ -131,7 +131,7 @@ const Categories = () => {
                       }}
                       className={"cursor-pointer"}
                     >
-                      <i className="las la-trash-alt text-2xl ml-4" />
+                      <i className="las la-trash-alt text-2xl ml-4 text-red " />
                     </span>
                   </td>
                 </tr>
