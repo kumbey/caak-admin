@@ -31,7 +31,7 @@ const AddEdit = ({
     category: {
       id: "",
     },
-    featured: "",
+    featured: false,
     profile: null,
     cover: null,
   };
