@@ -163,7 +163,7 @@ const AddEdit = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    value = JSON.stringify(value);
+    // value = JSON.stringify(value);
     setData({ ...data, [name]: value });
   };
   const handleCategoryChange = (e) => {
