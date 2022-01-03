@@ -25,6 +25,7 @@ const UserList = ({ users }) => {
   //     });
   //   }
   // });
+  console.log(users);
   return (
     <div className="mb-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -52,13 +53,23 @@ const UserList = ({ users }) => {
                     src={
                       user?.pic
                         ? getFileUrl(user?.pic)
-                        : getGenderImage("default")
+                        : getGenderImage(user.gender)
                     }
                     alt="image"
                   />
                 </td>
-                <td className="break-all truncate-3 w-96">@{user.nickname}</td>
-
+                <td className="break-all  truncate-3 w-96">
+                  <p
+                    className="cursor-pointer"
+                    onClick={() =>
+                      window.open(
+                        `https://www.beta.caak.mn/user/${user.id}/profile`
+                      )
+                    }
+                  >
+                    @{user.nickname}
+                  </p>
+                </td>
                 <td>{convertDateTime(user.createdAt)}</td>
 
                 <td>{calculate_age(user.birthdate)}</td>

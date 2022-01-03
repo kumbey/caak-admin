@@ -1,4 +1,5 @@
-const file0001 = /* GraphQL */ `{
+const file0001 = /* GraphQL */ `
+  {
     id
     key
     name
@@ -10,6 +11,9 @@ const file0001 = /* GraphQL */ `{
     type
     createdAt
     updatedAt
-}`
+    isExternal
+    external_url
+  }
+`;
 
-export default file0001
+export default file0001;

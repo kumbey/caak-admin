@@ -7,15 +7,6 @@ import placeholder from "./../../../src/assets/images/placeholder.png";
 import { convertDateTime } from "../utils";
 
 const DashList = ({ posts }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  let PageSize = 10;
-
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return posts.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
-
   return (
     <>
       <div className="mb-4">
@@ -23,8 +14,7 @@ const DashList = ({ posts }) => {
           <thead>
             <tr>
               <th className="text-left uppercase">NO</th>
-              <th className="text-left uppercase">Постын зураг </th>
-              <th className="text-left uppercase">Постын нэр</th>
+              <th className="text-left uppercase">Пост</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Групп</th>
               <th className="text-left uppercase">Нэмсэн хүн</th>
@@ -34,31 +24,60 @@ const DashList = ({ posts }) => {
             </tr>
           </thead>
           <tbody>
-            {currentTableData.map((post, index) => {
+            {posts.map((post, index) => {
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>
+
+                  <td
+                    onClick={() =>
+                      window.open(
+                        `https://www.beta.caak.mn/post/view/${post.id}`
+                      )
+                    }
+                    className="flex items-center cursor-pointer break-all truncate-3 w-96"
+                  >
                     <img
+                      className="mr-2"
                       width="64"
                       height="64"
                       src={
-                        (post?.items?.items[0]?.file?.type?.startsWith(
-                          "video"
-                        ) &&
-                          placeholder) ||
-                        (post?.items?.items[0]?.file
+                        post?.items?.items[0]?.file?.type?.startsWith("video")
+                          ? placeholder
+                          : post?.items?.items[0]?.file
                           ? getFileUrl(post.items.items[0].file)
-                          : getGenderImage("default"))
+                          : getGenderImage("default")
                       }
-                      alt="image"
+                      alt={post?.items?.items[0]?.file?.type}
                     />
+                    {post.title}
                   </td>
-                  <td className="break-all truncate-3 w-96">{post.title}</td>
 
                   <td>{convertDateTime(post.createdAt)}</td>
-                  <td>{post.group.name}</td>
-                  <td>{post.user.nickname}</td>
+                  <td>
+                    <p
+                      className="cursor-pointer"
+                      onClick={() =>
+                        window.open(
+                          `https://www.beta.caak.mn/group/${post.group.id}`
+                        )
+                      }
+                    >
+                      {post.group.name}
+                    </p>
+                  </td>
+                  <td>
+                    <p
+                      onClick={() =>
+                        window.open(
+                          `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                        )
+                      }
+                      className="cursor-pointer"
+                    >
+                      {post.user.nickname}
+                    </p>
+                  </td>
                   <td>{post.totals.reactions}</td>
                   <td>{post.totals.comments}</td>
                   <td>{post.totals.views}</td>

@@ -2,6 +2,7 @@ const comment0002 = /* GraphQL */ `
   {
     items {
       post {
+        id
         title
         items {
           items {

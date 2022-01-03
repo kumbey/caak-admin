@@ -175,7 +175,6 @@ const AddEdit = ({
 
   useEffect(() => {
     getCategories();
-    console.log(data);
   }, []);
 
   useEffect(() => {

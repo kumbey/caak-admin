@@ -10,6 +10,7 @@ import {
   deleteReportedPost,
   updateReportedPost,
 } from "../../graphql-custom/report/mutation";
+import placeholder from "./../../../src/assets/images/placeholder.png";
 
 const ReportList = ({ reportedPosts, setReportedPosts }) => {
   const { addToast } = useToast();
@@ -84,8 +85,7 @@ const ReportList = ({ reportedPosts, setReportedPosts }) => {
         <thead>
           <tr>
             <th className="text-left uppercase">NO</th>
-            <th className="text-left uppercase">Постын зураг</th>
-            <th className="text-left uppercase">Постын нэр</th>
+            <th className="text-left uppercase">Пост</th>
             <th className="text-left uppercase">Репорт</th>
             <th className="text-left uppercase">Репортлогчийн нэр</th>
             <th className="text-left uppercase">Үүссэн огноо</th>
@@ -99,24 +99,47 @@ const ReportList = ({ reportedPosts, setReportedPosts }) => {
             return (
               <tr key={index}>
                 <td>{index + 1}</td>
-                <td>
+
+                <td
+                  onClick={() =>
+                    window.open(
+                      `https://www.beta.caak.mn/post/view/${report.post.id}`
+                    )
+                  }
+                  className="flex cursor-pointer  border-none  w-96"
+                >
                   <img
-                    height={64}
-                    width={64}
+                    className="mr-2"
+                    width="64"
+                    height="64"
                     src={
-                      report?.post?.items?.items
+                      report?.post?.items?.items[0]?.file?.type?.startsWith(
+                        "video"
+                      )
+                        ? placeholder
+                        : report?.post?.items?.items
                         ? getFileUrl(report?.post?.items.items[0].file)
                         : getGenderImage("default")
                     }
                     alt="image"
                   />
-                </td>
-                <td className="break-all truncate-3 w-96">
-                  {report.post.title}
+                  <p className="break-all truncate-3">{report.post.title}</p>
                 </td>
 
                 <td>{report.reason}</td>
-                <td>{report.user.nickname}</td>
+                <td>
+                  {" "}
+                  <p
+                    onClick={() =>
+                      window.open(
+                        `https://www.beta.caak.mn/user/${report.user.id}/profile`
+                      )
+                    }
+                    className="cursor-pointer"
+                  >
+                    {report.user.nickname}
+                  </p>
+                </td>
                 <td>{convertDateTime(report.createdAt)}</td>
                 <td>{report.status === "CHECKED" ? "Идэвхтэй" : "Идэвхгүй"}</td>
                 {/* <td>{convertDateTime(report.updatedAt)}</td> */}
