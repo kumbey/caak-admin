@@ -11,6 +11,7 @@ import UserList from "../components/Dashboard/UserList";
 import { listUsers } from "../graphql-custom/user/queries";
 import { listReportedPosts } from "../graphql-custom/report/queries";
 import ReportList from "../components/Dashboard/ReportList";
+import PendingPostList from "../components/Dashboard/PendingPostList";
 
 const HomePage = () => {
   const menus = [
@@ -20,36 +21,57 @@ const HomePage = () => {
     },
     {
       id: 1,
-      name: "Сэтгэгдэлүүд",
+      name: "Хүлээгдэж буй постууд",
     },
     {
       id: 2,
-      name: "Хэрэглэгчид",
+      name: "Сэтгэгдэлүүд",
     },
     {
       id: 3,
+      name: "Хэрэглэгчид",
+    },
+    {
+      id: 4,
       name: "Репортууд",
     },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [posts, setPosts] = useState([]);
+  const [pendingPosts, setPendingPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [users, setUsers] = useState([]);
   const [reportedPosts, setReportedPosts] = useState([]);
 
-  const getPostsByStatus = async () => {
+  const getAllPosts = async () => {
     try {
       let resp = await API.graphql({
         query: getPostByStatus,
-        sortDirection: "DESC",
         variables: {
           status: "CONFIRMED",
+          sortDirection: "DESC",
+          limit: 100,
         },
       });
-
-      resp = getReturnData(resp);
-      setPosts(resp.items);
+      setPosts(getReturnData(resp).items);
+      console.log(posts);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+  const getPendingPosts = async () => {
+    try {
+      let resp = await API.graphql({
+        query: getPostByStatus,
+        variables: {
+          status: "PENDING",
+          sortDirection: "DESC",
+          limit: 100,
+        },
+      });
+      setPendingPosts(getReturnData(resp).items);
+      console.log(posts);
     } catch (ex) {
       console.log(ex);
     }
@@ -57,7 +79,12 @@ const HomePage = () => {
 
   const getAllComments = async () => {
     try {
-      const resp = await API.graphql(graphqlOperation(listComments));
+      const resp = await API.graphql({
+        query: listComments,
+        variables: {
+          sortDirection: "DESC",
+        },
+      });
       setComments(getReturnData(resp).items);
     } catch (ex) {
       console.log(ex);
@@ -83,7 +110,8 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    getPostsByStatus();
+    getAllPosts();
+    getPendingPosts();
     getAllComments();
     getAllUsers();
     getAllReportedPosts();
@@ -93,7 +121,7 @@ const HomePage = () => {
     <div style={{ marginTop: "100px", marginLeft: "30px" }}>
       <div
         className=" flex flex-col items-center w-full justify-between mx-7"
-        style={{ width: "400px" }}
+        style={{ width: "600px" }}
       >
         <div className="flex mb-10 ">
           {menus.map((menu, index) => {
@@ -118,10 +146,12 @@ const HomePage = () => {
         {activeIndex === 0 ? (
           <DashList posts={posts} />
         ) : activeIndex === 1 ? (
-          <CommentList comments={comments} />
+          <PendingPostList pendingPosts={pendingPosts} />
         ) : activeIndex === 2 ? (
-          <UserList users={users} />
+          <CommentList comments={comments} />
         ) : activeIndex === 3 ? (
+          <UserList users={users} />
+        ) : activeIndex === 4 ? (
           <ReportList
             reportedPosts={reportedPosts}
             setReportedPosts={setReportedPosts}
