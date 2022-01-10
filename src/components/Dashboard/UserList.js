@@ -32,8 +32,7 @@ const UserList = ({ users }) => {
         <thead>
           <tr>
             <th className="text-left uppercase">NO</th>
-            <th className="text-left uppercase">Аватар</th>
-            <th className="text-left uppercase">Хэрэглэгчийн нэр</th>
+            <th className="text-left uppercase">Хэрэглэгч</th>
             <th className="text-left uppercase">Үүссэн огноо</th>
             <th className="text-left uppercase">Нас</th>
             <th className="text-left uppercase">Хүйс</th>
@@ -47,28 +46,28 @@ const UserList = ({ users }) => {
               <tr key={index}>
                 <td>{index + 1}</td>
                 <td>
-                  <img
-                    height={64}
-                    width={64}
-                    src={
-                      user?.pic
-                        ? getFileUrl(user?.pic)
-                        : getGenderImage(user.gender)
-                    }
-                    alt="image"
-                  />
-                </td>
-                <td className="break-all  truncate-3 w-96">
-                  <p
-                    className="cursor-pointer"
-                    onClick={() =>
-                      window.open(
-                        `https://www.beta.caak.mn/user/${user.id}/profile`
-                      )
-                    }
-                  >
-                    @{user.nickname}
-                  </p>
+                  <div className="flex items-center">
+                    <img
+                      height={64}
+                      width={64}
+                      src={
+                        user?.pic
+                          ? getFileUrl(user?.pic)
+                          : getGenderImage(user.gender)
+                      }
+                      alt="image"
+                    />
+                    <p
+                      className="cursor-pointer break-all  truncate-3 w-96 ml-2"
+                      onClick={() =>
+                        window.open(
+                          `https://www.beta.caak.mn/user/${user.id}/profile`
+                        )
+                      }
+                    >
+                      @{user.nickname}
+                    </p>
+                  </div>
                 </td>
                 <td>{convertDateTime(user.createdAt)}</td>
 

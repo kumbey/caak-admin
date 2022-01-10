@@ -123,35 +123,37 @@ const ReportList = ({ reportedPosts, setReportedPosts }) => {
                     }
                     alt="image"
                   />
-                  <p className="break-all truncate-3">{report.post.title}</p>
+                  <p className="break-all truncate-3">{report?.post?.title}</p>
                 </td>
 
-                <td>{report.reason}</td>
+                <td>{report?.reason}</td>
                 <td>
                   {" "}
                   <p
                     onClick={() =>
                       window.open(
-                        `https://www.beta.caak.mn/user/${report.user.id}/profile`
+                        `https://www.beta.caak.mn/user/${report?.user?.id}/profile`
                       )
                     }
                     className="cursor-pointer"
                   >
-                    {report.user.nickname}
+                    {report?.user?.nickname}
                   </p>
                 </td>
-                <td>{convertDateTime(report.createdAt)}</td>
-                <td>{report.status === "CHECKED" ? "Идэвхтэй" : "Идэвхгүй"}</td>
-                {/* <td>{convertDateTime(report.updatedAt)}</td> */}
+                <td>{convertDateTime(report?.createdAt)}</td>
+                <td>
+                  {report?.status === "CHECKED" ? "Идэвхтэй" : "Идэвхгүй"}
+                </td>
+                {/* <td>{convertDateTime(report?.updatedAt)}</td> */}
                 <td className="flex my-4  border-none">
                   <span
-                    onClick={() => handleClick(report.id, "accept")}
+                    onClick={() => handleClick(report?.id, "accept")}
                     className={"cursor-pointer "}
                   >
                     <i className="las la-check-circle text-2xl text-green" />
                   </span>
                   <span
-                    onClick={() => handleClick(report.id, "delete")}
+                    onClick={() => handleClick(report?.id, "delete")}
                     className={"cursor-pointer"}
                   >
                     <i className="las la-trash-alt text-2xl text-red ml-4" />

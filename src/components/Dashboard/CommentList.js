@@ -34,37 +34,39 @@ const CommentList = ({ comments }) => {
                 <tr key={index}>
                   <td>{index + 1}</td>
 
-                  <td className="flex items-center break-all truncate-3 w-96">
-                    <img
-                      onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/post/view/${comment.post.id}`
-                        )
-                      }
-                      className="cursor-pointer mr-2"
-                      width="64"
-                      height="64"
-                      src={
-                        comment?.post?.items?.items[0]?.file?.type?.startsWith(
-                          "video"
-                        )
-                          ? placeholder
-                          : comment?.post?.items?.items[0]?.file
-                          ? getFileUrl(comment?.post?.items?.items[0]?.file)
-                          : getGenderImage("default")
-                      }
-                      alt="image"
-                    />
-                    <p
-                      onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/post/view/${comment.post.id}`
-                        )
-                      }
-                      className="cursor-pointer"
-                    >
-                      {comment?.post?.title}
-                    </p>
+                  <td>
+                    <div className="flex items-center">
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/post/view/${comment.post.id}`
+                          )
+                        }
+                        className="cursor-pointer mr-2"
+                        width="64"
+                        height="64"
+                        src={
+                          comment?.post?.items?.items[0]?.file?.type?.startsWith(
+                            "video"
+                          )
+                            ? placeholder
+                            : comment?.post?.items?.items[0]?.file
+                            ? getFileUrl(comment?.post?.items?.items[0]?.file)
+                            : getGenderImage("default")
+                        }
+                        alt="image"
+                      />
+                      <p
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/post/view/${comment.post.id}`
+                          )
+                        }
+                        className="cursor-pointer break-all truncate-3 w-96"
+                      >
+                        {comment?.post?.title}
+                      </p>
+                    </div>
                   </td>
 
                   <td>{convertDateTime(comment.createdAt)}</td>

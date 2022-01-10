@@ -35,22 +35,23 @@ const DashList = ({ posts }) => {
                         `https://www.beta.caak.mn/post/view/${post.id}`
                       )
                     }
-                    className="flex items-center cursor-pointer break-all truncate-3 w-96"
                   >
-                    <img
-                      className="mr-2"
-                      width="64"
-                      height="64"
-                      src={
-                        post?.items?.items[0]?.file?.type?.startsWith("video")
-                          ? placeholder
-                          : post?.items?.items[0]?.file
-                          ? getFileUrl(post.items.items[0].file)
-                          : getGenderImage("default")
-                      }
-                      alt={post?.items?.items[0]?.file?.type}
-                    />
-                    {post.title}
+                    <div className="flex items-center cursor-pointer break-all truncate-3 w-96">
+                      <img
+                        className="mr-2"
+                        width="64"
+                        height="64"
+                        src={
+                          post?.items?.items[0]?.file?.type?.startsWith("video")
+                            ? placeholder
+                            : post?.items?.items[0]?.file
+                            ? getFileUrl(post.items.items[0].file)
+                            : getGenderImage("default")
+                        }
+                        alt={post?.items?.items[0]?.file?.type}
+                      />
+                      {post.title}
+                    </div>
                   </td>
 
                   <td>{convertDateTime(post.createdAt)}</td>

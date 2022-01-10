@@ -75,6 +75,20 @@ const PendingPostList = ({ pendingPosts }) => {
                     </p>
                   </td>
                   <td>{convertDateTime(post.createdAt)}</td>
+                  <td className="flex my-4  border-none">
+                    <span
+                      // onClick={() => handleClick(report?.id, "accept")}
+                      className={"cursor-pointer "}
+                    >
+                      <i className="las la-check-circle text-2xl text-green" />
+                    </span>
+                    <span
+                      // onClick={() => handleClick(report?.id, "delete")}
+                      className={"cursor-pointer"}
+                    >
+                      <i className="las la-trash-alt text-2xl text-red ml-4" />
+                    </span>
+                  </td>
                 </tr>
               );
             })}

@@ -3,15 +3,17 @@ import { graphqlOperation } from "@aws-amplify/api-graphql";
 
 import { useEffect, useState } from "react";
 import { getPostByStatus } from "../graphql-custom/post/queries";
-import { listComments } from "../graphql-custom/comment/queries";
+import { listCommentsByStatus } from "../graphql-custom/comment/queries";
 import { getReturnData } from "../utility/Util";
 import DashList from "../components/Dashboard/DashList";
 import CommentList from "../components/Dashboard/CommentList";
 import UserList from "../components/Dashboard/UserList";
-import { listUsers } from "../graphql-custom/user/queries";
+import { listUsersByStatus } from "../graphql-custom/user/queries";
 import { listReportedPosts } from "../graphql-custom/report/queries";
 import ReportList from "../components/Dashboard/ReportList";
 import PendingPostList from "../components/Dashboard/PendingPostList";
+import { listFeedBacks } from "../graphql-custom/feedback/queries";
+import FeedBackList from "../components/Dashboard/FeedBackList";
 
 const HomePage = () => {
   const menus = [
@@ -35,6 +37,10 @@ const HomePage = () => {
       id: 4,
       name: "Репортууд",
     },
+    {
+      id: 5,
+      name: "Feedback",
+    },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -43,6 +49,7 @@ const HomePage = () => {
   const [comments, setComments] = useState([]);
   const [users, setUsers] = useState([]);
   const [reportedPosts, setReportedPosts] = useState([]);
+  const [feedBacks, setFeedBacks] = useState([]);
 
   const getAllPosts = async () => {
     try {
@@ -51,7 +58,6 @@ const HomePage = () => {
         variables: {
           status: "CONFIRMED",
           sortDirection: "DESC",
-          limit: 100,
         },
       });
       setPosts(getReturnData(resp).items);
@@ -67,7 +73,7 @@ const HomePage = () => {
         variables: {
           status: "PENDING",
           sortDirection: "DESC",
-          limit: 100,
+          limit: 500,
         },
       });
       setPendingPosts(getReturnData(resp).items);
@@ -79,9 +85,10 @@ const HomePage = () => {
 
   const getAllComments = async () => {
     try {
-      const resp = await API.graphql({
-        query: listComments,
+      let resp = await API.graphql({
+        query: listCommentsByStatus,
         variables: {
+          status: "ACTIVE",
           sortDirection: "DESC",
         },
       });
@@ -93,7 +100,13 @@ const HomePage = () => {
 
   const getAllUsers = async () => {
     try {
-      const resp = await API.graphql(graphqlOperation(listUsers));
+      const resp = await API.graphql({
+        query: listUsersByStatus,
+        variables: {
+          status: "ACTIVE",
+          sortDirection: "DESC",
+        },
+      });
       setUsers(getReturnData(resp).items);
     } catch (ex) {
       console.log(ex);
@@ -108,6 +121,14 @@ const HomePage = () => {
       console.log(ex);
     }
   };
+  const getAllFeedBacks = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(listFeedBacks));
+      setFeedBacks(getReturnData(resp).items);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     getAllPosts();
@@ -115,29 +136,25 @@ const HomePage = () => {
     getAllComments();
     getAllUsers();
     getAllReportedPosts();
+    getAllFeedBacks();
   }, []);
 
   return (
     <div style={{ marginTop: "100px", marginLeft: "30px" }}>
-      <div
-        className=" flex flex-col items-center w-full justify-between mx-7"
-        style={{ width: "600px" }}
-      >
-        <div className="flex mb-10 ">
-          {menus.map((menu, index) => {
-            return (
-              <div
-                className={`flex items-center px-4 my-4 border-2 h-10   hover:bg-primary-200 ${
-                  activeIndex === index ? "bg-primary-300" : ""
-                }`}
-                key={index}
-                onClick={() => setActiveIndex(index)}
-              >
-                <h4 className="cursor-pointer">{menu.name}</h4>
-              </div>
-            );
-          })}
-        </div>
+      <div className="flex mb-10 ">
+        {menus.map((menu, index) => {
+          return (
+            <div
+              className={`flex items-center px-4 my-4 border-2 h-10   hover:bg-primary-200 ${
+                activeIndex === index ? "bg-primary-300" : ""
+              }`}
+              key={index}
+              onClick={() => setActiveIndex(index)}
+            >
+              <h4 className="cursor-pointer">{menu.name}</h4>
+            </div>
+          );
+        })}
       </div>
       <div className="flex flex-col">
         <div className="mb-4">
@@ -156,6 +173,8 @@ const HomePage = () => {
             reportedPosts={reportedPosts}
             setReportedPosts={setReportedPosts}
           />
+        ) : activeIndex === 5 ? (
+          <FeedBackList feedBacks={feedBacks} />
         ) : null}
       </div>
     </div>
