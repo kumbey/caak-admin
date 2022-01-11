@@ -14,6 +14,8 @@ import ReportList from "../components/Dashboard/ReportList";
 import PendingPostList from "../components/Dashboard/PendingPostList";
 import { listFeedBacks } from "../graphql-custom/feedback/queries";
 import FeedBackList from "../components/Dashboard/FeedBackList";
+import GroupList from "../components/Dashboard/GroupList";
+import { listGroups } from "../graphql-custom/group/queries";
 
 const HomePage = () => {
   const menus = [
@@ -41,6 +43,10 @@ const HomePage = () => {
       id: 5,
       name: "Feedback",
     },
+    {
+      id: 6,
+      name: "Groups",
+    },
   ];
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -50,6 +56,7 @@ const HomePage = () => {
   const [users, setUsers] = useState([]);
   const [reportedPosts, setReportedPosts] = useState([]);
   const [feedBacks, setFeedBacks] = useState([]);
+  const [groups, setGroups] = useState([]);
 
   const getAllPosts = async () => {
     try {
@@ -61,7 +68,6 @@ const HomePage = () => {
         },
       });
       setPosts(getReturnData(resp).items);
-      console.log(posts);
     } catch (ex) {
       console.log(ex);
     }
@@ -77,7 +83,6 @@ const HomePage = () => {
         },
       });
       setPendingPosts(getReturnData(resp).items);
-      console.log(posts);
     } catch (ex) {
       console.log(ex);
     }
@@ -129,6 +134,14 @@ const HomePage = () => {
       console.log(ex);
     }
   };
+  const getAllFeedGroups = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(listGroups));
+      setGroups(getReturnData(resp).items);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     getAllPosts();
@@ -137,6 +150,7 @@ const HomePage = () => {
     getAllUsers();
     getAllReportedPosts();
     getAllFeedBacks();
+    getAllFeedGroups();
   }, []);
 
   return (
@@ -175,6 +189,8 @@ const HomePage = () => {
           />
         ) : activeIndex === 5 ? (
           <FeedBackList feedBacks={feedBacks} />
+        ) : activeIndex === 6 ? (
+          <GroupList groups={groups} />
         ) : null}
       </div>
     </div>

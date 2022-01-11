@@ -23,9 +23,9 @@ const CommentList = ({ comments }) => {
             <tr>
               <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Пост</th>
-              <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Сэтгэгдэл</th>
               <th className="text-left uppercase">Бичсэн хүн</th>
+              <th className="text-left uppercase">Үүссэн огноо</th>
             </tr>
           </thead>
           <tbody>
@@ -69,8 +69,6 @@ const CommentList = ({ comments }) => {
                     </div>
                   </td>
 
-                  <td>{convertDateTime(comment.createdAt)}</td>
-
                   <td>{comment.comment}</td>
                   <td>
                     <p
@@ -84,6 +82,7 @@ const CommentList = ({ comments }) => {
                       {comment.user.nickname}
                     </p>
                   </td>
+                  <td>{convertDateTime(comment.createdAt)}</td>
                 </tr>
               );
             })}

@@ -106,24 +106,27 @@ const ReportList = ({ reportedPosts, setReportedPosts }) => {
                       `https://www.beta.caak.mn/post/view/${report.post.id}`
                     )
                   }
-                  className="flex cursor-pointer  border-none  w-96"
                 >
-                  <img
-                    className="mr-2"
-                    width="64"
-                    height="64"
-                    src={
-                      report?.post?.items?.items[0]?.file?.type?.startsWith(
-                        "video"
-                      )
-                        ? placeholder
-                        : report?.post?.items?.items
-                        ? getFileUrl(report?.post?.items.items[0].file)
-                        : getGenderImage("default")
-                    }
-                    alt="image"
-                  />
-                  <p className="break-all truncate-3">{report?.post?.title}</p>
+                  <div className="flex items-center w-96">
+                    <img
+                      className="mr-2 cursor-pointer"
+                      width="64"
+                      height="64"
+                      src={
+                        report?.post?.items?.items[0]?.file?.type?.startsWith(
+                          "video"
+                        )
+                          ? placeholder
+                          : report?.post?.items?.items
+                          ? getFileUrl(report?.post?.items.items[0].file)
+                          : getGenderImage("default")
+                      }
+                      alt="image"
+                    />
+                    <p className="break-all truncate-3 cursor-pointer">
+                      {report?.post?.title}
+                    </p>
+                  </div>
                 </td>
 
                 <td>{report?.reason}</td>

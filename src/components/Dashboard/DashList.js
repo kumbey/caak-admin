@@ -7,6 +7,7 @@ import placeholder from "./../../../src/assets/images/placeholder.png";
 import { convertDateTime } from "../utils";
 
 const DashList = ({ posts }) => {
+  console.log(posts);
   return (
     <>
       <div className="mb-4">
@@ -29,18 +30,17 @@ const DashList = ({ posts }) => {
                 <tr key={index}>
                   <td>{index + 1}</td>
 
-                  <td
-                    onClick={() =>
-                      window.open(
-                        `https://www.beta.caak.mn/post/view/${post.id}`
-                      )
-                    }
-                  >
-                    <div className="flex items-center cursor-pointer break-all truncate-3 w-96">
+                  <td>
+                    <div className="flex items-center  w-96">
                       <img
-                        className="mr-2"
-                        width="64"
-                        height="64"
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className="mr-2 cursor-pointer"
+                        width="64px"
+                        style={{ maxHeight: "64px" }}
                         src={
                           post?.items?.items[0]?.file?.type?.startsWith("video")
                             ? placeholder
@@ -50,7 +50,16 @@ const DashList = ({ posts }) => {
                         }
                         alt={post?.items?.items[0]?.file?.type}
                       />
-                      {post.title}
+                      <p
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className="cursor-pointer break-all truncate-3"
+                      >
+                        {post.title}
+                      </p>
                     </div>
                   </td>
 
@@ -68,16 +77,33 @@ const DashList = ({ posts }) => {
                     </p>
                   </td>
                   <td>
-                    <p
-                      onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/user/${post.user.id}/profile`
-                        )
-                      }
-                      className="cursor-pointer"
-                    >
-                      {post.user.nickname}
-                    </p>
+                    <div className=" flex items-center">
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                          )
+                        }
+                        className="mr-2 cursor-pointer rounded-full"
+                        style={{ height: "32px", width: "32px" }}
+                        src={
+                          post?.user?.pic
+                            ? getFileUrl(post?.user.pic)
+                            : getGenderImage("default")
+                        }
+                        alt={post?.user.pic?.type}
+                      />
+                      <p
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                          )
+                        }
+                        className="cursor-pointer"
+                      >
+                        {post.user.nickname}
+                      </p>
+                    </div>
                   </td>
                   <td>{post.totals.reactions}</td>
                   <td>{post.totals.comments}</td>

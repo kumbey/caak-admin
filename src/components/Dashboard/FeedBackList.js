@@ -10,9 +10,9 @@ const FeedBackList = ({ feedBacks }) => {
           <tr>
             <th className="text-left uppercase ">NO</th>
             <th className="text-left uppercase w-1/3">Тайлбар</th>
+            <th className="text-left uppercase ">Төрөл</th>
             <th className="text-left uppercase ">Үнэлгээ</th>
             <th className="text-left uppercase">Статус</th>
-            <th className="text-left uppercase ">Төрөл</th>
             <th className="text-left uppercase w-1/5">Үүссэн огноо</th>
           </tr>
         </thead>
@@ -26,14 +26,15 @@ const FeedBackList = ({ feedBacks }) => {
                   <p className=" break-all  truncate-3 ">{feed.description}</p>
                 </td>
                 <td>
+                  <p className="truncate-3 ">{feed.type}</p>
+                </td>
+                <td>
                   <p className="truncate-3 text-left">{x}</p>
                 </td>
                 <td>
                   <p className="truncate-3 ">{feed.status}</p>
                 </td>
-                <td>
-                  <p className="truncate-3 ">{feed.type}</p>
-                </td>
+
                 <td>{convertDateTime(feed.createdAt)}</td>
               </tr>
             );

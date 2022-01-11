@@ -8,24 +8,6 @@ import UserCategory from "./UserCategory";
 const UserList = ({ users }) => {
   const [loading, setLoading] = useState(false);
 
-  // users.forEach((user) => {
-  //   if (user.category.items) {
-  //     user.category.items.forEach((item) => {
-  //       let temp = item.id.split("#");
-  //       let id = temp[0];
-  //       setCatArray([
-  //         ...catArray,
-  //         {
-  //           userId: user.id,
-  //           catId: {
-  //             id,
-  //           },
-  //         },
-  //       ]);
-  //     });
-  //   }
-  // });
-  console.log(users);
   return (
     <div className="mb-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -33,9 +15,9 @@ const UserList = ({ users }) => {
           <tr>
             <th className="text-left uppercase">NO</th>
             <th className="text-left uppercase">Хэрэглэгч</th>
-            <th className="text-left uppercase">Үүссэн огноо</th>
             <th className="text-left uppercase">Нас</th>
             <th className="text-left uppercase">Хүйс</th>
+            <th className="text-left uppercase">Үүссэн огноо</th>
             <th className="text-left uppercase">Сонирхолууд </th>
           </tr>
         </thead>
@@ -69,10 +51,11 @@ const UserList = ({ users }) => {
                     </p>
                   </div>
                 </td>
-                <td>{convertDateTime(user.createdAt)}</td>
 
                 <td>{calculate_age(user.birthdate)}</td>
                 <td>{user.gender === "MALE" ? "Эр" : "Эм"}</td>
+                <td>{convertDateTime(user.createdAt)}</td>
+
                 <td>
                   <ul>
                     <UserCategory userId={user.id} />
