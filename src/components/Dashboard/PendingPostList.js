@@ -1,12 +1,50 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 import Tables from "../Tables";
 import { getFileUrl, getGenderImage } from "../../utility/Util";
 import placeholder from "./../../../src/assets/images/placeholder.png";
-
+import API from "@aws-amplify/api";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
+import { useUser } from "../../context/userContext";
 import { convertDateTime } from "../utils";
+import { updateStatus } from "../../utility/ApiHelper";
+import { updatePost } from "../../graphql-custom/post/mutation";
+import ConfirmAlert from "../ConfirmAlert/ConfirmAlert";
 
 const PendingPostList = ({ pendingPosts }) => {
+  const { user } = useUser();
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [reports, setReports] = useState([]);
+
+  const [editId, setEditId] = useState("init");
+
+  const [type, setType] = useState({});
+  const [currentIndex, setCurrentIndex] = useState("init");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const postHandler = async (post, postId, status) => {
+    try {
+      await API.graphql(
+        graphqlOperation(updatePost, {
+          input: { id: postId, status: status, expectedVersion: post.version },
+        })
+      );
+      setShowAlert(false);
+    } catch (ex) {
+      setShowAlert(false);
+
+      if (
+        ex.errors[0].errorType === "DynamoDB:ConditionalCheckFailedException"
+      ) {
+        updateStatus(post, user.sysUser.id, status);
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   setShowAlert(true);
+  // }, [type]);
+
   return (
     <>
       <div className="mb-4">
@@ -77,13 +115,29 @@ const PendingPostList = ({ pendingPosts }) => {
                   <td>{convertDateTime(post.createdAt)}</td>
                   <td className="flex my-4  border-none">
                     <span
-                      // onClick={() => handleClick(report?.id, "accept")}
+                      // onClick={() => postHandler(post, post.id, "CONFIRMED")}
+                      onClick={() => {
+                        setType({
+                          post: post,
+                          postId: post.id,
+                          type: "CONFIRMED",
+                        });
+                        setShowAlert(true);
+                      }}
                       className={"cursor-pointer "}
                     >
                       <i className="las la-check-circle text-2xl text-green" />
                     </span>
                     <span
-                      // onClick={() => handleClick(report?.id, "delete")}
+                      // onClick={() => postHandler(post, post.id, "ARCHIVED")}
+                      onClick={() => {
+                        setType({
+                          post: post,
+                          postId: post.id,
+                          type: "ARCHIVED",
+                        });
+                        setShowAlert(true);
+                      }}
                       className={"cursor-pointer"}
                     >
                       <i className="las la-trash-alt text-2xl text-red ml-4" />
@@ -94,6 +148,20 @@ const PendingPostList = ({ pendingPosts }) => {
             })}
           </tbody>
         </Tables>
+        <ConfirmAlert
+          show={showAlert}
+          title={`${
+            type.type === "CONFIRMED"
+              ? "Та зөвшөөрөхдөө итгэлтэй байна уу?"
+              : "Та устгахдаа итгэлтэй байна уу?"
+          }`}
+          onClose={() => setShowAlert(false)}
+          onSubmit={() =>
+            type.type === "CONFIRMED"
+              ? postHandler(type.post, type.postId, "CONFIRMED")
+              : postHandler(type.post, type.postId, "ARCHIVED")
+          }
+        />
       </div>
     </>
   );
