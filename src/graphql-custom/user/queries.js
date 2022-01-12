@@ -20,6 +20,26 @@ export const listUsers = /* GraphQL */ `
   }
 `;
 
+export const listUsersByStatus = /* GraphQL */ `
+  query ListUsersByStatus(
+    $status: String,
+		$createdAt: ModelStringKeyConditionInput,
+		$sortDirection: ModelSortDirection,
+		$filter: ModelUserFilterInput,
+		$limit: Int,
+		$nextToken: String
+  ) {
+    listUsersByStatus(
+      status: $status,
+      createdAt: $createdAt,
+      sortDirection: $sortDirection,
+      filter: $filter,
+      limit: $limit,
+      nextToken: $nextToken
+    ) ${user0003}
+  }
+`;
+
 export const getUserCategory = /* GraphQL */ `
   query GetUserCategory($id: ID!) {
     getUserCategory(id: $id) {

@@ -11,10 +11,13 @@ import {
   getGroupList,
   getGroupUsersByGroup,
 } from "../../graphql-custom/group/queries";
+import { getCategoryList } from "../../graphql-custom/category/queries";
+import { getReturnData } from "../../utility/Util";
 
 const GroupUsers = () => {
   const [selectedGroup, setSelectedGroup] = useState("");
   const [groups, setGroups] = useState([]);
+  const [cats, setCats] = useState([]);
   const [users, setUsers] = useState([]);
   const [editId, setEditId] = useState("");
   const [show, setShow] = useState(false);
@@ -35,6 +38,8 @@ const GroupUsers = () => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
       setGroups(group.data.listGroups.items);
     });
+
+    getCategory();
   }, []);
 
   useEffect(() => {
@@ -49,6 +54,15 @@ const GroupUsers = () => {
     ).then((groupUsers) => {
       setUsers(groupUsers.data.getGroupUsersByGroup.items);
     });
+  };
+
+  const getCategory = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(getCategoryList));
+      setCats(getReturnData(resp).items);
+    } catch (ex) {
+      console.log(ex);
+    }
   };
 
   return (
@@ -66,10 +80,12 @@ const GroupUsers = () => {
             <option value={"DEFAULT"} disabled hidden>
               Групп Сонгоно уу...
             </option>
-            {groups.map((group) => {
+            {groups.map((group, index) => {
+              let icon;
+              icon = cats.filter((cat) => cat.id === group.category.id);
               return (
-                <option key={group.id} value={group.id}>
-                  {group.name}
+                <option key={index} value={group.id}>
+                  {`${icon[0].icon} ${group.name}`}
                 </option>
               );
             })}

@@ -31,3 +31,23 @@ export const listComments = /* GraphQL */ `
     listComments ${comment0002}
   }
 `;
+
+export const listCommentsByStatus = /* GraphQL */ `
+  query ListCommentsByStatus(
+		$status: String,
+		$createdAt: ModelStringKeyConditionInput,
+		$sortDirection: ModelSortDirection,
+		$filter: ModelCommentFilterInput,
+		$limit: Int,
+		$nextToken: String
+  ) {
+    listCommentsByStatus(
+      status: $status,
+      createdAt: $createdAt,
+      sortDirection: $sortDirection,
+      filter: $filter,
+      limit: $limit,
+      nextToken: $nextToken
+    ) ${comment0002}
+  }
+`;
