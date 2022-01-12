@@ -64,28 +64,30 @@ const PendingPostList = ({ pendingPosts }) => {
                 <tr key={index}>
                   <td>{index + 1}</td>
 
-                  <td
-                    onClick={() =>
-                      window.open(
-                        `https://www.beta.caak.mn/post/view/${post.id}`
-                      )
-                    }
-                    className="flex items-center cursor-pointer break-all truncate-3 w-96"
-                  >
-                    <img
-                      className="mr-2"
-                      width="64"
-                      height="64"
-                      src={
-                        post?.items?.items[0]?.file?.type?.startsWith("video")
-                          ? placeholder
-                          : post?.items?.items[0]?.file
-                          ? getFileUrl(post.items.items[0].file)
-                          : getGenderImage("default")
-                      }
-                      alt={post?.items?.items[0]?.file?.type}
-                    />
-                    {post.title}
+                  <td>
+                    <div className="flex items-center w-96">
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.beta.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className="mr-2 cursor-pointer"
+                        width="64"
+                        height="64"
+                        src={
+                          post?.items?.items[0]?.file?.type?.startsWith("video")
+                            ? placeholder
+                            : post?.items?.items[0]?.file
+                            ? getFileUrl(post.items.items[0].file)
+                            : getGenderImage("default")
+                        }
+                        alt={post?.items?.items[0]?.file?.type}
+                      />
+                      <p className="cursor-pointer break-all truncate-3">
+                        {post.title}
+                      </p>
+                    </div>
                   </td>
 
                   <td>
@@ -152,8 +154,8 @@ const PendingPostList = ({ pendingPosts }) => {
           show={showAlert}
           title={`${
             type.type === "CONFIRMED"
-              ? "Та зөвшөөрөхдөө итгэлтэй байна уу?"
-              : "Та устгахдаа итгэлтэй байна уу?"
+              ? `Та зөвшөөрөхдөө итгэлтэй байна уу?`
+              : "Та архивлахдаа итгэлтэй байна уу?"
           }`}
           onClose={() => setShowAlert(false)}
           onSubmit={() =>
