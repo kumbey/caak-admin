@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 
 import Tables from "../Tables";
 import { getFileUrl, getGenderImage } from "../../utility/Util";
@@ -10,16 +10,21 @@ import { convertDateTime } from "../utils";
 import { updateStatus } from "../../utility/ApiHelper";
 import { updatePost } from "../../graphql-custom/post/mutation";
 import ConfirmAlert from "../ConfirmAlert/ConfirmAlert";
+import Pagination from "../Pagination/Pagination";
 
 const PendingPostList = ({ pendingPosts }) => {
-  const { user } = useUser();
-  const [isShowModal, setIsShowModal] = useState(false);
-  const [reports, setReports] = useState([]);
+  let PageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const [editId, setEditId] = useState("init");
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return pendingPosts.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+  const { user } = useUser();
 
   const [type, setType] = useState({});
-  const [currentIndex, setCurrentIndex] = useState("init");
   const [showAlert, setShowAlert] = useState(false);
 
   const postHandler = async (post, postId, status) => {
@@ -41,10 +46,6 @@ const PendingPostList = ({ pendingPosts }) => {
     }
   };
 
-  // useEffect(() => {
-  //   setShowAlert(true);
-  // }, [type]);
-
   return (
     <>
       <div className="mb-4">
@@ -52,29 +53,27 @@ const PendingPostList = ({ pendingPosts }) => {
           <thead>
             <tr>
               <th className="text-left uppercase">NO</th>
-              <th className="text-left uppercase">Пост</th>
-              <th className="text-left uppercase">Групп</th>
-              <th className="text-left uppercase">Нэмсэн хүн</th>
-              <th className="text-left uppercase">Үүссэн огноо</th>
+              <th className="text-left uppercase w-96">Пост</th>
+              <th className="text-left uppercase w-56">Групп</th>
+              <th className="text-left uppercase w-40">Нэмсэн хүн</th>
+              <th className="text-left uppercase w-36">Үүссэн огноо</th>
             </tr>
           </thead>
           <tbody>
-            {pendingPosts.map((post, index) => {
+            {currentTableData.map((post, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td className="text-center">{index + 1}</td>
 
                   <td>
-                    <div className="flex items-center w-96">
+                    <div className="flex items-center">
                       <img
                         onClick={() =>
                           window.open(
                             `https://www.beta.caak.mn/post/view/${post.id}`
                           )
                         }
-                        className="mr-2 cursor-pointer"
-                        width="64"
-                        height="64"
+                        className="mr-2 cursor-pointer w-12 h-12 object-cover"
                         src={
                           post?.items?.items[0]?.file?.type?.startsWith("video")
                             ? placeholder
@@ -84,15 +83,13 @@ const PendingPostList = ({ pendingPosts }) => {
                         }
                         alt={post?.items?.items[0]?.file?.type}
                       />
-                      <p className="cursor-pointer break-all truncate-3">
-                        {post.title}
-                      </p>
+                      <p className="cursor-pointer line-clamp">{post.title}</p>
                     </div>
                   </td>
 
                   <td>
                     <p
-                      className="cursor-pointer"
+                      className="cursor-pointer line-clamp"
                       onClick={() =>
                         window.open(
                           `https://www.beta.caak.mn/group/${post.group.id}`
@@ -109,13 +106,13 @@ const PendingPostList = ({ pendingPosts }) => {
                           `https://www.beta.caak.mn/user/${post.user.id}/profile`
                         )
                       }
-                      className="cursor-pointer"
+                      className="cursor-pointer line-clamp"
                     >
                       {post.user.nickname}
                     </p>
                   </td>
-                  <td>{convertDateTime(post.createdAt)}</td>
-                  <td className="flex my-4  border-none">
+                  <td className="text-xs">{convertDateTime(post.createdAt)}</td>
+                  <td className="flex  border-none">
                     <span
                       // onClick={() => postHandler(post, post.id, "CONFIRMED")}
                       onClick={() => {
@@ -131,7 +128,6 @@ const PendingPostList = ({ pendingPosts }) => {
                       <i className="las la-check-circle text-2xl text-green" />
                     </span>
                     <span
-                      // onClick={() => postHandler(post, post.id, "ARCHIVED")}
                       onClick={() => {
                         setType({
                           post: post,
@@ -150,6 +146,13 @@ const PendingPostList = ({ pendingPosts }) => {
             })}
           </tbody>
         </Tables>
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={pendingPosts.length}
+          pageSize={PageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
         <ConfirmAlert
           show={showAlert}
           title={`${

@@ -26,6 +26,23 @@ const comment0002 = /* GraphQL */ `
       }
       user {
         nickname
+        pic {
+          bucket
+          createdAt
+          ext
+          external_url
+          id
+          isExternal
+          key
+          level
+          name
+          owner
+          provided_item
+          provider
+          region
+          type
+          updatedAt
+        }
       }
       comment
       createdAt

@@ -20,11 +20,20 @@ const UserCategory = ({ userId }) => {
   };
   useEffect(() => {
     getCategory(userId);
-  }, []);
+  }, [userId]);
 
-  return cats.map((cat, i) => {
-    return <li key={i}>{`${cat.category.icon} ${cat.category.name}`}</li>;
-  });
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {cats.map((cat, i) => {
+        return (
+          <p
+            key={i}
+            className="mr-4"
+          >{`${cat.category.icon} ${cat.category.name}`}</p>
+        );
+      })}
+    </div>
+  );
 };
 
 export default UserCategory;

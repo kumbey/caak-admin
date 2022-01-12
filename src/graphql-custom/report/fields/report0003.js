@@ -25,6 +25,23 @@ const report0003 = /* GraphQL */ `
       meta
       createdAt
       updatedAt
+      pic {
+        bucket
+        createdAt
+        ext
+        external_url
+        id
+        isExternal
+        key
+        level
+        name
+        owner
+        provided_item
+        provider
+        region
+        type
+        updatedAt
+      }
     }
     post {
       id

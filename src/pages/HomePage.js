@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { getPostByStatus } from "../graphql-custom/post/queries";
 import { listCommentsByStatus } from "../graphql-custom/comment/queries";
 import { getReturnData } from "../utility/Util";
-import DashList from "../components/Dashboard/DashList";
 import CommentList from "../components/Dashboard/CommentList";
 import UserList from "../components/Dashboard/UserList";
 import { listUsersByStatus } from "../graphql-custom/user/queries";
@@ -16,6 +15,7 @@ import { listFeedBacks } from "../graphql-custom/feedback/queries";
 import FeedBackList from "../components/Dashboard/FeedBackList";
 import GroupList from "../components/Dashboard/GroupList";
 import { listGroups } from "../graphql-custom/group/queries";
+import PostList from "../components/Dashboard/PostList";
 
 const HomePage = () => {
   const menus = [
@@ -154,8 +154,8 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div style={{ marginTop: "100px", marginLeft: "30px" }}>
-      <div className="flex mb-10 ">
+    <div style={{ marginTop: "80px", marginLeft: "30px" }}>
+      <div className="flex  ">
         {menus.map((menu, index) => {
           return (
             <div
@@ -165,17 +165,17 @@ const HomePage = () => {
               key={index}
               onClick={() => setActiveIndex(index)}
             >
-              <h4 className="cursor-pointer">{menu.name}</h4>
+              <h6 className="cursor-pointer">{menu.name}</h6>
             </div>
           );
         })}
       </div>
       <div className="flex flex-col">
-        <div className="mb-4">
-          <h1>{menus[activeIndex].name}</h1>
+        <div className="mb-3">
+          <h5>{menus[activeIndex].name}</h5>
         </div>
         {activeIndex === 0 ? (
-          <DashList posts={posts} />
+          <PostList posts={posts} />
         ) : activeIndex === 1 ? (
           <PendingPostList pendingPosts={pendingPosts} />
         ) : activeIndex === 2 ? (

@@ -863,7 +863,7 @@ Table
       }
 
       td {
-        @apply px-2 py-4;
+        @apply px-1 py-2;
       }
 
       &.row_selected {
@@ -1036,13 +1036,13 @@ Overlay
   @apply fixed top-0 right-0 bottom-0 left-0 opacity-0 z-40;
   @apply transition-opacity duration-200 ease-linear;
 
-&.active {
-   @apply opacity-20;
- }
+  &.active {
+    @apply opacity-20;
+  }
 
-&.workspace {
-   @apply z-10;
- }
+  &.workspace {
+    @apply z-10;
+  }
 }
 
 /*
