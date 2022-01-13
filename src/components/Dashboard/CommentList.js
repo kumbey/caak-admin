@@ -16,6 +16,8 @@ const CommentList = ({ comments }) => {
     const lastPageIndex = firstPageIndex + PageSize;
     return comments.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
+
+  console.log(comments);
   return (
     <>
       <div className="mb-4">
