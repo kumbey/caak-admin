@@ -5,14 +5,18 @@ import Pagination from "../Pagination/Pagination";
 import Tables from "../Tables";
 
 import { convertDateTime } from "../utils";
+import GroupAdmins from "./GroupAdmins";
 
-const GroupList = ({ groups }) => {
-  let PageSize = 10;
+const GroupList = ({ groups, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
     return groups.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
   return (
@@ -26,14 +30,16 @@ const GroupList = ({ groups }) => {
             <th className="text-left uppercase">Постууд</th>
             <th className="text-left uppercase ">Аура</th>
             <th className="text-left uppercase  w-40">Үүсгэсэн хэрэглэгч</th>
+            <th className="text-left uppercase  w-96">Удирдагчид</th>
             <th className="text-left uppercase w-36">Үүссэн огноо</th>
           </tr>
         </thead>
         <tbody>
           {currentTableData.map((group, index) => {
+            count++;
             return (
               <tr key={index}>
-                <td className="text-center">{index + 1}</td>
+                <td className="text-center">{count}</td>
                 <td>
                   <div className="flex items-center ">
                     <img
@@ -100,6 +106,9 @@ const GroupList = ({ groups }) => {
                       {group.founder.nickname}
                     </p>
                   </div>
+                </td>
+                <td className="text-xs">
+                  <GroupAdmins groupId={group.id} />
                 </td>
                 <td className="text-xs">{convertDateTime(group.createdAt)}</td>
               </tr>

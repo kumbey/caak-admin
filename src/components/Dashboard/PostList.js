@@ -7,22 +7,18 @@ import placeholder from "./../../../src/assets/images/placeholder.png";
 import { convertDateTime } from "../utils";
 import Pagination from "../Pagination/Pagination";
 
-const PostList = ({ posts }) => {
-  let PageSize = 10;
+const PostList = ({ posts, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
 
-  const [render, setRender] = useState(0);
-  console.log(posts);
-
-  useEffect(() => {
-    setRender(render + 1);
-  }, []);
   return posts.length > 0 ? (
     <div className="mb-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -40,9 +36,10 @@ const PostList = ({ posts }) => {
         </thead>
         <tbody>
           {currentTableData.map((post, index) => {
+            count++;
             return (
               <tr key={index}>
-                <td className="text-center">{index + 1}</td>
+                <td className="text-center">{count}</td>
 
                 <td>
                   <div className="flex items-center  ">

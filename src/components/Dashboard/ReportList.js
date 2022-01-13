@@ -13,13 +13,16 @@ import {
 import placeholder from "./../../../src/assets/images/placeholder.png";
 import Pagination from "../Pagination/Pagination";
 
-const ReportList = ({ reportedPosts, setReportedPosts }) => {
-  let PageSize = 10;
+const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
     return reportedPosts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
 
@@ -103,9 +106,10 @@ const ReportList = ({ reportedPosts, setReportedPosts }) => {
         </thead>
         <tbody>
           {currentTableData.map((report, index) => {
+            count++;
             return (
               <tr key={index}>
-                <td>{index + 1}</td>
+                <td>{count}</td>
 
                 <td
                   onClick={() =>

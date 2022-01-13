@@ -12,13 +12,16 @@ import { updatePost } from "../../graphql-custom/post/mutation";
 import ConfirmAlert from "../ConfirmAlert/ConfirmAlert";
 import Pagination from "../Pagination/Pagination";
 
-const PendingPostList = ({ pendingPosts }) => {
-  let PageSize = 10;
+const PendingPostList = ({ pendingPosts, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
     return pendingPosts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
 
@@ -61,9 +64,11 @@ const PendingPostList = ({ pendingPosts }) => {
           </thead>
           <tbody>
             {currentTableData.map((post, index) => {
+              count++;
+
               return (
                 <tr key={index}>
-                  <td className="text-center">{index + 1}</td>
+                  <td className="text-center">{count}</td>
 
                   <td>
                     <div className="flex items-center">
