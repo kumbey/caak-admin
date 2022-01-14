@@ -7,15 +7,19 @@ import placeholder from "./../../../src/assets/images/placeholder.png";
 import { convertDateTime } from "../utils";
 import Pagination from "../Pagination/Pagination";
 
-const CommentList = ({ comments }) => {
-  let PageSize = 10;
+const CommentList = ({ comments, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
     return comments.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
+
   return (
     <>
       <div className="mb-4">
@@ -31,9 +35,10 @@ const CommentList = ({ comments }) => {
           </thead>
           <tbody>
             {currentTableData.map((comment, index) => {
+              count++;
               return (
                 <tr key={index}>
-                  <td className="text-center">{index + 1}</td>
+                  <td className="text-center">{count}</td>
 
                   <td>
                     <div className="flex items-center">

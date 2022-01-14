@@ -7,13 +7,16 @@ import { convertDateTime } from "../utils";
 import UserCategory from "./UserCategory";
 import Pagination from "../Pagination/Pagination";
 
-const UserList = ({ users }) => {
-  let PageSize = 10;
+const UserList = ({ users, PageSize }) => {
+  let count = 0;
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
     return users.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
   return (
@@ -33,9 +36,10 @@ const UserList = ({ users }) => {
         </thead>
         <tbody>
           {currentTableData.map((user, index) => {
+            count++;
             return (
               <tr key={index}>
-                <td className="text-center">{index + 1}</td>
+                <td className="text-center">{count}</td>
 
                 <td>
                   <div className="flex items-center ">

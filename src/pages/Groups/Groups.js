@@ -105,7 +105,7 @@ const Groups = () => {
                   <td>{convertDateTime(group.createdAt)}</td>
                   <td>{`${
                     group.createdAt !== group.updatedAt
-                      ? convertDateTime(group.createdAt)
+                      ? convertDateTime(group.updatedAt)
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>

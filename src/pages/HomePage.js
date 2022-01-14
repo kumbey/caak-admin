@@ -58,6 +58,8 @@ const HomePage = () => {
   const [feedBacks, setFeedBacks] = useState([]);
   const [groups, setGroups] = useState([]);
 
+  const PageSize = 10;
+
   const getAllPosts = async () => {
     try {
       let resp = await API.graphql({
@@ -134,7 +136,7 @@ const HomePage = () => {
       console.log(ex);
     }
   };
-  const getAllFeedGroups = async () => {
+  const getAllGroups = async () => {
     try {
       const resp = await API.graphql(graphqlOperation(listGroups));
       setGroups(getReturnData(resp).items);
@@ -150,7 +152,7 @@ const HomePage = () => {
     getAllUsers();
     getAllReportedPosts();
     getAllFeedBacks();
-    getAllFeedGroups();
+    getAllGroups();
   }, []);
 
   return (
@@ -175,22 +177,23 @@ const HomePage = () => {
           <h5>{menus[activeIndex].name}</h5>
         </div>
         {activeIndex === 0 ? (
-          <PostList posts={posts} />
+          <PostList posts={posts} PageSize={PageSize} />
         ) : activeIndex === 1 ? (
-          <PendingPostList pendingPosts={pendingPosts} />
+          <PendingPostList pendingPosts={pendingPosts} PageSize={PageSize} />
         ) : activeIndex === 2 ? (
-          <CommentList comments={comments} />
+          <CommentList comments={comments} PageSize={PageSize} />
         ) : activeIndex === 3 ? (
-          <UserList users={users} />
+          <UserList users={users} PageSize={PageSize} />
         ) : activeIndex === 4 ? (
           <ReportList
             reportedPosts={reportedPosts}
             setReportedPosts={setReportedPosts}
+            PageSize={PageSize}
           />
         ) : activeIndex === 5 ? (
-          <FeedBackList feedBacks={feedBacks} />
+          <FeedBackList feedBacks={feedBacks} PageSize={PageSize} />
         ) : activeIndex === 6 ? (
-          <GroupList groups={groups} />
+          <GroupList groups={groups} PageSize={PageSize} />
         ) : null}
       </div>
     </div>

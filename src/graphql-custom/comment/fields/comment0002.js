@@ -25,6 +25,7 @@ const comment0002 = /* GraphQL */ `
         }
       }
       user {
+        id
         nickname
         pic {
           bucket
