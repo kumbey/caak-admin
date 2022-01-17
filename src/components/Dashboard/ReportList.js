@@ -12,6 +12,10 @@ import {
 } from "../../graphql-custom/report/mutation";
 import placeholder from "./../../../src/assets/images/placeholder.png";
 import Pagination from "../Pagination/Pagination";
+import {
+  createPostStatusHistory,
+  updatePost,
+} from "../../graphql-custom/post/mutation";
 
 const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
   let count = 0;
@@ -32,25 +36,27 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
 
   const [deleteId, setDeleteId] = useState("init");
   const [selectedType, setSelectedType] = useState();
+  const [exVersion, setExVersion] = useState();
+  const [reason, setReason] = useState();
 
-  const handleClick = (id, type) => {
+  const handleClick = (id, type, version, reason) => {
     setDeleteId(id);
     setSelectedType(type);
+    version && setExVersion(version);
+    reason && setReason(reason);
   };
 
   const deleteReportFunction = async (id) => {
     try {
-      const resp = await API.graphql(
-        graphqlOperation(deleteReportedPost, { input: { id } })
+      await API.graphql(
+        graphqlOperation(updateReportedPost, {
+          input: { id: id, status: "CHECKED" },
+        })
       );
       setShowAlert(false);
-      setReportedPosts(
-        reportedPosts.filter(
-          (report) => report.id !== resp.data.deleteReportedPost.id
-        )
-      );
+
       addToast({
-        content: `Устгалаа`,
+        content: `Шалгалаа`,
         title: "Амжилттай",
         autoClose: true,
       });
@@ -59,10 +65,16 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
     }
   };
   const acceptReportFunction = async (id) => {
+    console.log(reason);
     try {
       await API.graphql(
-        graphqlOperation(updateReportedPost, {
-          input: { id: id, status: "CHECKED" },
+        graphqlOperation(updatePost, {
+          input: { id: id, status: "REPORTED", expectedVersion: exVersion },
+        })
+      );
+      await API.graphql(
+        graphqlOperation(createPostStatusHistory, {
+          input: { post_id: id, status: "REPORTED", description: reason },
         })
       );
       setShowAlert(false);
@@ -106,6 +118,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
         </thead>
         <tbody>
           {currentTableData.map((report, index) => {
+            console.log(report);
             count++;
             return (
               <tr key={index}>
@@ -177,7 +190,14 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
                 {/* <td>{convertDateTime(report?.updatedAt)}</td> */}
                 <td className="flex my-4  border-none">
                   <span
-                    onClick={() => handleClick(report?.id, "accept")}
+                    onClick={() =>
+                      handleClick(
+                        report?.post?.id,
+                        "accept",
+                        report?.post?.version,
+                        report?.reason
+                      )
+                    }
                     className={"cursor-pointer "}
                   >
                     <i className="las la-check-circle text-2xl text-green" />
