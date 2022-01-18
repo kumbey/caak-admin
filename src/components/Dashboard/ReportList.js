@@ -65,7 +65,6 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
     }
   };
   const acceptReportFunction = async (id) => {
-    console.log(reason);
     try {
       await API.graphql(
         graphqlOperation(updatePost, {
@@ -118,7 +117,6 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
         </thead>
         <tbody>
           {currentTableData.map((report, index) => {
-            console.log(report);
             count++;
             return (
               <tr key={index}>
@@ -231,7 +229,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
       ) : (
         <ConfirmAlert
           show={showAlert}
-          title="Та устгахдаа итгэлтэй байна уу?"
+          title="Та шалгасан уу?"
           onClose={() => setShowAlert(false)}
           onSubmit={() => deleteReportFunction(deleteId)}
         />

@@ -32,9 +32,6 @@ const AddEdit = ({
   const setFile = (key, file) => {
     setData({ ...data, [key]: file });
   };
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   useEffect(() => {
     fetchCategory(editId); // eslint-disable-next-line
@@ -70,7 +67,6 @@ const AddEdit = ({
       const catImg =
         data.pic && !data.pic.id ? await uploadFile(data.pic) : data.pic;
       setData({ ...data, pic: catImg });
-      console.log(catImg.id);
       const postData = {
         name: data.name,
         icon: data.icon,
@@ -78,7 +74,6 @@ const AddEdit = ({
       };
 
       if (editId === "new") {
-        console.log(postData);
         const resp = await API.graphql(
           graphqlOperation(createCategory, { input: postData })
         );
