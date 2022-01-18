@@ -74,7 +74,7 @@ const CommentList = ({ comments, PageSize }) => {
                   </td>
 
                   <td>
-                    <p>{comment.comment}</p>
+                    <p className="line-clamp ">{comment.comment}</p>
                   </td>
                   <td>
                     <div className=" flex items-center">
