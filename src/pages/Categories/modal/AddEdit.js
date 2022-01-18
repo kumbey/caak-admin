@@ -156,7 +156,7 @@ const AddEdit = ({
           <DropZone
             title={"Drop it here"}
             keyName={"pic"}
-            file={data.pic}
+            file={data.picture}
             setFile={setFile}
           />
         </div>
