@@ -9,6 +9,9 @@ import GroupAdmins from "./GroupAdmins";
 
 const GroupList = ({ groups, PageSize }) => {
   let count = 0;
+  groups = groups.sort(function (a, b) {
+    return b.aura - a.aura;
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
 

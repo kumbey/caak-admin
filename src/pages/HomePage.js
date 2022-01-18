@@ -8,10 +8,16 @@ import { getReturnData } from "../utility/Util";
 import CommentList from "../components/Dashboard/CommentList";
 import UserList from "../components/Dashboard/UserList";
 import { listUsersByStatus } from "../graphql-custom/user/queries";
-import { listReportedPosts } from "../graphql-custom/report/queries";
+import {
+  ListReportedPostOrderByCreatedAt,
+  listReportedPosts,
+} from "../graphql-custom/report/queries";
 import ReportList from "../components/Dashboard/ReportList";
 import PendingPostList from "../components/Dashboard/PendingPostList";
-import { listFeedBacks } from "../graphql-custom/feedback/queries";
+import {
+  listFeedBackOrderByCreatedAt,
+  listFeedBacks,
+} from "../graphql-custom/feedback/queries";
 import FeedBackList from "../components/Dashboard/FeedBackList";
 import GroupList from "../components/Dashboard/GroupList";
 import { listGroups } from "../graphql-custom/group/queries";
@@ -122,7 +128,12 @@ const HomePage = () => {
 
   const getAllReportedPosts = async () => {
     try {
-      const resp = await API.graphql(graphqlOperation(listReportedPosts));
+      const resp = await API.graphql(
+        graphqlOperation(ListReportedPostOrderByCreatedAt, {
+          sortDirection: "DESC",
+          typeName: "REPORTED_POST",
+        })
+      );
       setReportedPosts(getReturnData(resp).items);
     } catch (ex) {
       console.log(ex);
@@ -130,7 +141,12 @@ const HomePage = () => {
   };
   const getAllFeedBacks = async () => {
     try {
-      const resp = await API.graphql(graphqlOperation(listFeedBacks));
+      const resp = await API.graphql(
+        graphqlOperation(listFeedBackOrderByCreatedAt, {
+          sortDirection: "DESC",
+          typeName: "FEEDBACK",
+        })
+      );
       setFeedBacks(getReturnData(resp).items);
     } catch (ex) {
       console.log(ex);

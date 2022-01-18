@@ -17,7 +17,7 @@ const PostList = ({ posts, PageSize }) => {
     const lastPageIndex = firstPageIndex + PageSize;
     count = (currentPage - 1) * PageSize;
     return posts.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, posts]);
 
   return posts.length > 0 ? (
     <div className="mb-4">
