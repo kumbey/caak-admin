@@ -38,7 +38,7 @@ const FeedBackList = ({ feedBacks, PageSize }) => {
                 <td className="text-center">{count}</td>
 
                 <td>
-                  <p>{feed.description}</p>
+                  <p className="line-clamp ">{feed.description}</p>
                 </td>
                 <td>
                   <p className="line-clamp text-center">{feed.type}</p>
