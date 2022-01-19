@@ -5,6 +5,7 @@ import HomePage from "../pages/HomePage";
 import Groups from "../pages/Groups/Groups";
 import GroupUsers from "../pages/GroupUsers/GroupUsers";
 import Reports from "../pages/ReportTypes/Reports";
+import Ads from "../pages/Ads/Ads";
 
 const Routes = [
   {
@@ -59,6 +60,13 @@ const Routes = [
     background: true,
     auth: true,
     page: () => <GroupUsers />,
+  },
+  {
+    path: "/ads",
+    exact: true,
+    background: true,
+    auth: true,
+    page: () => <Ads />,
   },
 ];
 
