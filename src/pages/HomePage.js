@@ -73,6 +73,7 @@ const HomePage = () => {
         variables: {
           status: "CONFIRMED",
           sortDirection: "DESC",
+          limit: 5000,
         },
       });
       setPosts(getReturnData(resp).items);
@@ -87,7 +88,7 @@ const HomePage = () => {
         variables: {
           status: "PENDING",
           sortDirection: "DESC",
-          limit: 500,
+          limit: 5000,
         },
       });
       setPendingPosts(getReturnData(resp).items);
@@ -103,6 +104,7 @@ const HomePage = () => {
         variables: {
           status: "ACTIVE",
           sortDirection: "DESC",
+          limit: 5000,
         },
       });
       setComments(getReturnData(resp).items);
@@ -118,6 +120,7 @@ const HomePage = () => {
         variables: {
           status: "ACTIVE",
           sortDirection: "DESC",
+          limit: 5000,
         },
       });
       setUsers(getReturnData(resp).items);
@@ -132,6 +135,7 @@ const HomePage = () => {
         graphqlOperation(ListReportedPostOrderByCreatedAt, {
           sortDirection: "DESC",
           typeName: "REPORTED_POST",
+          limit: 5000,
         })
       );
       setReportedPosts(getReturnData(resp).items);
@@ -145,6 +149,7 @@ const HomePage = () => {
         graphqlOperation(listFeedBackOrderByCreatedAt, {
           sortDirection: "DESC",
           typeName: "FEEDBACK",
+          limit: 5000,
         })
       );
       setFeedBacks(getReturnData(resp).items);
