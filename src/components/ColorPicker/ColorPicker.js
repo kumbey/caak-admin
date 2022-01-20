@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import reactCSS from "reactcss";
 import { SketchPicker } from "react-color";
 
-const ColorPicker = ({ setHex }) => {
+const ColorPicker = ({ name, setHex, hex }) => {
   const [picker, setPicker] = useState({
-    r: "241",
-    g: "112",
-    b: "19",
-    a: "1",
+    color: {
+      r: "0",
+      g: "0",
+      b: "0",
+      a: "1",
+    },
+    hex: "#000000",
   });
   const [show, setShow] = useState(false);
 
@@ -17,7 +20,7 @@ const ColorPicker = ({ setHex }) => {
         width: "30px",
         height: "14px",
         borderRadius: "2px",
-        background: `rgba(${picker.r}, ${picker.g}, ${picker.b}, ${picker.a})`,
+        background: `rgba(${picker.color.r}, ${picker.color.g}, ${picker.color.b}, ${picker.color.a})`,
       },
       swatch: {
         padding: "5px",
@@ -43,15 +46,6 @@ const ColorPicker = ({ setHex }) => {
     },
   });
 
-  const componentToHex = (c) => {
-    var hex = c.toString(16);
-    return hex.length === 1 ? "0" + hex : hex;
-  };
-
-  const rgbToHex = (r, g, b) => {
-    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-  };
-
   const handleClick = () => {
     setShow(!show);
   };
@@ -60,24 +54,25 @@ const ColorPicker = ({ setHex }) => {
     setShow(false);
   };
 
-  const handleChange = (color) => {
-    setPicker(color.rgb);
+  const handleChange = (col) => {
+    setPicker({ color: col.rgb, hex: col.hex });
+    setHex({ ...hex, [name]: col.hex });
   };
-
-  useEffect(() => {
-    setHex(rgbToHex(picker.r, picker.g, picker.b));
-  }, [picker]);
 
   return (
     <div className="flex items-center">
-      <p className="mr-4">{rgbToHex(picker.r, picker.g, picker.b)}</p>
+      <p className="mr-4">{picker.hex}</p>
       <div style={styles.swatch} onClick={handleClick}>
         <div style={styles.color} />
       </div>
       {show ? (
         <div style={styles.popover}>
           <div style={styles.cover} onClick={handleClose} />
-          <SketchPicker color={picker} onChange={handleChange} />
+          <SketchPicker
+            name={name}
+            color={picker.color}
+            onChange={handleChange}
+          />
         </div>
       ) : null}
     </div>

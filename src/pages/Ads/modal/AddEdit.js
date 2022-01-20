@@ -2,20 +2,18 @@ import { useEffect, useState } from "react";
 import Modal from "../../../components/Modal";
 import Input from "../../../components/Input";
 import Select from "../../../components/Select";
-import TextArea from "../../../components/TextArea";
 import DropZone from "../../../components/Dropzone";
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
-import { getCategoryList } from "../../../graphql-custom/category/queries";
-import { getGroup } from "../../../graphql-custom/group/queries";
 import { ApiFileUpload } from "../../../utility/ApiHelper";
+
 import {
-  createGroup,
-  updateGroup,
-} from "../../../graphql-custom/group/mutation";
+  createBanner,
+  updateBanner,
+} from "../../../graphql-custom/banner/mutation";
+import { getBanner } from "../../../graphql-custom/banner/queries";
 import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
-import CheckBox from "../../../components/CheckBox";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -24,45 +22,54 @@ const AddEdit = ({
   editId,
   show,
   setShow,
-  setGroups,
+  setBanners,
   currentIndex,
-  groups,
+  banners,
 }) => {
   const initData = {
-    name: "",
-    about: "",
-    category: {
-      id: "",
+    title: "",
+    pic1_id: "",
+    pic2_id: "",
+    start_date: "",
+    end_date: "",
+    meta: {
+      colors: "",
+      text: "",
+      url: "",
     },
-    featured: false,
-    profile: null,
-    cover: null,
+    type: "",
   };
+
+  const types = [
+    {
+      name: "A1",
+      value: "A1",
+    },
+    {
+      name: "A2",
+      value: "A2",
+    },
+  ];
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
-  const [categories, setCategories] = useState([]);
   const [oldImageFiles, setOldImageFiles] = useState({});
   const { user } = useUser();
   const { addToast } = useToast();
-  const [isChecked, setIsChecked] = useState();
-  const [hex, setHex] = useState();
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [numberOfDays, setNumberOfDays] = useState(null);
+  const [hex, setHex] = useState({});
+  const [date, setDate] = useState({});
 
-  const fetchGroup = async () => {
+  const fetchBanner = async () => {
     try {
       setLoading(true);
       if (editId !== "new" && editId !== "init") {
         const resp = await API.graphql(
-          graphqlOperation(getGroup, { id: editId })
+          graphqlOperation(getBanner, { id: editId })
         );
-        setData(resp.data.getGroup);
-        setIsChecked(resp.data.getGroup.featured === "true" ? true : false);
-        setOldImageFiles({
-          profile: resp.data.getGroup.profile,
-          cover: resp.data.getGroup.cover,
-        });
+        setData(resp.data.getBanner);
+        console.log(data);
       } else {
         setData(initData);
       }
@@ -72,7 +79,7 @@ const AddEdit = ({
       console.log(ex);
     }
   };
-  const updateGroupData = async (e) => {
+  const updateBannerData = async (e) => {
     e.preventDefault();
 
     const uploadFile = async (image) => {
@@ -81,50 +88,52 @@ const AddEdit = ({
 
     setLoading(true);
     try {
-      const coverImage =
-        data.cover && !data.cover.id
-          ? await uploadFile(data.cover)
-          : data.cover;
-      const profileImage =
-        data.profile && !data.profile.id
-          ? await uploadFile(data.profile)
-          : data.profile;
-      setData({ ...data, cover: coverImage, profile: profileImage });
+      const bigImg =
+        data.pic1 && !data.pic1.id ? await uploadFile(data.pic1) : data.pic1;
+      const smallImg =
+        data.pic2 && !data.pic2.id ? await uploadFile(data.pic2) : data.pic2;
+      setData({ ...data, pic1: bigImg, pic2: smallImg });
 
       const postData = {
-        name: data.name,
-        featured: data.featured,
-        category_id: data.category.id,
-        about: data.about,
-        groupCoverId: coverImage?.id,
-        groupProfileId: profileImage?.id,
+        title: data.title,
+        pic1_id: bigImg?.id,
+        pic2_id: smallImg?.id,
+        meta: JSON.stringify({
+          colors: data.hex,
+          text: data.text,
+          url: data.url,
+        }),
+        type: data.type,
+        start_date: startDate && startDate,
+        end_date: endDate && endDate,
+        typeName: "BANNER",
       };
 
       if (editId === "new") {
-        postData.founder_id = user.sysUser.id;
+        console.log("new");
         const resp = await API.graphql(
-          graphqlOperation(createGroup, {
+          graphqlOperation(createBanner, {
             input: postData,
           })
         );
-        setGroups((prevState) => [...prevState, resp.data.createGroup]);
+        setBanners((prevState) => [...prevState, resp.data.createBanner]);
         addToast({
-          content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
+          content: `${resp.data.createBanner.title} амжилттай үүслээ.`,
           autoClose: true,
         });
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
 
         const resp = await API.graphql(
-          graphqlOperation(updateGroup, {
+          graphqlOperation(updateBanner, {
             input: postData,
           })
         );
-        let arr = groups;
-        arr[currentIndex] = resp.data.updateGroup;
-        setGroups(arr);
+        let arr = banners;
+        arr[currentIndex] = resp.data.updateBanner;
+        setBanners(arr);
         addToast({
-          content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
+          content: `${resp.data.updateBanner.title} өөрчлөлтийг хадгаллаа.`,
           autoClose: true,
         });
 
@@ -138,20 +147,7 @@ const AddEdit = ({
         // }
       }
       setLoading(false);
-      setIsChecked(false);
-
       setShow(false);
-    } catch (ex) {
-      console.log(ex);
-    }
-  };
-
-  const getCategories = async () => {
-    try {
-      setLoading(true);
-      const resp = await API.graphql(graphqlOperation(getCategoryList));
-      setCategories(resp.data.listCategorys.items);
-      setLoading(false);
     } catch (ex) {
       setLoading(false);
       console.log(ex);
@@ -162,22 +158,13 @@ const AddEdit = ({
     setData({ ...data, [key]: file });
   };
 
-  const handleCheck = (e) => {
-    setIsChecked(e.target.checked);
-    const { name, checked } = e.target;
-    setData({ ...data, [name]: checked });
-  };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     // value = JSON.stringify(value);
     setData({ ...data, [name]: value });
   };
-  const handleCategoryChange = (e) => {
-    const { name, value } = e.target;
-    let category = { ...data[name] };
-    category.id = value;
-    setData({ ...data, [name]: category });
+  const close = () => {
+    setShow(false);
   };
 
   const getDiffDays = (start, end) => {
@@ -186,26 +173,36 @@ const AddEdit = ({
   };
 
   useEffect(() => {
-    getCategories();
-  }, []);
-
-  useEffect(() => {
     setNumberOfDays(getDiffDays(startDate, endDate));
   }, [startDate, endDate]);
 
   useEffect(() => {
-    fetchGroup();
+    fetchBanner();
     // eslint-disable-next-line
   }, [editId]);
 
-  const close = () => {
-    setIsChecked(false);
-    setShow(false);
-  };
+  useEffect(() => {
+    setData({
+      ...data,
+      start_date: startDate && startDate.toISOString(),
+      end_date: endDate && endDate.toISOString(),
+    });
+  }, [dateRange]);
+
+  useEffect(() => {
+    setData({
+      ...data,
+      hex,
+    });
+  }, [hex]);
+
+  useEffect(() => {
+    console.log(editId);
+  }, [editId]);
 
   return (
     <Modal
-      //   onSubmit={updateGroupData}
+      onSubmit={updateBannerData}
       show={show}
       title={
         editId !== "new" && editId !== "init"
@@ -225,8 +222,8 @@ const AddEdit = ({
       <div className="mt-8 max-w-md">
         <div className="grid grid-cols-1 gap-6">
           <Input
-            name={"description"}
-            value={data.description}
+            name={"title"}
+            value={data.title}
             label="Сурталчилгааны утга"
             onChange={handleChange}
           />
@@ -234,20 +231,20 @@ const AddEdit = ({
           <h4>Баннер зураг </h4>
           <DropZone
             title={"Drop it here"}
-            keyName={"img"}
-            file={data.img}
+            keyName={"pic1"}
+            file={data.pic1}
             setFile={setFile}
           />
           <h4>Баннер айкон</h4>
           <DropZone
             title={"Drop it here"}
-            keyName={"icon"}
-            file={data.icon}
+            keyName={"pic2"}
+            file={data.pic2}
             setFile={setFile}
           />
           <Input
-            name={"banner_text"}
-            value={data.banner_text}
+            name={"text"}
+            value={data.text}
             label="Баннер уриа үг"
             onChange={handleChange}
           />
@@ -259,28 +256,32 @@ const AddEdit = ({
           />
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Border color 1</p>
-            <ColorPicker setHex={setHex} />
+            <ColorPicker name={"border_color1"} hex={hex} setHex={setHex} />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Border color 2</p>
-            <ColorPicker setHex={setHex} />
+            <ColorPicker name={"border_color2"} hex={hex} setHex={setHex} />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text background color</p>
-            <ColorPicker setHex={setHex} />
+            <ColorPicker name={"text-bg_color"} hex={hex} setHex={setHex} />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text background hover color</p>
 
-            <ColorPicker setHex={setHex} />
+            <ColorPicker
+              name={"text-bg-hover-color"}
+              hex={hex}
+              setHex={setHex}
+            />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text color</p>
-            <ColorPicker setHex={setHex} />
+            <ColorPicker name={"text-color"} hex={hex} setHex={setHex} />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text hover color</p>
-            <ColorPicker setHex={setHex} />
+            <ColorPicker name={"text-hover-color"} hex={hex} setHex={setHex} />
           </div>
           <div className="flex items-center ">
             <p className="mr-28">
@@ -298,6 +299,24 @@ const AddEdit = ({
               />
             </div>
           </div>
+
+          <Select
+            name={"type"}
+            title="Төрөл сонгох"
+            value={data.type || "DEFAULT"}
+            onChange={handleChange}
+          >
+            <option value={"DEFAULT"} disabled hidden>
+              Сонгох...
+            </option>
+            {types.map((type, index) => {
+              return (
+                <option key={index} value={type.value}>
+                  {`${type.name}`}
+                </option>
+              );
+            })}
+          </Select>
         </div>
       </div>
     </Modal>
