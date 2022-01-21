@@ -11,3 +11,9 @@ export const updateBanner = /* GraphQL */ `
         updateBanner(input: $input) ${banner0001}
     }
 `;
+
+export const deleteBanner = /* GraphQL */ `
+    mutation DeleteBanner($input: DeleteBannerInput!) {
+        deleteBanner(input: $input) ${banner0001}
+    }
+`;

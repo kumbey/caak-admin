@@ -18,6 +18,7 @@ import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
+import { getDiffDays } from "../../../utility/Util";
 
 const AddEdit = ({
   editId,
@@ -53,8 +54,7 @@ const AddEdit = ({
   ];
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
-  const [oldImageFiles, setOldImageFiles] = useState({});
-  const { user } = useUser();
+
   const { addToast } = useToast();
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
@@ -71,6 +71,7 @@ const AddEdit = ({
           graphqlOperation(getBanner, { id: editId })
         );
         const meta = JSON.parse(resp.data.getBanner.meta);
+        console.log("meta parsed:", meta);
         setData({
           ...resp.data.getBanner,
           meta: {
@@ -113,8 +114,8 @@ const AddEdit = ({
           url: data.meta.url,
         }),
         type: data.type,
-        start_date: startDate && startDate,
-        end_date: endDate && endDate,
+        start_date: startDate ? startDate : null,
+        end_date: endDate ? endDate : null,
         typeName: "BANNER",
       };
 
@@ -131,7 +132,7 @@ const AddEdit = ({
         });
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
-
+        console.log("postData: ", postData);
         const resp = await API.graphql(
           graphqlOperation(updateBanner, {
             input: postData,
@@ -175,11 +176,6 @@ const AddEdit = ({
     setShow(false);
   };
 
-  const getDiffDays = (start, end) => {
-    const oneDay = 24 * 60 * 60 * 1000;
-    return Math.round((end - start) / oneDay) + 1;
-  };
-
   useEffect(() => {
     setNumberOfDays(getDiffDays(startDate, endDate));
   }, [startDate, endDate]);
@@ -190,6 +186,7 @@ const AddEdit = ({
   }, [editId]);
 
   useEffect(() => {
+    console.log("**********", startDate);
     setData({
       ...data,
       start_date: startDate && startDate.toISOString(),
@@ -313,9 +310,7 @@ const AddEdit = ({
             <ColorPicker
               name={"text_bg_hover_color"}
               hexColor={
-                data.meta.colors
-                  ? data.meta.colors.text_bg_hover_color
-                  : hexColor
+                data.meta.colors ? data.meta.colors.text_bg_hover_color : ""
               }
               setHexColor={setHexColor}
             />
@@ -333,7 +328,7 @@ const AddEdit = ({
             <ColorPicker
               name={"text_hover_color"}
               hexColor={
-                data.meta.colors ? data.meta.colors.text_hover_color : hexColor
+                data.meta.colors ? data.meta.colors.text_hover_color : ""
               }
               setHexColor={setHexColor}
             />
@@ -341,12 +336,14 @@ const AddEdit = ({
           <div className="flex items-center justify-between ">
             <p>Хоног: {numberOfDays > 0 ? numberOfDays : null}</p>
             <div className=" border-gray-300 border rounded-md  w-48">
+              {console.log(
+                "123123",
+                moment(data.start_date).format("MMMM DD YYYY")
+              )}
               <DatePicker
                 selectsRange={true}
-                startDate={
-                  data.start_date ? moment(data.start_date)._d : startDate
-                }
-                endDate={data.end_date ? moment(data.end_date)._d : endDate}
+                startDate={data.start_date ? moment(data.start_date)._d : ""}
+                endDate={data.end_date ? moment(data.end_date)._d : ""}
                 onChange={(update) => {
                   setDateRange(update);
                 }}

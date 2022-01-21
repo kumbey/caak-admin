@@ -6,8 +6,17 @@ import { listBannersByType } from "../../graphql-custom/banner/queries";
 import AddEdit from "./modal/AddEdit";
 import Tables from "../../components/Tables";
 import { convertDateTime } from "../../components/utils";
-import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
+import {
+  getDiffDays,
+  getFileUrl,
+  getGenderImage,
+  getReturnData,
+} from "../../utility/Util";
 import Select from "../../components/Select";
+import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
+import { useToast } from "../../components/Toast/ToastProvider";
+import { deleteBanner } from "../../graphql-custom/banner/mutation";
+import moment from "moment";
 
 const Ads = () => {
   const types = [
@@ -20,6 +29,7 @@ const Ads = () => {
       value: "A2",
     },
   ];
+  const { addToast } = useToast();
 
   const [isShowModal, setIsShowModal] = useState(false);
   const [banners, setBanners] = useState([]);
@@ -38,6 +48,28 @@ const Ads = () => {
       })
     );
     setBanners(getReturnData(resp).items);
+  };
+
+  const delBanner = async (id) => {
+    try {
+      const resp = await API.graphql(
+        graphqlOperation(deleteBanner, {
+          input: { id },
+        })
+      );
+      setShowAlert(false);
+      addToast({
+        content: `амжилттай устгалаа.`,
+        autoClose: true,
+      });
+      //Removing item from local state after removed from the server.
+      const filteredArray = banners.filter(
+        (item) => item.id !== resp.data.deleteBanner.id
+      );
+      setBanners(filteredArray);
+    } catch (ex) {
+      console.log(ex);
+    }
   };
 
   const editHandler = (id, index) => {
@@ -104,8 +136,9 @@ const Ads = () => {
         <Tables styles="hoverable table_bordered" fullWidth="w-full">
           <thead>
             <tr>
-              <th className="text-left uppercase">NO</th>
+              <th className="text-center uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
+              <th className="text-center uppercase ">Хоног</th>
               <th className="text-left uppercase">Эхэлсэн огноо</th>
               <th className="text-left uppercase">Дуусах огноо</th>
               <th className="text-left uppercase">Засах</th>
@@ -115,11 +148,11 @@ const Ads = () => {
             {banners.map((banner, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td className="text-center">{index + 1}</td>
                   <td>
                     <div className="flex items-center ">
                       <img
-                        className="mr-2 w-12 h-12 object-cover cursor-pointer"
+                        className="mr-2 w-12 h-12 object-cover "
                         src={
                           banner?.pic1
                             ? getFileUrl(banner?.pic1)
@@ -127,12 +160,19 @@ const Ads = () => {
                         }
                         alt={""}
                       />
-                      <p className="cursor-pointer line-clamp">
-                        {banner.title}
-                      </p>
+                      <p className=" line-clamp">{banner.title}</p>
                     </div>
                   </td>
 
+                  <td>
+                    <p className="text-center">
+                      {" "}
+                      {getDiffDays(
+                        moment(banner.start_date, "YYYY-MM-DD")._d,
+                        moment(banner.end_date, "YYYY-MM-DD")._d
+                      )}
+                    </p>
+                  </td>
                   <td>{convertDateTime(banner.start_date)}</td>
                   <td>{convertDateTime(banner.end_date)}</td>
                   <td>
@@ -140,14 +180,14 @@ const Ads = () => {
                       onClick={() => editHandler(banner.id, index)}
                       className={"cursor-pointer"}
                     >
-                      <i className="text-2xl las la-edit" />
+                      <i className="text-2xl text-green las la-edit" />
                     </span>
-                    {/* <span
-                      onClick={() => setDeleteId(group.id)}
+                    <span
+                      onClick={() => setDeleteId(banner.id)}
                       className={"cursor-pointer"}
                     >
-                      <i className="ml-4 text-2xl las la-trash-alt" />
-                    </span> */}
+                      <i className="ml-4 text-2xl text-red las la-trash-alt" />
+                    </span>
                   </td>
                 </tr>
               );
@@ -162,6 +202,12 @@ const Ads = () => {
         editId={editId}
         show={isShowModal}
         setShow={setIsShowModal}
+      />
+      <ConfirmAlert
+        title={"Та устгахдаа итгэлтэй байна уу"}
+        show={showAlert}
+        onClose={() => setShowAlert(false)}
+        onSubmit={() => delBanner(deleteId)}
       />
     </div>
   );

@@ -276,6 +276,11 @@ export const extractDate = (date) => {
   return { year, month, day };
 };
 
+export const getDiffDays = (start, end) => {
+  const oneDay = 24 * 60 * 60 * 1000;
+  return Math.round((end - start) / oneDay) + 1;
+};
+
 let object = {
   useQuery,
   mailNumber,
@@ -293,5 +298,6 @@ let object = {
   closeModal,
   getFileUrl,
   extractDate,
+  getDiffDays,
 };
 export default object;
