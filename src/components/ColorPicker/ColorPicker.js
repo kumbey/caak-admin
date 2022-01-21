@@ -5,12 +5,12 @@ import { SketchPicker } from "react-color";
 const ColorPicker = ({ name, setHexColor, hexColor }) => {
   const [picker, setPicker] = useState({
     color: {
-      r: "0",
-      g: "0",
-      b: "0",
-      a: "1",
+      r: "",
+      g: "",
+      b: "",
+      a: "",
     },
-    hex: "#000000",
+    hex: "",
   });
   const [show, setShow] = useState(false);
 

@@ -281,13 +281,13 @@ const AddEdit = ({
             label="Линк"
             onChange={(e) => setUrl(e.target.value)}
           />
+          <h4>Өнгө</h4>
+
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Border color 1</p>
             <ColorPicker
               name={"border_color1"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.border_color1 : hexColor
-              }
+              hexColor={data.meta.colors ? data.meta.colors.border_color1 : ""}
               setHexColor={setHexColor}
             />
           </div>
@@ -295,9 +295,7 @@ const AddEdit = ({
             <p className="mr-10">Border color 2</p>
             <ColorPicker
               name={"border_color2"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.border_color2 : hexColor
-              }
+              hexColor={data.meta.colors ? data.meta.colors.border_color2 : ""}
               setHexColor={setHexColor}
             />
           </div>
@@ -305,9 +303,7 @@ const AddEdit = ({
             <p className="mr-10">Text background color</p>
             <ColorPicker
               name={"text_bg_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_bg_color : hexColor
-              }
+              hexColor={data.meta.colors ? data.meta.colors.text_bg_color : ""}
               setHexColor={setHexColor}
             />
           </div>
@@ -328,9 +324,7 @@ const AddEdit = ({
             <p className="mr-10">Text color</p>
             <ColorPicker
               name={"text_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_color : hexColor
-              }
+              hexColor={data.meta.colors ? data.meta.colors.text_color : ""}
               setHexColor={setHexColor}
             />
           </div>
@@ -344,11 +338,9 @@ const AddEdit = ({
               setHexColor={setHexColor}
             />
           </div>
-          <div className="flex items-center ">
-            <p className="mr-28">
-              Хоног: {numberOfDays > 0 ? numberOfDays : null}
-            </p>
-            <div className="border-gray-300 border rounded-md bg-primary">
+          <div className="flex items-center justify-between ">
+            <p>Хоног: {numberOfDays > 0 ? numberOfDays : null}</p>
+            <div className=" border-gray-300 border rounded-md  w-48">
               <DatePicker
                 selectsRange={true}
                 startDate={
