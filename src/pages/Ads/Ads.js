@@ -69,10 +69,6 @@ const Ads = () => {
     }
   }, [deleteId]);
 
-  useEffect(() => {
-    // fetchBanners();
-    console.log(banners);
-  }, []);
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">

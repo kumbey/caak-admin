@@ -17,6 +17,7 @@ import { useToast } from "../../../components/Toast/ToastProvider";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import moment from "moment";
 
 const AddEdit = ({
   editId,
@@ -58,8 +59,9 @@ const AddEdit = ({
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
   const [numberOfDays, setNumberOfDays] = useState(null);
-  const [hex, setHex] = useState({});
-  const [date, setDate] = useState({});
+  const [hexColor, setHexColor] = useState({});
+  const [text, setText] = useState();
+  const [url, setUrl] = useState();
 
   const fetchBanner = async () => {
     try {
@@ -68,8 +70,15 @@ const AddEdit = ({
         const resp = await API.graphql(
           graphqlOperation(getBanner, { id: editId })
         );
-        setData(resp.data.getBanner);
-        console.log(data);
+        const meta = JSON.parse(resp.data.getBanner.meta);
+        setData({
+          ...resp.data.getBanner,
+          meta: {
+            colors: meta.colors,
+            text: meta.text,
+            url: meta.url,
+          },
+        });
       } else {
         setData(initData);
       }
@@ -99,9 +108,9 @@ const AddEdit = ({
         pic1_id: bigImg?.id,
         pic2_id: smallImg?.id,
         meta: JSON.stringify({
-          colors: data.hex,
-          text: data.text,
-          url: data.url,
+          colors: data.meta.colors,
+          text: data.meta.text,
+          url: data.meta.url,
         }),
         type: data.type,
         start_date: startDate && startDate,
@@ -110,7 +119,6 @@ const AddEdit = ({
       };
 
       if (editId === "new") {
-        console.log("new");
         const resp = await API.graphql(
           graphqlOperation(createBanner, {
             input: postData,
@@ -192,13 +200,32 @@ const AddEdit = ({
   useEffect(() => {
     setData({
       ...data,
-      hex,
+      meta: { ...data.meta, colors: { ...data.meta.colors, ...hexColor } },
     });
-  }, [hex]);
+  }, [hexColor]);
+
+  useEffect(() => {
+    setData({
+      ...data,
+      meta: { ...data.meta, text: text },
+    });
+  }, [text]);
+
+  useEffect(() => {
+    setData({
+      ...data,
+      meta: { ...data.meta, url: url },
+    });
+  }, [url]);
 
   useEffect(() => {
     console.log(editId);
   }, [editId]);
+
+  useEffect(() => {
+    console.log("orig hex:", hexColor);
+    console.log(data);
+  }, [data]);
 
   return (
     <Modal
@@ -244,44 +271,78 @@ const AddEdit = ({
           />
           <Input
             name={"text"}
-            value={data.text}
+            value={data.meta.text}
             label="Баннер уриа үг"
-            onChange={handleChange}
+            onChange={(e) => setText(e.target.value)}
           />
           <Input
             name={"url"}
-            value={data.url}
+            value={data.meta.url}
             label="Линк"
-            onChange={handleChange}
+            onChange={(e) => setUrl(e.target.value)}
           />
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Border color 1</p>
-            <ColorPicker name={"border_color1"} hex={hex} setHex={setHex} />
+            <ColorPicker
+              name={"border_color1"}
+              hexColor={
+                data.meta.colors ? data.meta.colors.border_color1 : hexColor
+              }
+              setHexColor={setHexColor}
+            />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Border color 2</p>
-            <ColorPicker name={"border_color2"} hex={hex} setHex={setHex} />
+            <ColorPicker
+              name={"border_color2"}
+              hexColor={
+                data.meta.colors ? data.meta.colors.border_color2 : hexColor
+              }
+              setHexColor={setHexColor}
+            />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text background color</p>
-            <ColorPicker name={"text-bg_color"} hex={hex} setHex={setHex} />
+            <ColorPicker
+              name={"text_bg_color"}
+              hexColor={
+                data.meta.colors ? data.meta.colors.text_bg_color : hexColor
+              }
+              setHexColor={setHexColor}
+            />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text background hover color</p>
 
             <ColorPicker
-              name={"text-bg-hover-color"}
-              hex={hex}
-              setHex={setHex}
+              name={"text_bg_hover_color"}
+              hexColor={
+                data.meta.colors
+                  ? data.meta.colors.text_bg_hover_color
+                  : hexColor
+              }
+              setHexColor={setHexColor}
             />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text color</p>
-            <ColorPicker name={"text-color"} hex={hex} setHex={setHex} />
+            <ColorPicker
+              name={"text_color"}
+              hexColor={
+                data.meta.colors ? data.meta.colors.text_color : hexColor
+              }
+              setHexColor={setHexColor}
+            />
           </div>
           <div className="relative flex items-center justify-between">
             <p className="mr-10">Text hover color</p>
-            <ColorPicker name={"text-hover-color"} hex={hex} setHex={setHex} />
+            <ColorPicker
+              name={"text_hover_color"}
+              hexColor={
+                data.meta.colors ? data.meta.colors.text_hover_color : hexColor
+              }
+              setHexColor={setHexColor}
+            />
           </div>
           <div className="flex items-center ">
             <p className="mr-28">
@@ -290,8 +351,10 @@ const AddEdit = ({
             <div className="border-gray-300 border rounded-md bg-primary">
               <DatePicker
                 selectsRange={true}
-                startDate={startDate}
-                endDate={endDate}
+                startDate={
+                  data.start_date ? moment(data.start_date)._d : startDate
+                }
+                endDate={data.end_date ? moment(data.end_date)._d : endDate}
                 onChange={(update) => {
                   setDateRange(update);
                 }}

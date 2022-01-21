@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import reactCSS from "reactcss";
 import { SketchPicker } from "react-color";
 
-const ColorPicker = ({ name, setHex, hex }) => {
+const ColorPicker = ({ name, setHexColor, hexColor }) => {
   const [picker, setPicker] = useState({
     color: {
       r: "0",
@@ -20,7 +20,7 @@ const ColorPicker = ({ name, setHex, hex }) => {
         width: "30px",
         height: "14px",
         borderRadius: "2px",
-        background: `rgba(${picker.color.r}, ${picker.color.g}, ${picker.color.b}, ${picker.color.a})`,
+        background: `${hexColor || picker.hex}`,
       },
       swatch: {
         padding: "5px",
@@ -46,6 +46,15 @@ const ColorPicker = ({ name, setHex, hex }) => {
     },
   });
 
+  // const componentToHex = (c) => {
+  //   var hex = c.toString(16);
+  //   return hex.length === 1 ? "0" + hex : hex;
+  // };
+
+  // const rgbToHex = (r, g, b) => {
+  //   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  // };
+
   const handleClick = () => {
     setShow(!show);
   };
@@ -56,9 +65,12 @@ const ColorPicker = ({ name, setHex, hex }) => {
 
   const handleChange = (col) => {
     setPicker({ color: col.rgb, hex: col.hex });
-    setHex({ ...hex, [name]: col.hex });
+    setHexColor({ ...hexColor, [name]: col.hex });
   };
 
+  useEffect(() => {
+    console.log("hex:", hexColor);
+  }, [hexColor]);
   return (
     <div className="flex items-center">
       <p className="mr-4">{picker.hex}</p>
