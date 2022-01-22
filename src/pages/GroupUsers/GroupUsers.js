@@ -70,7 +70,7 @@ const GroupUsers = () => {
       <div className="">
         <h1>Группын хэрэглэгчид</h1>
 
-        <div className="flex mt-6">
+        <div className="flex mt-6 mb-5">
           <Select
             name="group_id"
             // title="Груп сонгох"

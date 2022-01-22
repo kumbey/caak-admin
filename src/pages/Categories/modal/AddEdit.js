@@ -9,6 +9,8 @@ import {
   createCategory,
   updateCategory,
 } from "../../../graphql-custom/category/mutation";
+import DropZone from "../../../components/Dropzone";
+import { ApiFileUpload } from "../../../utility/ApiHelper";
 
 const AddEdit = ({
   editId,
@@ -22,9 +24,14 @@ const AddEdit = ({
   const initData = {
     name: "",
     icon: "",
+    pic: null,
   };
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
+
+  const setFile = (key, file) => {
+    setData({ ...data, [key]: file });
+  };
 
   useEffect(() => {
     fetchCategory(editId); // eslint-disable-next-line
@@ -52,39 +59,55 @@ const AddEdit = ({
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const uploadFile = async (image) => {
+      return await ApiFileUpload(image);
+    };
     setLoading(true);
+    try {
+      const catImg =
+        data.pic && !data.pic.id ? await uploadFile(data.pic) : data.pic;
+      setData({ ...data, pic: catImg });
+      const postData = {
+        name: data.name,
+        icon: data.icon,
+        pic_id: catImg?.id,
+      };
 
-    if (editId === "new") {
-      setLoading(true);
+      if (editId === "new") {
+        const resp = await API.graphql(
+          graphqlOperation(createCategory, { input: postData })
+        );
 
-      const resp = await API.graphql(
-        graphqlOperation(createCategory, { input: data })
-      );
+        setCategories((prev) => [...prev, resp.data.createCategory]);
 
-      setCategories((prev) => [...prev, resp.data.createCategory]);
+        addToast({
+          content: `${resp.data.createCategory.name} амжилттай үүслээ.`,
+          title: "Амжилттай",
+          autoClose: true,
+        });
+        setIsShowModal(false);
+      } else if (editId !== "new" && editId !== "init") {
+        postData.id = data.id;
+        delete data.createdAt;
+        delete data.updatedAt;
+        const resp = await API.graphql(
+          graphqlOperation(updateCategory, { input: postData })
+        );
 
-      addToast({
-        content: `${resp.data.createCategory.name} амжилттай үүслээ.`,
-        title: "Амжилттай",
-        autoClose: true,
-      });
+        let arr = categories;
+        arr[currentIndex] = resp.data.updateCategory;
+        setCategories(arr);
+        addToast({
+          content: `өөрчлөлтийг хадгаллаа.`,
+          title: "Амжилттай",
+          autoClose: true,
+        });
+      }
       setLoading(false);
-      setIsShowModal(false);
-    } else if (editId !== "new" && editId !== "init") {
-      delete data.createdAt;
-      delete data.updatedAt;
-      const resp = await API.graphql(
-        graphqlOperation(updateCategory, { input: data })
-      );
+    } catch (ex) {
+      setLoading(false);
 
-      let arr = categories;
-      arr[currentIndex] = resp.data.updateCategory;
-      setCategories(arr);
-      addToast({
-        content: `өөрчлөлтийг хадгаллаа.`,
-        title: "Амжилттай",
-        autoClose: true,
-      });
+      console.log(ex);
     }
   };
 
@@ -123,6 +146,13 @@ const AddEdit = ({
             value={data.icon}
             label="Категори айкон нэр"
             onChange={handleChange}
+          />
+          <h4>Категори зураг</h4>
+          <DropZone
+            title={"Drop it here"}
+            keyName={"pic"}
+            file={data.picture}
+            setFile={setFile}
           />
         </div>
       </div>

@@ -97,6 +97,7 @@ const Categories = () => {
             <tr>
               <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
+              <th className="text-left uppercase">Зураг</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
               <th className="text-left uppercase">Засах</th>

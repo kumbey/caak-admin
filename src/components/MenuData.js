@@ -32,6 +32,14 @@ const MenuData = [
     path: "/groupusers",
   },
   {
+    name: "CAAK ADS",
+    icon: "icon la la-buysellads",
+    id: "ads",
+    sections: null,
+    sub: null,
+    path: "/ads",
+  },
+  {
     name: "Репорт",
     icon: "icon las la-flag",
     id: "reports",

@@ -16,3 +16,25 @@ export const listFeedBacks = /* GraphQL */ `
     }
   }
 `;
+export const listFeedBackOrderByCreatedAt = /* GraphQL */ `
+  query listFeedBackOrderByCreatedAt(
+    $typeName: String,
+		$createdAt: ModelStringKeyConditionInput,
+		$sortDirection: ModelSortDirection,
+		$filter: ModelFeedBackFilterInput,
+		$limit: Int,
+		$nextToken: String
+  ) {
+    listFeedBackOrderByCreatedAt(
+      typeName: $typeName,
+      createdAt: $createdAt,
+      sortDirection: $sortDirection,
+      filter: $filter,
+      limit: $limit,
+      nextToken: $nextToken
+    ) {
+      items ${feedback0001}
+      nextToken
+    }
+  }
+`;

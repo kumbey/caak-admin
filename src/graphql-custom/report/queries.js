@@ -21,3 +21,24 @@ export const listReportedPosts = /* GraphQL */ `
     }
   }
 `;
+export const ListReportedPostOrderByCreatedAt = /* GraphQL */ `
+  query ListReportedPostOrderByCreatedAt(
+    $typeName: String,
+		$createdAt: ModelStringKeyConditionInput,
+		$sortDirection: ModelSortDirection,
+		$filter: ModelReportedPostFilterInput,
+		$limit: Int,
+		$nextToken: String
+  ) {
+    ListReportedPostOrderByCreatedAt(
+      typeName: $typeName,
+      createdAt: $createdAt,
+      sortDirection: $sortDirection,
+      filter: $filter,
+      limit: $limit,
+      nextToken: $nextToken
+    ) {
+     items ${report0003}
+    }
+  }
+`;
