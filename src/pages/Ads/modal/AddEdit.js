@@ -16,8 +16,10 @@ import { useToast } from "../../../components/Toast/ToastProvider";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addDays, getDiffDays } from "../../../utility/Util";
+
 import moment from "moment";
-import { getDiffDays } from "../../../utility/Util";
+import { convertDateTime } from "../../../components/utils";
 
 const AddEdit = ({
   editId,
@@ -55,12 +57,12 @@ const AddEdit = ({
   const [loading, setLoading] = useState();
 
   const { addToast } = useToast();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
-  const [numberOfDays, setNumberOfDays] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const [hexColor, setHexColor] = useState({});
   const [text, setText] = useState();
   const [url, setUrl] = useState();
+  const [dayLen, setDayLen] = useState(0);
 
   const fetchBanner = async () => {
     try {
@@ -70,8 +72,18 @@ const AddEdit = ({
           graphqlOperation(getBanner, { id: editId })
         );
         const meta = JSON.parse(resp.data.getBanner.meta);
+        setStartDate(moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d);
+        setEndDate(moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d);
+
+        setDayLen(
+          getDiffDays(
+            moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
+            moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d
+          )
+        );
         setData({
           ...resp.data.getBanner,
+
           meta: {
             colors: meta.colors,
             text: meta.text,
@@ -159,7 +171,12 @@ const AddEdit = ({
       console.log(ex);
     }
   };
-
+  const removeDays = (start, end) => {
+    let result;
+    result = end - start;
+    console.log(result);
+    return result;
+  };
   const setFile = (key, file) => {
     setData({ ...data, [key]: file });
   };
@@ -174,21 +191,20 @@ const AddEdit = ({
   };
 
   useEffect(() => {
-    setNumberOfDays(getDiffDays(startDate, endDate));
-  }, [startDate, endDate]);
-
-  useEffect(() => {
     fetchBanner();
     // eslint-disable-next-line
   }, [editId]);
 
   useEffect(() => {
+    let res = addDays(startDate, dayLen);
+    setEndDate(res);
+
     setData({
       ...data,
       start_date: startDate && startDate.toISOString(),
-      end_date: endDate && endDate.toISOString(),
+      end_date: res && res.toISOString(),
     });
-  }, [dateRange]);
+  }, [startDate, dayLen]);
 
   useEffect(() => {
     setData({
@@ -235,10 +251,9 @@ const AddEdit = ({
           <Select
             name={"type"}
             title="Баннер сонгох"
-            // value={"All"}
+            value={data.type || "A1"}
             onChange={handleChange}
           >
-            {/* <option value={"All"}>{types[0].value}</option> */}
             {types.map((type, index) => {
               return (
                 <option key={index} value={type.value}>
@@ -285,6 +300,25 @@ const AddEdit = ({
             label="Линк"
             onChange={(e) => setUrl(e.target.value)}
           />
+          <Input
+            value={dayLen}
+            label="Хоног"
+            onChange={(e) => setDayLen(e.target.value)}
+          />
+          <h4>Огноо</h4>
+          <div className=" flex items-center justify-between ">
+            <div className="react-datepicker-time__input  border-gray-300 border rounded-md  w-48">
+              <DatePicker
+                selected={startDate || ""}
+                onChange={(date) => setStartDate(date)}
+                showTimeSelect
+                timeFormat="HH:mm"
+                dateFormat="yyyy/MM/d, h:mm aa"
+              />
+            </div>
+          </div>
+          <h4>Дуусах огноо</h4>
+          <p>{convertDateTime(endDate?.toISOString())}</p>
           {data.type !== "A2" ? (
             <>
               <h4>Өнгө</h4>
@@ -350,20 +384,6 @@ const AddEdit = ({
               </div>
             </>
           ) : null}
-          <div className="flex items-center justify-between ">
-            <p>Хоног: {numberOfDays > 0 ? numberOfDays : null}</p>
-            <div className=" border-gray-300 border rounded-md  w-48">
-              <DatePicker
-                selectsRange={true}
-                startDate={data.start_date ? moment(data.start_date)._d : ""}
-                endDate={data.end_date ? moment(data.end_date)._d : ""}
-                onChange={(update) => {
-                  setDateRange(update);
-                }}
-                isClearable={true}
-              />
-            </div>
-          </div>
         </div>
       </div>
     </Modal>

@@ -40,7 +40,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
         position: "fixed",
         top: "0px",
         right: "0px",
-        bottom: "-450px",
+        bottom: "-650px",
         left: "0px",
       },
     },
