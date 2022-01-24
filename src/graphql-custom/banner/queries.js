@@ -8,18 +8,14 @@ export const getBanner = /* GraphQL */ `
 
 export const listBanners = /* GraphQL */ `
     query ListBanners (
-        $id: ID,
 		$filter: ModelBannerFilterInput,
 		$limit: Int,
 		$nextToken: String,
-		$sortDirection: ModelSortDirection
     ) {
         listBanners (
-            id: $id,
             filter: $filter,
             limit: $limit,
             nextToken: $nextToken,
-            sortDirection: $sortDirection
         ) {items ${banner0001}}
     }
 `;

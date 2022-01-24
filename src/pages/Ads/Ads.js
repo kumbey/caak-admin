@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import Button from "../../components/Button";
-import { listBannersByType } from "../../graphql-custom/banner/queries";
+import {
+  listBanners,
+  listBannersByType,
+} from "../../graphql-custom/banner/queries";
 import AddEdit from "./modal/AddEdit";
 import Tables from "../../components/Tables";
 import { convertDateTime } from "../../components/utils";
@@ -21,6 +24,10 @@ import moment from "moment";
 const Ads = () => {
   const types = [
     {
+      name: "Бүгд",
+      value: "All",
+    },
+    {
       name: "A1",
       value: "A1",
     },
@@ -37,14 +44,23 @@ const Ads = () => {
   const [currentIndex, setCurrentIndex] = useState("init");
   const [deleteId, setDeleteId] = useState("init");
   const [showAlert, setShowAlert] = useState(false);
-  const [selectedType, setSelectedType] = useState();
+  const [selectedType, setSelectedType] = useState("All");
 
-  const fetchBanners = async (e) => {
-    setSelectedType(e.target.value);
+  const fetchBanners = async () => {
+    const resp = await API.graphql(
+      graphqlOperation(listBanners, {
+        type: selectedType,
+      })
+    );
+
+    setBanners(getReturnData(resp).items);
+  };
+
+  const fetchBannersType = async () => {
     const resp = await API.graphql(
       graphqlOperation(listBannersByType, {
         sortDirection: "ASC",
-        type: e.target.value,
+        type: selectedType,
       })
     );
     setBanners(getReturnData(resp).items);
@@ -76,6 +92,18 @@ const Ads = () => {
     setEditId(id);
     setCurrentIndex(index);
   };
+
+  const handleChange = (e) => {
+    setSelectedType(e.target.value);
+  };
+
+  useEffect(() => {
+    if (selectedType === "All") {
+      fetchBanners();
+    } else {
+      fetchBannersType();
+    }
+  }, [selectedType]);
 
   useEffect(() => {
     if (editId !== "init") {
@@ -115,14 +143,12 @@ const Ads = () => {
       </div>
       <div className="w-52 mb-5">
         <Select
-          name={"category"}
+          name={"type"}
           title="Категори сонгох"
-          value={selectedType || "DEFAULT"}
-          onChange={fetchBanners}
+          value={selectedType}
+          onChange={handleChange}
         >
-          <option value={"DEFAULT"} disabled hidden>
-            Сонгох...
-          </option>
+          {/* <option value={"All"}>Сонгох...</option> */}
           {types.map((type, index) => {
             return (
               <option key={index} value={type.value}>

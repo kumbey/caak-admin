@@ -12,7 +12,6 @@ import {
   updateBanner,
 } from "../../../graphql-custom/banner/mutation";
 import { getBanner } from "../../../graphql-custom/banner/queries";
-import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
@@ -71,7 +70,6 @@ const AddEdit = ({
           graphqlOperation(getBanner, { id: editId })
         );
         const meta = JSON.parse(resp.data.getBanner.meta);
-        console.log("meta parsed:", meta);
         setData({
           ...resp.data.getBanner,
           meta: {
@@ -132,7 +130,6 @@ const AddEdit = ({
         });
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
-        console.log("postData: ", postData);
         const resp = await API.graphql(
           graphqlOperation(updateBanner, {
             input: postData,
@@ -186,7 +183,6 @@ const AddEdit = ({
   }, [editId]);
 
   useEffect(() => {
-    console.log("**********", startDate);
     setData({
       ...data,
       start_date: startDate && startDate.toISOString(),
@@ -215,15 +211,6 @@ const AddEdit = ({
     });
   }, [url]);
 
-  useEffect(() => {
-    console.log(editId);
-  }, [editId]);
-
-  useEffect(() => {
-    console.log("orig hex:", hexColor);
-    console.log(data);
-  }, [data]);
-
   return (
     <Modal
       onSubmit={updateBannerData}
@@ -245,6 +232,21 @@ const AddEdit = ({
     >
       <div className="mt-8 max-w-md">
         <div className="grid grid-cols-1 gap-6">
+          <Select
+            name={"type"}
+            title="Баннер сонгох"
+            // value={"All"}
+            onChange={handleChange}
+          >
+            {/* <option value={"All"}>{types[0].value}</option> */}
+            {types.map((type, index) => {
+              return (
+                <option key={index} value={type.value}>
+                  {`${type.name}`}
+                </option>
+              );
+            })}
+          </Select>
           <Input
             name={"title"}
             value={data.title}
@@ -259,87 +261,98 @@ const AddEdit = ({
             file={data.pic1}
             setFile={setFile}
           />
-          <h4>Баннер айкон</h4>
-          <DropZone
-            title={"Drop it here"}
-            keyName={"pic2"}
-            file={data.pic2}
-            setFile={setFile}
-          />
-          <Input
-            name={"text"}
-            value={data.meta.text}
-            label="Баннер уриа үг"
-            onChange={(e) => setText(e.target.value)}
-          />
+          {data.type !== "A2" ? (
+            <>
+              <h4>Баннер айкон</h4>
+              <DropZone
+                title={"Drop it here"}
+                keyName={"pic2"}
+                file={data.pic2}
+                setFile={setFile}
+              />
+              <Input
+                name={"text"}
+                value={data.meta.text}
+                label="Баннер уриа үг"
+                onChange={(e) => setText(e.target.value)}
+              />
+            </>
+          ) : null}
+
           <Input
             name={"url"}
             value={data.meta.url}
             label="Линк"
             onChange={(e) => setUrl(e.target.value)}
           />
-          <h4>Өнгө</h4>
+          {data.type !== "A2" ? (
+            <>
+              <h4>Өнгө</h4>
 
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Border color 1</p>
-            <ColorPicker
-              name={"border_color1"}
-              hexColor={data.meta.colors ? data.meta.colors.border_color1 : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Border color 2</p>
-            <ColorPicker
-              name={"border_color2"}
-              hexColor={data.meta.colors ? data.meta.colors.border_color2 : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text background color</p>
-            <ColorPicker
-              name={"text_bg_color"}
-              hexColor={data.meta.colors ? data.meta.colors.text_bg_color : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text background hover color</p>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Border color 1</p>
+                <ColorPicker
+                  name={"border_color1"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.border_color1 : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Border color 2</p>
+                <ColorPicker
+                  name={"border_color2"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.border_color2 : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text background color</p>
+                <ColorPicker
+                  name={"text_bg_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_bg_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text background hover color</p>
 
-            <ColorPicker
-              name={"text_bg_hover_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_bg_hover_color : ""
-              }
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text color</p>
-            <ColorPicker
-              name={"text_color"}
-              hexColor={data.meta.colors ? data.meta.colors.text_color : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text hover color</p>
-            <ColorPicker
-              name={"text_hover_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_hover_color : ""
-              }
-              setHexColor={setHexColor}
-            />
-          </div>
+                <ColorPicker
+                  name={"text_bg_hover_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_bg_hover_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text color</p>
+                <ColorPicker
+                  name={"text_color"}
+                  hexColor={data.meta.colors ? data.meta.colors.text_color : ""}
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text hover color</p>
+                <ColorPicker
+                  name={"text_hover_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_hover_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+            </>
+          ) : null}
           <div className="flex items-center justify-between ">
             <p>Хоног: {numberOfDays > 0 ? numberOfDays : null}</p>
             <div className=" border-gray-300 border rounded-md  w-48">
-              {console.log(
-                "123123",
-                moment(data.start_date).format("MMMM DD YYYY")
-              )}
               <DatePicker
                 selectsRange={true}
                 startDate={data.start_date ? moment(data.start_date)._d : ""}
@@ -351,24 +364,6 @@ const AddEdit = ({
               />
             </div>
           </div>
-
-          <Select
-            name={"type"}
-            title="Төрөл сонгох"
-            value={data.type || "DEFAULT"}
-            onChange={handleChange}
-          >
-            <option value={"DEFAULT"} disabled hidden>
-              Сонгох...
-            </option>
-            {types.map((type, index) => {
-              return (
-                <option key={index} value={type.value}>
-                  {`${type.name}`}
-                </option>
-              );
-            })}
-          </Select>
         </div>
       </div>
     </Modal>
