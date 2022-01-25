@@ -52,8 +52,10 @@ const Ads = () => {
         type: selectedType,
       })
     );
-
-    setBanners(getReturnData(resp).items);
+    let res = getReturnData(resp).items.sort(function (a, b) {
+      return new Date(a.start_date) - new Date(b.start_date);
+    });
+    setBanners(res);
   };
 
   const fetchBannersType = async () => {
