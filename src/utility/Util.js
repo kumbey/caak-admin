@@ -278,7 +278,15 @@ export const extractDate = (date) => {
 
 export const getDiffDays = (start, end) => {
   const oneDay = 24 * 60 * 60 * 1000;
-  return Math.round((end - start) / oneDay) + 1;
+  return Math.round((end - start) / oneDay);
+};
+
+export const addDays = (date, days) => {
+  let result = new Date(date);
+  if (days) {
+    result.setDate(result.getDate() + parseInt(days));
+  }
+  return result;
 };
 
 let object = {
@@ -299,5 +307,6 @@ let object = {
   getFileUrl,
   extractDate,
   getDiffDays,
+  addDays,
 };
 export default object;

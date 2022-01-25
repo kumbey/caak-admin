@@ -40,7 +40,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
         position: "fixed",
         top: "0px",
         right: "0px",
-        bottom: "-450px",
+        bottom: "-650px",
         left: "0px",
       },
     },
@@ -68,9 +68,6 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
     setHexColor({ ...hexColor, [name]: col.hex });
   };
 
-  useEffect(() => {
-    console.log("hex:", hexColor);
-  }, [hexColor]);
   return (
     <div className="flex items-center">
       <p className="mr-4">{picker.hex}</p>

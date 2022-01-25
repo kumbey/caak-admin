@@ -10,6 +10,7 @@ const banner0001 = /* GraphQL */ `
     end_date
     meta
     type
+    typeName
     pic1_id
     pic1 ${file0001}
     pic2_id

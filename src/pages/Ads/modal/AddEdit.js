@@ -12,13 +12,16 @@ import {
   updateBanner,
 } from "../../../graphql-custom/banner/mutation";
 import { getBanner } from "../../../graphql-custom/banner/queries";
-import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
 import ColorPicker from "../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { addDays, getDiffDays } from "../../../utility/Util";
+
 import moment from "moment";
-import { getDiffDays } from "../../../utility/Util";
+import { convertDateTime } from "../../../components/utils";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 
 const AddEdit = ({
   editId,
@@ -32,14 +35,15 @@ const AddEdit = ({
     title: "",
     pic1_id: "",
     pic2_id: "",
-    start_date: "",
-    end_date: "",
+    start_date: new Date(),
+    end_date: new Date(),
     meta: {
       colors: "",
       text: "",
       url: "",
     },
-    type: "",
+    type: "A1",
+    dayLen: 0,
   };
 
   const types = [
@@ -56,9 +60,7 @@ const AddEdit = ({
   const [loading, setLoading] = useState();
 
   const { addToast } = useToast();
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
-  const [numberOfDays, setNumberOfDays] = useState(null);
+
   const [hexColor, setHexColor] = useState({});
   const [text, setText] = useState();
   const [url, setUrl] = useState();
@@ -71,9 +73,15 @@ const AddEdit = ({
           graphqlOperation(getBanner, { id: editId })
         );
         const meta = JSON.parse(resp.data.getBanner.meta);
-        console.log("meta parsed:", meta);
+
         setData({
           ...resp.data.getBanner,
+          start_date: moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
+          end_date: moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d,
+          dayLen: getDiffDays(
+            moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
+            moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d
+          ),
           meta: {
             colors: meta.colors,
             text: meta.text,
@@ -103,7 +111,6 @@ const AddEdit = ({
       const smallImg =
         data.pic2 && !data.pic2.id ? await uploadFile(data.pic2) : data.pic2;
       setData({ ...data, pic1: bigImg, pic2: smallImg });
-
       const postData = {
         title: data.title,
         pic1_id: bigImg?.id,
@@ -114,11 +121,10 @@ const AddEdit = ({
           url: data.meta.url,
         }),
         type: data.type,
-        start_date: startDate ? startDate : null,
-        end_date: endDate ? endDate : null,
+        start_date: data.start_date ? data.start_date.toISOString() : null,
+        end_date: data.end_date ? data.end_date.toISOString() : null,
         typeName: "BANNER",
       };
-
       if (editId === "new") {
         const resp = await API.graphql(
           graphqlOperation(createBanner, {
@@ -132,7 +138,6 @@ const AddEdit = ({
         });
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
-        console.log("postData: ", postData);
         const resp = await API.graphql(
           graphqlOperation(updateBanner, {
             input: postData,
@@ -145,15 +150,6 @@ const AddEdit = ({
           content: `${resp.data.updateBanner.title} өөрчлөлтийг хадгаллаа.`,
           autoClose: true,
         });
-
-        // if (
-        //   oldImageFiles.cover.id !== data.cover.id &&
-        //   oldImageFiles.profile.id !== data.profile.id
-        // ) {
-        //   await API.graphql(
-        //     graphqlOperation(deleteFile, { input: oldImageFiles.cover.id })
-        //   );
-        // }
       }
       setLoading(false);
       setShow(false);
@@ -169,7 +165,6 @@ const AddEdit = ({
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // value = JSON.stringify(value);
     setData({ ...data, [name]: value });
   };
   const close = () => {
@@ -177,22 +172,17 @@ const AddEdit = ({
   };
 
   useEffect(() => {
-    setNumberOfDays(getDiffDays(startDate, endDate));
-  }, [startDate, endDate]);
-
-  useEffect(() => {
     fetchBanner();
     // eslint-disable-next-line
   }, [editId]);
 
   useEffect(() => {
-    console.log("**********", startDate);
+    let res = addDays(data.start_date, data.dayLen);
     setData({
       ...data,
-      start_date: startDate && startDate.toISOString(),
-      end_date: endDate && endDate.toISOString(),
+      end_date: res,
     });
-  }, [dateRange]);
+  }, [data.start_date, data.dayLen]);
 
   useEffect(() => {
     setData({
@@ -215,15 +205,6 @@ const AddEdit = ({
     });
   }, [url]);
 
-  useEffect(() => {
-    console.log(editId);
-  }, [editId]);
-
-  useEffect(() => {
-    console.log("orig hex:", hexColor);
-    console.log(data);
-  }, [data]);
-
   return (
     <Modal
       onSubmit={updateBannerData}
@@ -245,6 +226,20 @@ const AddEdit = ({
     >
       <div className="mt-8 max-w-md">
         <div className="grid grid-cols-1 gap-6">
+          <Select
+            name={"type"}
+            title="Баннер сонгох"
+            value={data.type || "A1"}
+            onChange={handleChange}
+          >
+            {types.map((type, index) => {
+              return (
+                <option key={index} value={type.value}>
+                  {`${type.name}`}
+                </option>
+              );
+            })}
+          </Select>
           <Input
             name={"title"}
             value={data.title}
@@ -259,116 +254,121 @@ const AddEdit = ({
             file={data.pic1}
             setFile={setFile}
           />
-          <h4>Баннер айкон</h4>
-          <DropZone
-            title={"Drop it here"}
-            keyName={"pic2"}
-            file={data.pic2}
-            setFile={setFile}
-          />
-          <Input
-            name={"text"}
-            value={data.meta.text}
-            label="Баннер уриа үг"
-            onChange={(e) => setText(e.target.value)}
-          />
+          {data.type !== "A2" ? (
+            <>
+              <h4>Баннер айкон</h4>
+              <DropZone
+                title={"Drop it here"}
+                keyName={"pic2"}
+                file={data.pic2}
+                setFile={setFile}
+              />
+              <Input
+                name={"text"}
+                value={data.meta.text}
+                label="Баннер уриа үг"
+                onChange={(e) => setText(e.target.value)}
+              />
+            </>
+          ) : null}
+
           <Input
             name={"url"}
             value={data.meta.url}
             label="Линк"
             onChange={(e) => setUrl(e.target.value)}
           />
-          <h4>Өнгө</h4>
-
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Border color 1</p>
-            <ColorPicker
-              name={"border_color1"}
-              hexColor={data.meta.colors ? data.meta.colors.border_color1 : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Border color 2</p>
-            <ColorPicker
-              name={"border_color2"}
-              hexColor={data.meta.colors ? data.meta.colors.border_color2 : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text background color</p>
-            <ColorPicker
-              name={"text_bg_color"}
-              hexColor={data.meta.colors ? data.meta.colors.text_bg_color : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text background hover color</p>
-
-            <ColorPicker
-              name={"text_bg_hover_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_bg_hover_color : ""
-              }
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text color</p>
-            <ColorPicker
-              name={"text_color"}
-              hexColor={data.meta.colors ? data.meta.colors.text_color : ""}
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="relative flex items-center justify-between">
-            <p className="mr-10">Text hover color</p>
-            <ColorPicker
-              name={"text_hover_color"}
-              hexColor={
-                data.meta.colors ? data.meta.colors.text_hover_color : ""
-              }
-              setHexColor={setHexColor}
-            />
-          </div>
-          <div className="flex items-center justify-between ">
-            <p>Хоног: {numberOfDays > 0 ? numberOfDays : null}</p>
-            <div className=" border-gray-300 border rounded-md  w-48">
-              {console.log(
-                "123123",
-                moment(data.start_date).format("MMMM DD YYYY")
-              )}
+          <Input
+            value={data.dayLen}
+            label="Хоног"
+            onChange={(e) => setData({ ...data, dayLen: e.target.value })}
+          />
+          <h4>Огноо</h4>
+          <div className=" flex items-center justify-between ">
+            <div className="react-datepicker-time__input  border-gray-300 border rounded-md  w-48">
               <DatePicker
-                selectsRange={true}
-                startDate={data.start_date ? moment(data.start_date)._d : ""}
-                endDate={data.end_date ? moment(data.end_date)._d : ""}
-                onChange={(update) => {
-                  setDateRange(update);
-                }}
-                isClearable={true}
+                selected={data.start_date}
+                onChange={(date) => setData({ ...data, start_date: date })}
+                showTimeSelect
+                timeFormat="HH:mm"
+                dateFormat="yyyy/MM/d, h:mm aa"
               />
             </div>
           </div>
 
-          <Select
-            name={"type"}
-            title="Төрөл сонгох"
-            value={data.type || "DEFAULT"}
-            onChange={handleChange}
-          >
-            <option value={"DEFAULT"} disabled hidden>
-              Сонгох...
-            </option>
-            {types.map((type, index) => {
-              return (
-                <option key={index} value={type.value}>
-                  {`${type.name}`}
-                </option>
-              );
-            })}
-          </Select>
+          <h4>Дуусах огноо</h4>
+
+          <p>
+            {show && !loading && data.end_date
+              ? convertDateTime(data?.end_date?.toISOString())
+              : null}
+          </p>
+
+          {data.type !== "A2" ? (
+            <>
+              <h4>Өнгө</h4>
+
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Border color 1</p>
+                <ColorPicker
+                  name={"border_color1"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.border_color1 : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Border color 2</p>
+                <ColorPicker
+                  name={"border_color2"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.border_color2 : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text background color</p>
+                <ColorPicker
+                  name={"text_bg_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_bg_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text background hover color</p>
+
+                <ColorPicker
+                  name={"text_bg_hover_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_bg_hover_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text color</p>
+                <ColorPicker
+                  name={"text_color"}
+                  hexColor={data.meta.colors ? data.meta.colors.text_color : ""}
+                  setHexColor={setHexColor}
+                />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <p className="mr-10">Text hover color</p>
+                <ColorPicker
+                  name={"text_hover_color"}
+                  hexColor={
+                    data.meta.colors ? data.meta.colors.text_hover_color : ""
+                  }
+                  setHexColor={setHexColor}
+                />
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
     </Modal>
