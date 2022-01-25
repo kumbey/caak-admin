@@ -13,6 +13,7 @@ import { convertDateTime } from "../../components/utils";
 import { useToast } from "../../components/Toast/ToastProvider";
 import { getCategoryList } from "../../graphql-custom/category/queries";
 import { deleteCategory } from "../../graphql-custom/category/mutation";
+import { getFileUrl, getGenderImage } from "../../utility/Util";
 
 const Categories = () => {
   const { addToast } = useToast();
@@ -105,6 +106,7 @@ const Categories = () => {
           </thead>
           <tbody>
             {categories.map((cat, index) => {
+              console.log(cat);
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>
@@ -112,7 +114,19 @@ const Categories = () => {
                     {cat.icon + " "}
                     {cat.name}
                   </td>
-
+                  <td>
+                    <div className="flex items-center  ">
+                      <img
+                        className="mr-2 cursor-pointer w-12 h-12 object-cover"
+                        src={
+                          cat?.picture
+                            ? getFileUrl(cat.picture)
+                            : getGenderImage("default")
+                        }
+                        alt={""}
+                      />
+                    </div>
+                  </td>
                   <td>{convertDateTime(cat.createdAt)}</td>
                   <td>{`${
                     cat.createdAt !== cat.updatedAt
