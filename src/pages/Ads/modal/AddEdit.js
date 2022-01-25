@@ -20,6 +20,8 @@ import { addDays, getDiffDays } from "../../../utility/Util";
 
 import moment from "moment";
 import { convertDateTime } from "../../../components/utils";
+import setHours from "date-fns/setHours";
+import setMinutes from "date-fns/setMinutes";
 
 const AddEdit = ({
   editId,
@@ -33,14 +35,15 @@ const AddEdit = ({
     title: "",
     pic1_id: "",
     pic2_id: "",
-    start_date: "",
-    end_date: "",
+    start_date: new Date(),
+    end_date: new Date(),
     meta: {
       colors: "",
       text: "",
       url: "",
     },
-    type: "",
+    type: "A1",
+    dayLen: 0,
   };
 
   const types = [
@@ -57,12 +60,10 @@ const AddEdit = ({
   const [loading, setLoading] = useState();
 
   const { addToast } = useToast();
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+
   const [hexColor, setHexColor] = useState({});
   const [text, setText] = useState();
   const [url, setUrl] = useState();
-  const [dayLen, setDayLen] = useState(0);
 
   const fetchBanner = async () => {
     try {
@@ -72,18 +73,15 @@ const AddEdit = ({
           graphqlOperation(getBanner, { id: editId })
         );
         const meta = JSON.parse(resp.data.getBanner.meta);
-        setStartDate(moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d);
-        setEndDate(moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d);
 
-        setDayLen(
-          getDiffDays(
-            moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
-            moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d
-          )
-        );
         setData({
           ...resp.data.getBanner,
-
+          start_date: moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
+          end_date: moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d,
+          dayLen: getDiffDays(
+            moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
+            moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d
+          ),
           meta: {
             colors: meta.colors,
             text: meta.text,
@@ -113,7 +111,6 @@ const AddEdit = ({
       const smallImg =
         data.pic2 && !data.pic2.id ? await uploadFile(data.pic2) : data.pic2;
       setData({ ...data, pic1: bigImg, pic2: smallImg });
-
       const postData = {
         title: data.title,
         pic1_id: bigImg?.id,
@@ -124,11 +121,10 @@ const AddEdit = ({
           url: data.meta.url,
         }),
         type: data.type,
-        start_date: startDate ? startDate : null,
-        end_date: endDate ? endDate : null,
+        start_date: data.start_date ? data.start_date.toISOString() : null,
+        end_date: data.end_date ? data.end_date.toISOString() : null,
         typeName: "BANNER",
       };
-
       if (editId === "new") {
         const resp = await API.graphql(
           graphqlOperation(createBanner, {
@@ -154,15 +150,6 @@ const AddEdit = ({
           content: `${resp.data.updateBanner.title} өөрчлөлтийг хадгаллаа.`,
           autoClose: true,
         });
-
-        // if (
-        //   oldImageFiles.cover.id !== data.cover.id &&
-        //   oldImageFiles.profile.id !== data.profile.id
-        // ) {
-        //   await API.graphql(
-        //     graphqlOperation(deleteFile, { input: oldImageFiles.cover.id })
-        //   );
-        // }
       }
       setLoading(false);
       setShow(false);
@@ -171,19 +158,13 @@ const AddEdit = ({
       console.log(ex);
     }
   };
-  const removeDays = (start, end) => {
-    let result;
-    result = end - start;
-    console.log(result);
-    return result;
-  };
+
   const setFile = (key, file) => {
     setData({ ...data, [key]: file });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // value = JSON.stringify(value);
     setData({ ...data, [name]: value });
   };
   const close = () => {
@@ -196,15 +177,12 @@ const AddEdit = ({
   }, [editId]);
 
   useEffect(() => {
-    let res = addDays(startDate, dayLen);
-    setEndDate(res);
-
+    let res = addDays(data.start_date, data.dayLen);
     setData({
       ...data,
-      start_date: startDate && startDate.toISOString(),
-      end_date: res && res.toISOString(),
+      end_date: res,
     });
-  }, [startDate, dayLen]);
+  }, [data.start_date, data.dayLen]);
 
   useEffect(() => {
     setData({
@@ -301,24 +279,31 @@ const AddEdit = ({
             onChange={(e) => setUrl(e.target.value)}
           />
           <Input
-            value={dayLen}
+            value={data.dayLen}
             label="Хоног"
-            onChange={(e) => setDayLen(e.target.value)}
+            onChange={(e) => setData({ ...data, dayLen: e.target.value })}
           />
           <h4>Огноо</h4>
           <div className=" flex items-center justify-between ">
             <div className="react-datepicker-time__input  border-gray-300 border rounded-md  w-48">
               <DatePicker
-                selected={startDate || ""}
-                onChange={(date) => setStartDate(date)}
+                selected={data.start_date}
+                onChange={(date) => setData({ ...data, start_date: date })}
                 showTimeSelect
                 timeFormat="HH:mm"
                 dateFormat="yyyy/MM/d, h:mm aa"
               />
             </div>
           </div>
+
           <h4>Дуусах огноо</h4>
-          <p>{convertDateTime(endDate?.toISOString())}</p>
+
+          <p>
+            {show && !loading && data.end_date
+              ? convertDateTime(data?.end_date?.toISOString())
+              : null}
+          </p>
+
           {data.type !== "A2" ? (
             <>
               <h4>Өнгө</h4>

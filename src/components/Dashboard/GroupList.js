@@ -12,7 +12,7 @@ const GroupList = ({ groups, PageSize }) => {
   groups = groups.sort(function (a, b) {
     return b.aura - a.aura;
   });
-
+  console.log(groups);
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
