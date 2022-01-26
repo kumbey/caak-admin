@@ -291,7 +291,7 @@ const AddEdit = ({
                 onChange={(date) => setData({ ...data, start_date: date })}
                 showTimeSelect
                 timeFormat="HH:mm"
-                dateFormat="yyyy/MM/d, h:mm aa"
+                dateFormat="yyyy/MM/d, HH:mm aa"
               />
             </div>
           </div>
