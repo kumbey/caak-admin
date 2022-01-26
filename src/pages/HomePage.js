@@ -73,7 +73,6 @@ const HomePage = () => {
         variables: {
           status: "CONFIRMED",
           sortDirection: "DESC",
-          limit: 5000,
         },
       });
       setPosts(getReturnData(resp).items);

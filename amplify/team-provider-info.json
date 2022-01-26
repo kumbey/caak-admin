@@ -1,14 +1,14 @@
 {
-  "dev": {
+  "prod": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-caak-dev-123611-authRole",
-      "UnauthRoleArn": "arn:aws:iam::395091497679:role/amplify-caak-dev-123611-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::395091497679:role/amplify-caak-dev-123611-authRole",
+      "AuthRoleName": "amplify-caak-prod-180235-authRole",
+      "UnauthRoleArn": "arn:aws:iam::395091497679:role/amplify-caak-prod-180235-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::395091497679:role/amplify-caak-prod-180235-authRole",
       "Region": "ap-southeast-1",
-      "DeploymentBucketName": "amplify-caak-dev-123611-deployment",
-      "UnauthRoleName": "amplify-caak-dev-123611-unauthRole",
-      "StackName": "amplify-caak-dev-123611",
-      "StackId": "arn:aws:cloudformation:ap-southeast-1:395091497679:stack/amplify-caak-dev-123611/3b2fe890-4da9-11ec-b9b0-02a58faeed02",
+      "DeploymentBucketName": "amplify-caak-prod-180235-deployment",
+      "UnauthRoleName": "amplify-caak-prod-180235-unauthRole",
+      "StackName": "amplify-caak-prod-180235",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:395091497679:stack/amplify-caak-prod-180235/cd593fe0-5bfb-11ec-9209-069d7f8a7db2",
       "AmplifyAppId": "d36nkdl3p18em1"
     }
   }
