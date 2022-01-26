@@ -106,7 +106,6 @@ const Categories = () => {
           </thead>
           <tbody>
             {categories.map((cat, index) => {
-              console.log(cat);
               return (
                 <tr key={index}>
                   <td>{index + 1}</td>

@@ -137,8 +137,8 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
                           "video"
                         )
                           ? placeholder
-                          : report?.post?.items?.items
-                          ? getFileUrl(report?.post?.items.items[0].file)
+                          : report?.post?.items?.items[0]?.file
+                          ? getFileUrl(report?.post?.items?.items[0]?.file)
                           : getGenderImage("default")
                       }
                       alt="image"
