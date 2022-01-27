@@ -42,6 +42,7 @@ const AddEdit = ({
   const { user } = useUser();
   const { addToast } = useToast();
   const [isChecked, setIsChecked] = useState();
+  const [isValid, setIsValid] = useState(false);
 
   const fetchGroup = async () => {
     try {
@@ -172,6 +173,10 @@ const AddEdit = ({
     category.id = value;
     setData({ ...data, [name]: category });
   };
+  const close = () => {
+    setIsChecked(false);
+    setShow(false);
+  };
 
   useEffect(() => {
     getCategories();
@@ -182,10 +187,20 @@ const AddEdit = ({
     // eslint-disable-next-line
   }, [editId]);
 
-  const close = () => {
-    setIsChecked(false);
-    setShow(false);
-  };
+  useEffect(() => {
+    if (
+      data.name &&
+      data.category &&
+      data.about &&
+      data.cover &&
+      data.profile
+    ) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [data]);
+
   return (
     <Modal
       onSubmit={updateGroupData}
@@ -199,6 +214,7 @@ const AddEdit = ({
       onClose={() => close()}
       type="submit"
       loading={loading}
+      isValid={isValid}
       submitBtnName={
         editId !== "new" && editId !== "init" ? "Хадгалах" : "Шинэ бүлэг үүсгэх"
       }

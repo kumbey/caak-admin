@@ -24,29 +24,23 @@ const AddEdit = ({
   const initData = {
     name: "",
     icon: "",
-    pic: null,
+    picture: "",
+    pic_id: "",
   };
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
+  const [isValid, setIsValid] = useState(false);
 
-  const setFile = (key, file) => {
-    setData({ ...data, [key]: file });
-  };
-
-  useEffect(() => {
-    fetchCategory(editId); // eslint-disable-next-line
-  }, [editId]);
-
-  const fetchCategory = async (id) => {
+  const fetchCategory = async () => {
     try {
       setLoading(true);
-      if (id !== "new" && id !== "init") {
+      if (editId !== "new" && editId !== "init") {
         const resp = await API.graphql(
-          graphqlOperation(getCategoryByID, { id: id })
+          graphqlOperation(getCategoryByID, { id: editId })
         );
 
-        setData(resp.data.getCategory);
-      } else if (id === "new") {
+        setData({ ...resp.data.getCategory });
+      } else {
         setData(initData);
       }
       setLoading(false);
@@ -65,8 +59,10 @@ const AddEdit = ({
     setLoading(true);
     try {
       const catImg =
-        data.pic && !data.pic.id ? await uploadFile(data.pic) : data.pic;
-      setData({ ...data, pic: catImg });
+        data.picture && !data.picture.id
+          ? await uploadFile(data.picture)
+          : data.picture;
+      setData({ ...data, picture: catImg });
       const postData = {
         name: data.name,
         icon: data.icon,
@@ -85,11 +81,10 @@ const AddEdit = ({
           title: "Амжилттай",
           autoClose: true,
         });
-        setIsShowModal(false);
       } else if (editId !== "new" && editId !== "init") {
         postData.id = data.id;
-        delete data.createdAt;
-        delete data.updatedAt;
+        // delete data.createdAt;
+        // delete data.updatedAt;
         const resp = await API.graphql(
           graphqlOperation(updateCategory, { input: postData })
         );
@@ -104,6 +99,7 @@ const AddEdit = ({
         });
       }
       setLoading(false);
+      setIsShowModal(false);
     } catch (ex) {
       setLoading(false);
 
@@ -111,10 +107,26 @@ const AddEdit = ({
     }
   };
 
+  const setFile = (key, file) => {
+    setData({ ...data, [key]: file });
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
+
+  useEffect(() => {
+    fetchCategory(); // eslint-disable-next-line
+  }, [editId]);
+
+  useEffect(() => {
+    if (data.name && data.icon && data.picture) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [data]);
 
   return (
     <Modal
@@ -129,6 +141,7 @@ const AddEdit = ({
       onSubmit={handleSubmit}
       type="submit"
       loading={loading}
+      isValid={isValid}
       submitBtnName={`${
         editId !== "new" && editId !== "init" ? "Хадгалах" : "Категори үүсгэх"
       } `}
@@ -150,7 +163,7 @@ const AddEdit = ({
           <h4>Категори зураг</h4>
           <DropZone
             title={"Drop it here"}
-            keyName={"pic"}
+            keyName={"picture"}
             file={data.picture}
             setFile={setFile}
           />
