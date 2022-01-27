@@ -46,9 +46,7 @@ const GroupList = ({ groups, PageSize }) => {
                   <div className="flex items-center ">
                     <img
                       onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/group/${group.id}`
-                        )
+                        window.open(`https://www.caak.mn/group/${group.id}`)
                       }
                       className="mr-2 w-12 h-12 object-cover cursor-pointer"
                       src={
@@ -60,9 +58,7 @@ const GroupList = ({ groups, PageSize }) => {
                     />
                     <p
                       onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/group/${group.id}`
-                        )
+                        window.open(`https://www.caak.mn/group/${group.id}`)
                       }
                       className="cursor-pointer line-clamp"
                     >
@@ -85,7 +81,7 @@ const GroupList = ({ groups, PageSize }) => {
                     <img
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${group.founder.id}/profile`
+                          `https://www.caak.mn/user/${group.founder.id}/profile`
                         )
                       }
                       className="mr-2 rounded-full max-h-[32px] cursor-pointer"
@@ -100,7 +96,7 @@ const GroupList = ({ groups, PageSize }) => {
                     <p
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${group.founder.id}/profile`
+                          `https://www.caak.mn/user/${group.founder.id}/profile`
                         )
                       }
                       className="line-clamp cursor-pointer "

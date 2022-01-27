@@ -75,7 +75,7 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
                       <img
                         onClick={() =>
                           window.open(
-                            `https://www.beta.caak.mn/post/view/${post.id}`
+                            `https://www.caak.mn/post/view/${post.id}`
                           )
                         }
                         className="mr-2 cursor-pointer w-12 h-12 object-cover"
@@ -97,7 +97,7 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
                       className="cursor-pointer line-clamp"
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/group/${post.group.id}`
+                          `https://www.caak.mn/group/${post.group.id}`
                         )
                       }
                     >
@@ -108,7 +108,7 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
                     <p
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                          `https://www.caak.mn/user/${post.user.id}/profile`
                         )
                       }
                       className="cursor-pointer line-clamp"

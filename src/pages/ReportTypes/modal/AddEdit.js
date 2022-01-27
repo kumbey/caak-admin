@@ -28,10 +28,7 @@ const AddEdit = ({
   const [data, setData] = useState(initData);
   const [isChecked, setIsChecked] = useState();
   const [loading, setLoading] = useState();
-
-  useEffect(() => {
-    fetchReport(editId); // eslint-disable-next-line
-  }, [editId]);
+  const [isValid, setIsValid] = useState(false);
 
   const fetchReport = async (id) => {
     try {
@@ -106,6 +103,18 @@ const AddEdit = ({
     setData({ ...data, [name]: checked });
   };
 
+  useEffect(() => {
+    fetchReport(editId); // eslint-disable-next-line
+  }, [editId]);
+
+  useEffect(() => {
+    if (data.name && data.description) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [data]);
+
   return (
     <Modal
       show={show}
@@ -119,6 +128,7 @@ const AddEdit = ({
       onSubmit={handleSubmit}
       type="submit"
       loading={loading}
+      isValid={isValid}
       submitBtnName={`${
         editId !== "new" && editId !== "init" ? "Хадгалах" : "Репорт үүсгэх"
       } `}

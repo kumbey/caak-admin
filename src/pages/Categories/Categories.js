@@ -54,7 +54,6 @@ const Categories = () => {
       setCategories(cat.data.listCategorys.items);
     });
   }, []);
-
   useEffect(() => {
     if (editId !== "init") {
       setIsShowModal(true);

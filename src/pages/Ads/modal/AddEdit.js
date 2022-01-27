@@ -20,8 +20,6 @@ import { addDays, getDiffDays } from "../../../utility/Util";
 
 import moment from "moment";
 import { convertDateTime } from "../../../components/utils";
-import setHours from "date-fns/setHours";
-import setMinutes from "date-fns/setMinutes";
 
 const AddEdit = ({
   editId,
@@ -33,7 +31,9 @@ const AddEdit = ({
 }) => {
   const initData = {
     title: "",
+    pic1: "",
     pic1_id: "",
+    pic2: "",
     pic2_id: "",
     start_date: new Date(),
     end_date: new Date(),
@@ -64,6 +64,7 @@ const AddEdit = ({
   const [hexColor, setHexColor] = useState({});
   const [text, setText] = useState();
   const [url, setUrl] = useState();
+  const [isValid, setIsValid] = useState(false);
 
   const fetchBanner = async () => {
     try {
@@ -76,11 +77,11 @@ const AddEdit = ({
 
         setData({
           ...resp.data.getBanner,
-          start_date: moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
-          end_date: moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d,
+          start_date: moment(resp.data.getBanner.start_date)._d,
+          end_date: moment(resp.data.getBanner.end_date)._d,
           dayLen: getDiffDays(
-            moment(resp.data.getBanner.start_date, "YYYY-MM-DD")._d,
-            moment(resp.data.getBanner.end_date, "YYYY-MM-DD")._d
+            moment(resp.data.getBanner.start_date)._d,
+            moment(resp.data.getBanner.end_date)._d
           ),
           meta: {
             colors: meta.colors,
@@ -205,6 +206,29 @@ const AddEdit = ({
     });
   }, [url]);
 
+  useEffect(() => {
+    if (data.type === "A1") {
+      if (
+        data.title &&
+        data.pic1 &&
+        data.pic2 &&
+        data.dayLen &&
+        data.start_date &&
+        data.meta.colors
+      ) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+    } else if (data.type === "A2") {
+      if (data.title && data.pic1 && data.dayLen && data.start_date) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+    }
+  }, [data]);
+
   return (
     <Modal
       onSubmit={updateBannerData}
@@ -218,6 +242,7 @@ const AddEdit = ({
       onClose={() => close()}
       type="submit"
       loading={loading}
+      isValid={isValid}
       submitBtnName={
         editId !== "new" && editId !== "init"
           ? "Хадгалах"
@@ -289,9 +314,10 @@ const AddEdit = ({
               <DatePicker
                 selected={data.start_date}
                 onChange={(date) => setData({ ...data, start_date: date })}
+                // onChange={(date) => console.log(date)}
                 showTimeSelect
                 timeFormat="HH:mm"
-                dateFormat="yyyy/MM/d, h:mm aa"
+                dateFormat="yyyy/MM/d, HH:mm:ss"
               />
             </div>
           </div>

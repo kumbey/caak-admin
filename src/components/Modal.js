@@ -15,6 +15,7 @@ export default function Modal({
   content,
   loading,
   className,
+  isValid,
   ...props
 }) {
   const { setOverlay } = useTheme();
@@ -63,11 +64,14 @@ export default function Modal({
                   Хаах
                 </button>
                 <button
-                  disabled={loading}
+                  disabled={!isValid || loading}
                   // onClick={onSubmit}
                   type={type}
-                  className="btn btn_primary ml-2 uppercase"
+                  className="btn btn_primary ml-2 uppercase "
                 >
+                  {loading && (
+                    <i className="las la-spinner animate-spin mr-1"></i>
+                  )}
                   {submitBtnName}
                 </button>
               </div>

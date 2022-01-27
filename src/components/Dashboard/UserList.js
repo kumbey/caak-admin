@@ -46,7 +46,7 @@ const UserList = ({ users, PageSize }) => {
                     <img
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${user.id}/profile`
+                          `https://www.caak.mn/user/${user.id}/profile`
                         )
                       }
                       src={
@@ -61,7 +61,7 @@ const UserList = ({ users, PageSize }) => {
                       className="cursor-pointer line-clamp ml-2"
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${user.id}/profile`
+                          `https://www.caak.mn/user/${user.id}/profile`
                         )
                       }
                     >

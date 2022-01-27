@@ -17,12 +17,9 @@ const Edit = ({
 }) => {
   const roles = ["ADMIN", "MEMBER", "MODERATOR"];
   const [selectedRole, setSelectedRole] = useState();
+  const [isValid, setIsValid] = useState(false);
 
   const { addToast } = useToast();
-
-  useEffect(() => {
-    setSelectedRole(userRole);
-  }, [userRole]);
 
   const updateRole = async (event) => {
     event.preventDefault(event);
@@ -46,19 +43,38 @@ const Edit = ({
       title: "Амжилттай",
       autoClose: true,
     });
+    close();
+  };
+
+  const close = () => {
     setShow(false);
+    setSelectedRole(userRole);
   };
 
   const handleRoleChange = (e) => {
     setSelectedRole(e.target.value);
   };
+
+  useEffect(() => {
+    setSelectedRole(userRole);
+  }, [userRole]);
+
+  useEffect(() => {
+    if (selectedRole) {
+      setIsValid(true);
+    } else {
+      setIsValid(false);
+    }
+  }, [selectedRole]);
+
   return (
     <Modal
       onSubmit={updateRole}
       show={show}
       title="Эрх өөрчлөх"
       content="content"
-      onClose={() => setShow(false)}
+      isValid={isValid}
+      onClose={() => close()}
       type="submit"
       //   loading={loading}
       submitBtnName="Эрх өөрчлөх"
