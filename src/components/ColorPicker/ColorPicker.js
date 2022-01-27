@@ -20,7 +20,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
         width: "30px",
         height: "14px",
         borderRadius: "2px",
-        background: `${hexColor || picker.hex}`,
+        background: `${hexColor || ""}`,
       },
       swatch: {
         padding: "5px",
@@ -70,7 +70,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
 
   return (
     <div className="flex items-center">
-      <p className="mr-4">{picker.hex}</p>
+      <p className="mr-4">{hexColor ? hexColor : ""}</p>
       <div style={styles.swatch} onClick={handleClick}>
         <div style={styles.color} />
       </div>

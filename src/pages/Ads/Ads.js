@@ -194,10 +194,9 @@ const Ads = () => {
 
                   <td>
                     <p className="text-center">
-                      {" "}
                       {getDiffDays(
-                        moment(banner.start_date, "YYYY-MM-DD")._d,
-                        moment(banner.end_date, "YYYY-MM-DD")._d
+                        moment(banner.start_date)._d,
+                        moment(banner.end_date)._d
                       )}
                     </p>
                   </td>
