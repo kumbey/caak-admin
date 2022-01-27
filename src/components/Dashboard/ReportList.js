@@ -125,7 +125,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
                 <td
                   onClick={() =>
                     window.open(
-                      `https://www.beta.caak.mn/post/view/${report.post.id}`
+                      `https://www.caak.mn/post/view/${report.post.id}`
                     )
                   }
                 >
@@ -155,7 +155,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
                     <img
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${report?.user?.id}/profile`
+                          `https://www.caak.mn/user/${report?.user?.id}/profile`
                         )
                       }
                       className="mr-2 cursor-pointer rounded-full"
@@ -170,7 +170,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
                     <p
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${report?.user?.id}/profile`
+                          `https://www.caak.mn/user/${report?.user?.id}/profile`
                         )
                       }
                       className="cursor-pointer line-clamp"

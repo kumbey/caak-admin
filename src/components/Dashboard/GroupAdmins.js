@@ -29,9 +29,7 @@ const GroupAdmins = ({ groupId }) => {
           <div key={i} className="flex items-center">
             <img
               onClick={() =>
-                window.open(
-                  `https://www.beta.caak.mn/user/${admin.user.id}/profile`
-                )
+                window.open(`https://www.caak.mn/user/${admin.user.id}/profile`)
               }
               className="mr-2 w-8 h-8 object-cover cursor-pointer rounded-full"
               src={
@@ -43,9 +41,7 @@ const GroupAdmins = ({ groupId }) => {
             />
             <p
               onClick={() =>
-                window.open(
-                  `https://www.beta.caak.mn/user/${admin.user.id}/profile`
-                )
+                window.open(`https://www.caak.mn/user/${admin.user.id}/profile`)
               }
               className="line-clamp cursor-pointer "
             >

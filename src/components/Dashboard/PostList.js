@@ -45,9 +45,7 @@ const PostList = ({ posts, PageSize }) => {
                   <div className="flex items-center  ">
                     <img
                       onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/post/view/${post.id}`
-                        )
+                        window.open(`https://www.caak.mn/post/view/${post.id}`)
                       }
                       className="mr-2 cursor-pointer w-12 h-12 object-cover"
                       src={
@@ -61,9 +59,7 @@ const PostList = ({ posts, PageSize }) => {
                     />
                     <p
                       onClick={() =>
-                        window.open(
-                          `https://www.beta.caak.mn/post/view/${post.id}`
-                        )
+                        window.open(`https://www.caak.mn/post/view/${post.id}`)
                       }
                       className="cursor-pointer line-clamp"
                     >
@@ -76,9 +72,7 @@ const PostList = ({ posts, PageSize }) => {
                   <p
                     className="cursor-pointer line-clamp"
                     onClick={() =>
-                      window.open(
-                        `https://www.beta.caak.mn/group/${post.group.id}`
-                      )
+                      window.open(`https://www.caak.mn/group/${post.group.id}`)
                     }
                   >
                     {post.group.name}
@@ -89,7 +83,7 @@ const PostList = ({ posts, PageSize }) => {
                     <img
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                          `https://www.caak.mn/user/${post.user.id}/profile`
                         )
                       }
                       className="mr-2 cursor-pointer rounded-full"
@@ -104,7 +98,7 @@ const PostList = ({ posts, PageSize }) => {
                     <p
                       onClick={() =>
                         window.open(
-                          `https://www.beta.caak.mn/user/${post.user.id}/profile`
+                          `https://www.caak.mn/user/${post.user.id}/profile`
                         )
                       }
                       className="cursor-pointer line-clamp"
