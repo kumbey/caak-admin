@@ -81,6 +81,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
             name={name}
             color={picker.color}
             onChange={handleChange}
+            width={"90%"}
           />
         </div>
       ) : null}
