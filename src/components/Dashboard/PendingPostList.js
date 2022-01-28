@@ -60,6 +60,7 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
               <th className="text-left uppercase w-56">Групп</th>
               <th className="text-left uppercase w-40">Нэмсэн хүн</th>
               <th className="text-left uppercase w-36">Үүссэн огноо</th>
+              <th className="text-left uppercase">Үйлдэл</th>
             </tr>
           </thead>
           <tbody>
@@ -88,7 +89,16 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
                         }
                         alt={post?.items?.items[0]?.file?.type}
                       />
-                      <p className="cursor-pointer line-clamp">{post.title}</p>
+                      <p
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className="cursor-pointer line-clamp"
+                      >
+                        {post.title}
+                      </p>
                     </div>
                   </td>
 
@@ -117,7 +127,7 @@ const PendingPostList = ({ pendingPosts, PageSize }) => {
                     </p>
                   </td>
                   <td className="text-xs">{convertDateTime(post.createdAt)}</td>
-                  <td className="flex  border-none">
+                  <td className="flex my-2 border-none">
                     <span
                       // onClick={() => postHandler(post, post.id, "CONFIRMED")}
                       onClick={() => {

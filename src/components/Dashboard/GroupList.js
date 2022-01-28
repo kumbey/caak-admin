@@ -38,6 +38,8 @@ const GroupList = ({ groups, PageSize }) => {
         </thead>
         <tbody>
           {currentTableData.map((group, index) => {
+            let totalMember =
+              group.totals.member + group.totals.admin + group.totals.moderator;
             count++;
             return (
               <tr key={index}>
@@ -67,7 +69,7 @@ const GroupList = ({ groups, PageSize }) => {
                   </div>
                 </td>
                 <td>
-                  <p className="text-center">{group.totals.member}</p>
+                  <p className="text-center">{totalMember}</p>
                 </td>
                 <td>
                   <p className="text-center">{group.totals.confirmed}</p>
