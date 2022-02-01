@@ -9,7 +9,7 @@ import AddEdit from "./modal/AddEdit";
 import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
 import { deleteGroup } from "../../graphql-custom/group/mutation";
 import Pagination from "../../components/Pagination/Pagination";
-import { getFileUrl, getGenderImage } from "../../utility/Util";
+import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
 
 const Groups = () => {
   // const { addToast } = useToast();
@@ -30,7 +30,7 @@ const Groups = () => {
     count = (currentPage - 1) * PageSize;
 
     return groups.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, groups]);
 
   const editHandler = (id, index) => {
     setEditId(id);
@@ -54,21 +54,27 @@ const Groups = () => {
       console.log(ex);
     }
   };
-
-  useEffect(() => {
-    API.graphql(graphqlOperation(getGroupList)).then((group) => {
+  const getGroups = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(getGroupList));
       setGroups(
-        group.data.listGroups.items.sort(function (a, b) {
-          if (a.name < b.name) {
+        getReturnData(resp).items.sort(function (a, b) {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
           }
-          if (a.name > b.name) {
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
             return 1;
           }
           return 0;
         })
       );
-    });
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  useEffect(() => {
+    getGroups();
   }, []);
 
   useEffect(() => {
@@ -94,7 +100,7 @@ const Groups = () => {
       setShowAlert(true);
     }
   }, [deleteId]);
-  return (
+  return groups.length > 0 ? (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">
         <div className="mb-4">
@@ -200,7 +206,7 @@ const Groups = () => {
         onSubmit={() => deleteGroupData(deleteId)}
       />
     </div>
-  );
+  ) : null;
 };
 
 export default Groups;
