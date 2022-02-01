@@ -1,5 +1,6 @@
 // import post0002 from "./fields/post0002";
 import post0004 from "./fields/post0004";
+import post0006 from "./fields/post0006";
 
 // export const getPost = /* GraphQL */ `
 //     query GetPost($id: ID!) {
@@ -28,7 +29,7 @@ export const getPostByStatus = /* GraphQL */ `
             filter: $filter,
             limit: $limit,
             nextToken: $nextToken) {
-            items ${post0004}
+            items ${post0006}
             nextToken
         }
     }

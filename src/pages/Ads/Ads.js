@@ -53,7 +53,7 @@ const Ads = () => {
       })
     );
     let res = getReturnData(resp).items.sort(function (a, b) {
-      return new Date(a.start_date) - new Date(b.start_date);
+      return new Date(b.start_date) - new Date(a.start_date);
     });
     setBanners(res);
   };

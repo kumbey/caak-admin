@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import Tables from "../Tables";
-import { getFileUrl, getGenderImage } from "../../utility/Util";
+import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { convertDateTime } from "../utils";
@@ -16,10 +16,13 @@ import {
   createPostStatusHistory,
   updatePost,
 } from "../../graphql-custom/post/mutation";
+import { ListReportedPostOrderByCreatedAt } from "../../graphql-custom/report/queries";
+import Loader from "../Loader";
 
-const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
+const ReportList = ({ PageSize }) => {
   let count = 0;
 
+  const [reportedPosts, setReportedPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
@@ -28,7 +31,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
     count = (currentPage - 1) * PageSize;
 
     return reportedPosts.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, reportedPosts]);
 
   const { addToast } = useToast();
 
@@ -37,7 +40,28 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
   const [deleteId, setDeleteId] = useState("init");
   const [selectedType, setSelectedType] = useState();
   const [exVersion, setExVersion] = useState();
+  const [loading, setLoading] = useState();
   const [reason, setReason] = useState();
+
+  const getAllReportedPosts = async () => {
+    setLoading(true);
+
+    try {
+      const resp = await API.graphql(
+        graphqlOperation(ListReportedPostOrderByCreatedAt, {
+          sortDirection: "DESC",
+          typeName: "REPORTED_POST",
+          limit: 5000,
+        })
+      );
+      setReportedPosts(getReturnData(resp).items);
+      setLoading(false);
+    } catch (ex) {
+      setLoading(false);
+
+      console.log(ex);
+    }
+  };
 
   const handleClick = (id, type, version, reason) => {
     setDeleteId(id);
@@ -89,6 +113,10 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
   };
 
   useEffect(() => {
+    getAllReportedPosts();
+  }, []);
+
+  useEffect(() => {
     if (!showAlert) {
       setDeleteId("init");
     }
@@ -100,7 +128,7 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
     }
   }, [deleteId]);
 
-  return (
+  return reportedPosts.length > 0 ? (
     <div className="mb-4 mr-2">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
         <thead>
@@ -235,6 +263,11 @@ const ReportList = ({ reportedPosts, setReportedPosts, PageSize }) => {
         />
       )}
     </div>
+  ) : (
+    <Loader
+      containerClassName={"self-center w-full h-[20px]"}
+      className={`bg-blue-500 ${loading ? "opacity-100" : "opacity-0"}`}
+    />
   );
 };
 

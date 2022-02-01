@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Tables from "../../components/Tables";
 import Select from "../../components/Select";
@@ -13,6 +13,7 @@ import {
 } from "../../graphql-custom/group/queries";
 import { getCategoryList } from "../../graphql-custom/category/queries";
 import { getReturnData } from "../../utility/Util";
+import Pagination from "../../components/Pagination/Pagination";
 
 const GroupUsers = () => {
   const [selectedGroup, setSelectedGroup] = useState("");
@@ -23,6 +24,18 @@ const GroupUsers = () => {
   const [show, setShow] = useState(false);
   const [userRole, setUserRole] = useState("");
   const [currentIndex, setCurrentIndex] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  let count = 0;
+  let PageSize = 100;
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
+    return users.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, users]);
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -36,7 +49,17 @@ const GroupUsers = () => {
   };
   useEffect(() => {
     API.graphql(graphqlOperation(getGroupList)).then((group) => {
-      setGroups(group.data.listGroups.items);
+      setGroups(
+        group.data.listGroups.items.sort(function (a, b) {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        })
+      );
     });
 
     getCategory();
@@ -52,7 +75,17 @@ const GroupUsers = () => {
         group_id: id,
       })
     ).then((groupUsers) => {
-      setUsers(groupUsers.data.getGroupUsersByGroup.items);
+      setUsers(
+        groupUsers.data.getGroupUsersByGroup.items.sort(function (a, b) {
+          if (a.user.nickname.toLowerCase() < b.user.nickname.toLowerCase()) {
+            return -1;
+          }
+          if (a.user.nickname.toLowerCase() > b.user.nickname.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        })
+      );
     });
   };
 
@@ -101,21 +134,23 @@ const GroupUsers = () => {
               <th className="text-left uppercase">Ник нэр</th>
               <th className="text-left uppercase">Эрх</th>
               <th className="text-left uppercase">ID</th>
-              <th className="text-left uppercase">Засах</th>
+              <th className="text-center uppercase">Засах</th>
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => {
+            {currentTableData.map((user, index) => {
+              count++;
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td className="text-center">{count}</td>
+
                   <td>{user.user.firstname}</td>
                   <td>{user.user.nickname}</td>
                   <td>{user.role}</td>
                   <td>{user.user.id}</td>
-                  <td>
+                  <td className="flex justify-center">
                     <span
-                      className={"cursor-pointer"}
+                      className={"cursor-pointer "}
                       onClick={() =>
                         editHandler(user.user.id, user.role, index)
                       }
@@ -128,6 +163,13 @@ const GroupUsers = () => {
             })}
           </tbody>
         </Tables>
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={users.length}
+          pageSize={PageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
         <Edit
           users={users}
           setUsers={setUsers}

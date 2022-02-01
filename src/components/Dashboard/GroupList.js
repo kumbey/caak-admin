@@ -1,18 +1,21 @@
-import { useState, useMemo } from "react";
+import { API, graphqlOperation } from "aws-amplify";
+import { useState, useMemo, useEffect } from "react";
+import { listGroups } from "../../graphql-custom/group/queries";
 
-import { getFileUrl, getGenderImage } from "../../utility/Util";
+import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
+import Loader from "../Loader";
 import Pagination from "../Pagination/Pagination";
 import Tables from "../Tables";
 
 import { convertDateTime } from "../utils";
 import GroupAdmins from "./GroupAdmins";
 
-const GroupList = ({ groups, PageSize }) => {
-  let count = 0;
-  groups = groups.sort(function (a, b) {
-    return b.aura - a.aura;
-  });
+const GroupList = ({ PageSize }) => {
+  const [groups, setGroups] = useState([]);
+  const [loading, setLoading] = useState();
   const [currentPage, setCurrentPage] = useState(1);
+
+  let count = 0;
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -20,8 +23,30 @@ const GroupList = ({ groups, PageSize }) => {
     count = (currentPage - 1) * PageSize;
 
     return groups.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
-  return (
+  }, [currentPage, groups]);
+
+  const getAllGroups = async () => {
+    setLoading(true);
+    try {
+      const resp = await API.graphql(graphqlOperation(listGroups));
+      setGroups(
+        getReturnData(resp).items.sort(function (a, b) {
+          return b.aura - a.aura;
+        })
+      );
+      setLoading(false);
+    } catch (ex) {
+      setLoading(false);
+
+      console.log(ex);
+    }
+  };
+
+  useEffect(() => {
+    getAllGroups();
+  }, []);
+
+  return groups.length > 0 ? (
     <div className="mb-4 pr-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full ">
         <thead>
@@ -38,6 +63,8 @@ const GroupList = ({ groups, PageSize }) => {
         </thead>
         <tbody>
           {currentTableData.map((group, index) => {
+            let totalMember =
+              group.totals.member + group.totals.admin + group.totals.moderator;
             count++;
             return (
               <tr key={index}>
@@ -67,7 +94,7 @@ const GroupList = ({ groups, PageSize }) => {
                   </div>
                 </td>
                 <td>
-                  <p className="text-center">{group.totals.member}</p>
+                  <p className="text-center">{totalMember}</p>
                 </td>
                 <td>
                   <p className="text-center">{group.totals.confirmed}</p>
@@ -122,6 +149,11 @@ const GroupList = ({ groups, PageSize }) => {
         onPageChange={(page) => setCurrentPage(page)}
       />
     </div>
+  ) : (
+    <Loader
+      containerClassName={"self-center w-full h-[20px]"}
+      className={`bg-blue-500 ${loading ? "opacity-100" : "opacity-0"}`}
+    />
   );
 };
 

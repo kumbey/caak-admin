@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { convertDateTime } from "../../components/utils";
@@ -8,6 +8,8 @@ import { getGroupList } from "../../graphql-custom/group/queries";
 import AddEdit from "./modal/AddEdit";
 import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
 import { deleteGroup } from "../../graphql-custom/group/mutation";
+import Pagination from "../../components/Pagination/Pagination";
+import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
 
 const Groups = () => {
   // const { addToast } = useToast();
@@ -17,6 +19,18 @@ const Groups = () => {
   const [currentIndex, setCurrentIndex] = useState("init");
   const [deleteId, setDeleteId] = useState("init");
   const [showAlert, setShowAlert] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  let count = 0;
+  let PageSize = 10;
+  const currentTableData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
+
+    return groups.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, groups]);
 
   const editHandler = (id, index) => {
     setEditId(id);
@@ -40,11 +54,27 @@ const Groups = () => {
       console.log(ex);
     }
   };
+  const getGroups = async () => {
+    try {
+      const resp = await API.graphql(graphqlOperation(getGroupList));
+      setGroups(
+        getReturnData(resp).items.sort(function (a, b) {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        })
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
-    API.graphql(graphqlOperation(getGroupList)).then((group) => {
-      setGroups(group.data.listGroups.items);
-    });
+    getGroups();
   }, []);
 
   useEffect(() => {
@@ -70,7 +100,7 @@ const Groups = () => {
       setShowAlert(true);
     }
   }, [deleteId]);
-  return (
+  return groups.length > 0 ? (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
       <div className="">
         <div className="mb-4">
@@ -95,11 +125,37 @@ const Groups = () => {
             </tr>
           </thead>
           <tbody>
-            {groups.map((group, index) => {
+            {currentTableData.map((group, index) => {
+              count++;
+
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>{group.name}</td>
+                  <td className="text-center">{count}</td>
+
+                  <td>
+                    <div className="flex items-center ">
+                      <img
+                        onClick={() =>
+                          window.open(`https://www.caak.mn/group/${group.id}`)
+                        }
+                        className="mr-2 w-12 h-12 object-cover cursor-pointer"
+                        src={
+                          group?.profile
+                            ? getFileUrl(group.profile)
+                            : getGenderImage("default")
+                        }
+                        alt={""}
+                      />
+                      <p
+                        onClick={() =>
+                          window.open(`https://www.caak.mn/group/${group.id}`)
+                        }
+                        className="cursor-pointer line-clamp"
+                      >
+                        {group.name}
+                      </p>
+                    </div>
+                  </td>
                   <td>{group.category.name}</td>
 
                   <td>{convertDateTime(group.createdAt)}</td>
@@ -127,6 +183,13 @@ const Groups = () => {
             })}
           </tbody>
         </Tables>
+        <Pagination
+          className="pagination-bar"
+          currentPage={currentPage}
+          totalCount={groups.length}
+          pageSize={PageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
       </div>
       <AddEdit
         groups={groups}
@@ -143,7 +206,7 @@ const Groups = () => {
         onSubmit={() => deleteGroupData(deleteId)}
       />
     </div>
-  );
+  ) : null;
 };
 
 export default Groups;

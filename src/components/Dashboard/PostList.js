@@ -1,15 +1,20 @@
 import { useState, useMemo, useEffect } from "react";
 
 import Tables from "../Tables";
-import { getFileUrl, getGenderImage } from "../../utility/Util";
+import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
 import placeholder from "./../../../src/assets/images/placeholder.png";
 
 import { convertDateTime } from "../utils";
 import Pagination from "../Pagination/Pagination";
+import { API } from "aws-amplify";
+import { getPostByStatus } from "../../graphql-custom/post/queries";
+import Loader from "../Loader";
 
-const PostList = ({ posts, PageSize }) => {
+const PostList = ({ PageSize }) => {
   let count = 0;
 
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState();
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
@@ -18,6 +23,29 @@ const PostList = ({ posts, PageSize }) => {
     count = (currentPage - 1) * PageSize;
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
+
+  const getAllPosts = async () => {
+    setLoading(true);
+    try {
+      let resp = await API.graphql({
+        query: getPostByStatus,
+        variables: {
+          status: "CONFIRMED",
+          sortDirection: "DESC",
+          limit: 1000,
+        },
+      });
+      setPosts(getReturnData(resp).items);
+      setLoading(false);
+    } catch (ex) {
+      setLoading(false);
+      console.log(ex);
+    }
+  };
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
 
   return posts.length > 0 ? (
     <div className="mb-4">
@@ -125,7 +153,12 @@ const PostList = ({ posts, PageSize }) => {
         onPageChange={(page) => setCurrentPage(page)}
       />
     </div>
-  ) : null;
+  ) : (
+    <Loader
+      containerClassName={"self-center w-full h-[20px]"}
+      className={`bg-blue-500 ${loading ? "opacity-100" : "opacity-0"}`}
+    />
+  );
 };
 
 export default PostList;

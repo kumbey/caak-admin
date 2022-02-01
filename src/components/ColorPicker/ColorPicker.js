@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import reactCSS from "reactcss";
 import { SketchPicker } from "react-color";
 
@@ -81,6 +81,7 @@ const ColorPicker = ({ name, setHexColor, hexColor }) => {
             name={name}
             color={picker.color}
             onChange={handleChange}
+            width={"90%"}
           />
         </div>
       ) : null}
