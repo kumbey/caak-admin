@@ -15,6 +15,7 @@ const PostList = ({ PageSize }) => {
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState();
+  const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
@@ -24,28 +25,33 @@ const PostList = ({ PageSize }) => {
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
 
-  const getAllPosts = async () => {
-    setLoading(true);
+  async function getAllPosts() {
+    let resp;
     try {
-      let resp = await API.graphql({
+      resp = await API.graphql({
         query: getPostByStatus,
         variables: {
-          status: "CONFIRMED",
+          status: "ARCHIVED",
           sortDirection: "DESC",
-          limit: 1000,
+          nextToken: nextNextToken,
+          limit: 20,
         },
       });
-      setPosts(getReturnData(resp).items);
-      setLoading(false);
+      setNextNextToken(getReturnData(resp).nextToken);
+
+      setPosts([...posts, ...getReturnData(resp).items]);
     } catch (ex) {
-      setLoading(false);
       console.log(ex);
     }
-  };
+  }
 
   useEffect(() => {
     getAllPosts();
   }, []);
+
+  useEffect(() => {
+    if (nextNextToken) getAllPosts();
+  }, [currentPage]);
 
   return posts.length > 0 ? (
     <div className="mb-4">
