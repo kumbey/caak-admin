@@ -16,8 +16,16 @@ export const getGroup = /* GraphQL */ `
     }
 `;
 export const getGroupUsersByGroup = /* GraphQL */ `
-    query GetGroupUsersByGroup($group_id: ID!) {
-        getGroupUsersByGroup(group_id: $group_id) ${getUsersByGroupField}
+    query GetGroupUsersByGroup(
+        $group_id: ID!,
+        $nextToken: String
+
+        ) {
+        getGroupUsersByGroup(
+            group_id: $group_id,
+            nextToken: $nextToken
+
+            ) ${getUsersByGroupField}
     }
 `;
 

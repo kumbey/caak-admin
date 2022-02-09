@@ -42,7 +42,6 @@ const PendingPostList = ({ PageSize }) => {
         variables: {
           status: "PENDING",
           sortDirection: "DESC",
-          limit: 5000,
         },
       });
       setPendingPosts(getReturnData(resp).items);
