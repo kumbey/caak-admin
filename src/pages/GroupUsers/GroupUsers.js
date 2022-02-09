@@ -16,19 +16,20 @@ import { getReturnData } from "../../utility/Util";
 import Pagination from "../../components/Pagination/Pagination";
 
 const GroupUsers = () => {
-  const [selectedGroup, setSelectedGroup] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState();
   const [groups, setGroups] = useState([]);
   const [cats, setCats] = useState([]);
   const [users, setUsers] = useState([]);
   const [editId, setEditId] = useState("");
   const [show, setShow] = useState(false);
   const [userRole, setUserRole] = useState("");
-  const [currentIndex, setCurrentIndex] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(1);
+  const [nextNextToken, setNextNextToken] = useState(undefined);
 
   const [currentPage, setCurrentPage] = useState(1);
 
   let count = 0;
-  let PageSize = 100;
+  let PageSize = 50;
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
@@ -38,55 +39,17 @@ const GroupUsers = () => {
   }, [currentPage, users]);
 
   const handleChange = (e) => {
-    const { value } = e.target;
-    setSelectedGroup(value);
+    setUsers([]);
+    setCurrentPage(1);
+    setNextNextToken(undefined);
+    setSelectedGroup(e.target.value);
   };
+
   const editHandler = (id, role, index) => {
     setEditId(id);
     setUserRole(role);
     setShow(true);
     setCurrentIndex(index);
-  };
-  useEffect(() => {
-    API.graphql(graphqlOperation(getGroupList)).then((group) => {
-      setGroups(
-        group.data.listGroups.items.sort(function (a, b) {
-          if (a.name.toLowerCase() < b.name.toLowerCase()) {
-            return -1;
-          }
-          if (a.name.toLowerCase() > b.name.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        })
-      );
-    });
-
-    getCategory();
-  }, []);
-
-  useEffect(() => {
-    if (selectedGroup) getUsers(selectedGroup);
-  }, [selectedGroup]);
-
-  const getUsers = (id) => {
-    API.graphql(
-      graphqlOperation(getGroupUsersByGroup, {
-        group_id: id,
-      })
-    ).then((groupUsers) => {
-      setUsers(
-        groupUsers.data.getGroupUsersByGroup.items.sort(function (a, b) {
-          if (a.user.nickname.toLowerCase() < b.user.nickname.toLowerCase()) {
-            return -1;
-          }
-          if (a.user.nickname.toLowerCase() > b.user.nickname.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        })
-      );
-    });
   };
 
   const getCategory = async () => {
@@ -97,6 +60,73 @@ const GroupUsers = () => {
       console.log(ex);
     }
   };
+
+  const getGroup = async () => {
+    let resp;
+    try {
+      resp = await API.graphql(graphqlOperation(getGroupList));
+      setGroups(
+        getReturnData(resp).items.sort(function (a, b) {
+          if (a.name.toLowerCase() < b.name.toLowerCase()) {
+            return -1;
+          }
+          if (a.name.toLowerCase() > b.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        })
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
+  const getUsers = async (id) => {
+    let resp;
+
+    try {
+      resp = await API.graphql(
+        graphqlOperation(getGroupUsersByGroup, {
+          group_id: id,
+          nextToken: nextNextToken,
+        })
+      );
+      if (getReturnData(resp).nextToken) {
+        setNextNextToken(getReturnData(resp).nextToken);
+      } else {
+        setNextNextToken(null);
+      }
+
+      setUsers([...users, ...getReturnData(resp).items]);
+    } catch (ex) {
+      console.log(ex);
+    }
+
+    // setUsers(
+    // resp.data.getGroupUsersByGroup.items.sort(function (a, b) {
+    //   if (a.user.nickname.toLowerCase() < b.user.nickname.toLowerCase()) {
+    //     return -1;
+    //   }
+    //   if (a.user.nickname.toLowerCase() > b.user.nickname.toLowerCase()) {
+    //     return 1;
+    //   }
+    //   return 0;
+    // })
+    // );
+  };
+
+  useEffect(() => {
+    getGroup();
+    getCategory();
+  }, []);
+
+  useEffect(() => {
+    if (selectedGroup) getUsers(selectedGroup);
+  }, [selectedGroup]);
+
+  useEffect(() => {
+    if (nextNextToken) getUsers(selectedGroup);
+  }, [currentPage]);
 
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
@@ -118,7 +148,7 @@ const GroupUsers = () => {
               icon = cats.filter((cat) => cat.id === group.category.id);
               return (
                 <option key={index} value={group.id}>
-                  {`${icon[0].icon} ${group.name}`}
+                  {`${icon[0]?.icon} ${group.name}`}
                 </option>
               );
             })}
