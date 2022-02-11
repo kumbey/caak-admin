@@ -70,24 +70,29 @@ const CommentList = ({ PageSize }) => {
 
                 <td>
                   <div className="flex items-center">
-                    <img
-                      onClick={() =>
-                        window.open(
-                          `https://www.caak.mn/post/view/${comment.post.id}`
-                        )
-                      }
-                      className="cursor-pointer mr-2 w-12 h-12 object-cover"
-                      src={
-                        comment?.post?.items?.items[0]?.file?.type?.startsWith(
-                          "video"
-                        )
-                          ? placeholder
-                          : comment?.post?.items?.items[0]?.file
-                          ? getFileUrl(comment?.post?.items?.items[0]?.file)
-                          : getGenderImage("default")
-                      }
-                      alt="image"
-                    />
+                    <div
+                      className="mr-2"
+                      style={{ minWidth: "48px", minHeight: "48px" }}
+                    >
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/post/view/${comment.post.id}`
+                          )
+                        }
+                        className="cursor-pointer w-12 h-12 object-cover"
+                        src={
+                          comment?.post?.items?.items[0]?.file?.type?.startsWith(
+                            "video"
+                          )
+                            ? placeholder
+                            : comment?.post?.items?.items[0]?.file
+                            ? getFileUrl(comment?.post?.items?.items[0]?.file)
+                            : getGenderImage("default")
+                        }
+                        alt="image"
+                      />
+                    </div>
                     <p
                       onClick={() =>
                         window.open(
