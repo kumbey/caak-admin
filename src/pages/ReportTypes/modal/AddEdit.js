@@ -69,6 +69,7 @@ const AddEdit = ({
       addToast({
         content: `${resp.data.createReportType.name} амжилттай үүслээ.`,
         title: "Амжилттай",
+        type: "update",
         autoClose: true,
       });
       setLoading(false);

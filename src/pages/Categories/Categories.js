@@ -40,8 +40,9 @@ const Categories = () => {
         categories.filter((cat) => cat.id !== resp.data.deleteCategory.id)
       );
       addToast({
-        content: `Устгалаа`,
+        content: `${resp.data.deleteCategory.name} амжилттай устгалаа`,
         title: "Амжилттай",
+        type: "delete",
         autoClose: true,
       });
     } catch (error) {

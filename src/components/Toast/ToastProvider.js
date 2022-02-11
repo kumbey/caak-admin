@@ -7,9 +7,15 @@ const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
   const addToast = useCallback(
-    ({ content, title, autoClose }) => {
+    ({ content, title, autoClose, time, type }) => {
       let toast = toasts;
-      toast.push({ content: content, title: title, autoClose: autoClose });
+      toast.push({
+        content: content,
+        title: title,
+        autoClose: autoClose,
+        time: time,
+        type: type,
+      });
       setToasts([...toast]);
     },
     [setToasts, toasts]

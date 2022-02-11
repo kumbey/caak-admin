@@ -13,8 +13,10 @@ import { updatePost } from "../../graphql-custom/post/mutation";
 import ConfirmAlert from "../ConfirmAlert/ConfirmAlert";
 import Pagination from "../Pagination/Pagination";
 import { getPostByStatus } from "../../graphql-custom/post/queries";
+import { useToast } from "../Toast/ToastProvider";
 
 const PendingPostList = ({ PageSize }) => {
+  const { addToast } = useToast();
   let count = 0;
 
   const [pendingPosts, setPendingPosts] = useState([]);
@@ -55,11 +57,22 @@ const PendingPostList = ({ PageSize }) => {
 
   const postHandler = async (post, postId, status) => {
     try {
-      await API.graphql(
+      const resp = await API.graphql(
         graphqlOperation(updatePost, {
           input: { id: postId, status: status, expectedVersion: post.version },
         })
       );
+      setPendingPosts(
+        pendingPosts.filter((post) => post.id !== resp.data.updatePost.id)
+      );
+      addToast({
+        content: post.title,
+        title: `Амжилттай ${
+          status === "CONFIRMED" ? "зөвшөөрлөө" : "архивлалаа"
+        }.`,
+        autoClose: true,
+        type: `${status == "CONFIRMED" ? "update" : "archived"}`,
+      });
       setShowAlert(false);
     } catch (ex) {
       setShowAlert(false);
@@ -97,20 +110,27 @@ const PendingPostList = ({ PageSize }) => {
 
                 <td>
                   <div className="flex items-center">
-                    <img
-                      onClick={() =>
-                        window.open(`https://www.caak.mn/post/view/${post.id}`)
-                      }
-                      className="mr-2 cursor-pointer w-12 h-12 object-cover"
-                      src={
-                        post?.items?.items[0]?.file?.type?.startsWith("video")
-                          ? placeholder
-                          : post?.items?.items[0]?.file
-                          ? getFileUrl(post.items.items[0].file)
-                          : getGenderImage("default")
-                      }
-                      alt={post?.items?.items[0]?.file?.type}
-                    />
+                    <div
+                      className="mr-2"
+                      style={{ minWidth: "48px", minHeight: "48px" }}
+                    >
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className="cursor-pointer w-12 h-12 object-cover"
+                        src={
+                          post?.items?.items[0]?.file?.type?.startsWith("video")
+                            ? placeholder
+                            : post?.items?.items[0]?.file
+                            ? getFileUrl(post.items.items[0].file)
+                            : getGenderImage("default")
+                        }
+                        alt={post?.items?.items[0]?.file?.type}
+                      />
+                    </div>
                     <p
                       onClick={() =>
                         window.open(`https://www.caak.mn/post/view/${post.id}`)

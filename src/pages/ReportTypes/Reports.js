@@ -42,6 +42,7 @@ const Reports = () => {
       addToast({
         content: `Устгалаа`,
         title: "Амжилттай",
+        type: "delete",
         autoClose: true,
       });
     } catch (error) {

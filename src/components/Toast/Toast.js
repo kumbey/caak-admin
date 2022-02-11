@@ -2,7 +2,16 @@ import React, { useEffect } from "react";
 import { useToast } from "./ToastProvider";
 import "./anime.css";
 
-const Toast = ({ title, time, content, id, autoClose, removing, ...props }) => {
+const Toast = ({
+  title,
+  time,
+  content,
+  type,
+  id,
+  autoClose,
+  removing,
+  ...props
+}) => {
   const { removeToast } = useToast();
 
   useEffect(() => {
@@ -25,7 +34,29 @@ const Toast = ({ title, time, content, id, autoClose, removing, ...props }) => {
       className={removing ? "toast removeToast mb-4" : "toast addToast mb-4"}
     >
       <div className="toast-header">
-        <h5>{title}</h5>
+        <span
+          className={`${
+            type === "delete"
+              ? "las la-trash-alt text-social-pinterest"
+              : type === "update"
+              ? "las la-check-circle text-social-whatsapp"
+              : type === "archived"
+              ? "las la-box text-social-twitter"
+              : ""
+          } text-2xl mr-2`}
+        />
+        <p
+          className="text-base"
+          style={{
+            display: "inline-block",
+            width: "300px",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {title}
+        </p>
         <small>{time}</small>
         <button
           onClick={() => {
@@ -37,7 +68,18 @@ const Toast = ({ title, time, content, id, autoClose, removing, ...props }) => {
           &times;
         </button>
       </div>
-      <div className="toast-body">{content}</div>
+      <div
+        className="toast-body flex items-center"
+        style={{
+          display: "inline-block",
+          width: "380px",
+          overflow: "hidden",
+          whiteSpace: "nowrap",
+          textOverflow: "ellipsis",
+        }}
+      >
+        <p>{content}</p>
+      </div>
     </div>
   );
 };

@@ -78,6 +78,7 @@ const AddEdit = ({
 
         addToast({
           content: `${resp.data.createCategory.name} амжилттай үүслээ.`,
+          type: "update",
           title: "Амжилттай",
           autoClose: true,
         });
@@ -93,8 +94,9 @@ const AddEdit = ({
         arr[currentIndex] = resp.data.updateCategory;
         setCategories(arr);
         addToast({
-          content: `өөрчлөлтийг хадгаллаа.`,
+          content: `${resp.data.updateCategory.name} өөрчлөлтийг хадгаллаа.`,
           title: "Амжилттай",
+          type: "update",
           autoClose: true,
         });
       }

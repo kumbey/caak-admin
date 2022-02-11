@@ -105,6 +105,8 @@ const Groups = () => {
     }
     addToast({
       content: `${currentEditingData.name} -д өөрчлөлт орууллаа`,
+      autoClose: true,
+      type: "update",
       title: "Амжилттай",
     });
     setIsShowEdit(false);
@@ -124,6 +126,7 @@ const Groups = () => {
         addToast({
           content: `Устгалаа`,
           title: "Амжилттай",
+          type: "delete",
           autoClose: true,
         });
       });
@@ -158,6 +161,7 @@ const Groups = () => {
           addToast({
             content: `${result.data.createGroup.name} амжилттай үүслээ`,
             title: "Амжилттай",
+            type: "update",
             autoClose: true,
           });
           setIsLoading(false);
