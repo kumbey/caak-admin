@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react";
-import Modal from "../../../components/Modal";
-import Input from "../../../components/Input";
-import Select from "../../../components/Select";
-import DropZone from "../../../components/Dropzone";
+import Modal from "../../../../components/Modal";
+import Input from "../../../../components/Input";
+import Select from "../../../../components/Select";
+import DropZone from "../../../../components/Dropzone";
 import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
-import { ApiFileUpload } from "../../../utility/ApiHelper";
+import { ApiFileUpload } from "../../../../utility/ApiHelper";
 
 import {
   createBanner,
   updateBanner,
-} from "../../../graphql-custom/banner/mutation";
-import { getBanner } from "../../../graphql-custom/banner/queries";
-import { useToast } from "../../../components/Toast/ToastProvider";
-import ColorPicker from "../../../components/ColorPicker/ColorPicker";
+} from "../../../../graphql-custom/banner/mutation";
+import { getBanner } from "../../../../graphql-custom/banner/queries";
+import { useToast } from "../../../../components/Toast/ToastProvider";
+import ColorPicker from "../../../../components/ColorPicker/ColorPicker";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { addDays, getDiffDays } from "../../../utility/Util";
+import { addDays, getDiffDays } from "../../../../utility/Util";
 
 import moment from "moment";
-import { convertDateTime } from "../../../components/utils";
+import { convertDateTime } from "../../../../components/utils";
 
 const AddEdit = ({
   editId,
@@ -135,6 +135,8 @@ const AddEdit = ({
         setBanners((prevState) => [...prevState, resp.data.createBanner]);
         addToast({
           content: `${resp.data.createBanner.title} амжилттай үүслээ.`,
+          title: `Амжилттай үүслээ.`,
+          type: "update",
           autoClose: true,
         });
       } else if (editId !== "new" && editId !== "init") {
@@ -148,7 +150,9 @@ const AddEdit = ({
         arr[currentIndex] = resp.data.updateBanner;
         setBanners(arr);
         addToast({
+          title: `Амжилттай хадгаллаа.`,
           content: `${resp.data.updateBanner.title} өөрчлөлтийг хадгаллаа.`,
+          type: "update",
           autoClose: true,
         });
       }
