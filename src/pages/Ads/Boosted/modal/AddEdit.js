@@ -122,7 +122,6 @@ const AddEdit = ({
   }, [data]);
 
   useEffect(() => {
-    console.log(editId);
     getBoosted();
     // eslint-disable-next-line
   }, [editId]);

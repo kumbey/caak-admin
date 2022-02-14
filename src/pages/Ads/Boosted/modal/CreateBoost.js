@@ -78,9 +78,6 @@ const CreateBoost = ({ editId, show, setShow }) => {
       setIsValid(false);
     }
   }, [data]);
-  useEffect(() => {
-    console.log("post_id:", editId);
-  }, [editId]);
 
   return (
     <Modal
