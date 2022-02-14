@@ -7,8 +7,16 @@ export const getBoostedPost = /* GraphQL */ `
 `;
 
 export const listBoostedPosts = /* GraphQL */ `
-    query ListBoostedPosts {
-        listBoostedPosts  {items ${boost0001}}
+    query ListBoostedPosts (
+        $filter: ModelBoostedPostFilterInput, 
+        $limit: Int, 
+        $nextToken: String
+    ) {
+        listBoostedPosts (
+            filter: $filter, 
+            limit: $limit, 
+            nextToken: $nextToken
+        )  {items ${boost0001}}
     }
 `;
 

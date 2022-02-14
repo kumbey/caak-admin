@@ -39,6 +39,7 @@ const post0006 = /* GraphQL */ `
       shares
       updatedAt
       views
+      reach
     }
     reacted
     items {

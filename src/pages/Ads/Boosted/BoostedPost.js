@@ -1,6 +1,5 @@
 import { API, graphqlOperation } from "aws-amplify";
 import { useEffect, useState } from "react";
-import Button from "../../../components/Button";
 import Tables from "../../../components/Tables";
 import { useToast } from "../../../components/Toast/ToastProvider";
 import AddEdit from "./modal/AddEdit";
@@ -13,7 +12,7 @@ import {
 } from "../../../utility/Util";
 import moment from "moment";
 import { convertDateTime } from "../../../components/utils";
-import { listBoostedPostByStatusOrderByEndDate } from "../../../graphql-custom/boost/queries";
+import { listBoostedPosts } from "../../../graphql-custom/boost/queries";
 import ConfirmAlert from "../../../components/ConfirmAlert/ConfirmAlert";
 import { deleteBoostedPost } from "../../../graphql-custom/boost/mutation";
 
@@ -27,6 +26,9 @@ const BoostedPost = () => {
   const [deleteId, setDeleteId] = useState("init");
   const [showAlert, setShowAlert] = useState(false);
 
+  const date = new Date();
+  const now = date.toISOString();
+
   const editHandler = (id, index) => {
     setEditId(id);
     setCurrentIndex(index);
@@ -35,19 +37,18 @@ const BoostedPost = () => {
   const fetchBoostedPosts = async () => {
     try {
       const resp = await API.graphql(
-        graphqlOperation(listBoostedPostByStatusOrderByEndDate, {
+        graphqlOperation(listBoostedPosts, {
           status: "ACTIVE",
-          sortDirection: "DESC",
         })
       );
-      setBoostedPosts(getReturnData(resp).items);
+      setBoostedPosts(
+        getReturnData(resp).items.sort(function (a, b) {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        })
+      );
     } catch (ex) {
       console.log(ex);
     }
-    // let res = getReturnData(resp).items.sort(function (a, b) {
-    //   return new Date(b.start_date) - new Date(a.start_date);
-    // });
-    // setBoostedPosts(res);
   };
 
   const delBoost = async (id) => {
@@ -114,13 +115,17 @@ const BoostedPost = () => {
                 <th className="text-center uppercase w-20">Хоног</th>
                 <th className="text-left uppercase w-60">Эхэлсэн огноо</th>
                 <th className="text-left uppercase w-60">Дуусах огноо</th>
-                <th className="text-left uppercase w-24">Засах</th>
+                <th className="text-center uppercase w-24">Даралт</th>
+                <th className="text-center uppercase w-24">Засах</th>
               </tr>
             </thead>
             <tbody>
               {boostedPosts.map((boost, index) => {
                 return (
-                  <tr key={index}>
+                  <tr
+                    key={index}
+                    className={`${boost.end_date < now ? "bg-red-50" : ""}`}
+                  >
                     <td className="text-center">{index + 1}</td>
                     <td>
                       <div className="flex items-center ">
@@ -147,19 +152,23 @@ const BoostedPost = () => {
                     </td>
                     <td>{convertDateTime(boost.start_date)}</td>
                     <td>{convertDateTime(boost.end_date)}</td>
+                    <td className="text-center">{boost.post.totals.views}</td>
+
                     <td>
-                      <span
-                        onClick={() => editHandler(boost.id, index)}
-                        className={"cursor-pointer"}
-                      >
-                        <i className="text-2xl text-green las la-edit" />
-                      </span>
-                      <span
-                        onClick={() => setDeleteId(boost.id)}
-                        className={"cursor-pointer"}
-                      >
-                        <i className="ml-4 text-2xl text-red las la-trash-alt" />
-                      </span>
+                      <div className="flex justify-center items-center">
+                        <span
+                          onClick={() => editHandler(boost.id, index)}
+                          className={"cursor-pointer"}
+                        >
+                          <i className="text-2xl text-green las la-edit" />
+                        </span>
+                        <span
+                          onClick={() => setDeleteId(boost.id)}
+                          className={"cursor-pointer"}
+                        >
+                          <i className="ml-4 text-2xl text-red las la-trash-alt" />
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 );

@@ -11,23 +11,26 @@ import { getPostByStatus } from "../../graphql-custom/post/queries";
 import Loader from "../Loader";
 import { useToast } from "../Toast/ToastProvider";
 import CreateBoost from "../../pages/Ads/Boosted/modal/CreateBoost";
+import { listBoostedPosts } from "../../graphql-custom/boost/queries";
 
 const PostList = ({ PageSize }) => {
   let count = 0;
   const { addToast } = useToast();
 
   const [isShowModal, setIsShowModal] = useState(false);
-  const [banners, setBanners] = useState([]);
   const [editId, setEditId] = useState("init");
   const [currentIndex, setCurrentIndex] = useState("init");
   const [deleteId, setDeleteId] = useState("init");
   const [showAlert, setShowAlert] = useState(false);
-  const [selectedType, setSelectedType] = useState("All");
+  const [boostedPosts, setBoostedPosts] = useState([]);
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState();
   const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const date = new Date();
+  const now = date.toISOString();
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -60,22 +63,31 @@ const PostList = ({ PageSize }) => {
       console.log(ex);
     }
   }
+  const fetchBoostedPosts = async () => {
+    try {
+      const resp = await API.graphql({
+        query: listBoostedPosts,
+        variables: {
+          status: "ACTIVE",
+          // end_date: { gt: now },
+        },
+      });
+      setBoostedPosts(
+        getReturnData(resp).items.filter((boost) => boost.end_date > now)
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     getAllPosts();
+    fetchBoostedPosts();
   }, []);
 
   useEffect(() => {
     if (nextNextToken) getAllPosts();
   }, [currentPage]);
-
-  // useEffect(() => {
-  //   if (selectedType === "All") {
-  //     fetchBanners();
-  //   } else {
-  //     fetchBannersType();
-  //   }
-  // }, [selectedType]);
 
   useEffect(() => {
     if (editId !== "init") {
@@ -100,7 +112,6 @@ const PostList = ({ PageSize }) => {
       setShowAlert(true);
     }
   }, [deleteId]);
-
   return posts.length > 0 ? (
     <div className="mb-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -121,6 +132,10 @@ const PostList = ({ PageSize }) => {
         <tbody>
           {currentTableData.map((post, index) => {
             count++;
+            let isBoosted = false;
+            boostedPosts.map((boost) => {
+              if (boost.post_id === post.id) isBoosted = true;
+            });
             return (
               <tr key={index}>
                 <td className="text-center">{count}</td>
@@ -202,15 +217,30 @@ const PostList = ({ PageSize }) => {
 
                 <td className="text-center">{post.totals.comments}</td>
                 <td className="text-center">{post.totals.reactions}</td>
+                <td className="text-center">
+                  {post.totals.reach ? post.totals.reach : 0}
+                </td>
                 <td className="text-center">{post.totals.views}</td>
-                <td className="text-center">click</td>
-                <td className="flex my-2 border-none">
-                  <span
-                    onClick={() => editHandler(post.id, index)}
-                    className={"cursor-pointer"}
+                <td className="flex my-2 border-none justify-center">
+                  <a
+                    href="#"
+                    className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
+                    data-bs-toggle="tooltip"
+                    title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
                   >
-                    <i className="text-2xl text-green las la-edit" />
-                  </span>
+                    <span
+                      onClick={() => !isBoosted && editHandler(post.id, index)}
+                      className={`${
+                        !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
+                      }`}
+                    >
+                      <i
+                        className={`${
+                          !isBoosted ? "text-green " : "text-red "
+                        } text-2xl las la-rocket`}
+                      />
+                    </span>
+                  </a>
                 </td>
               </tr>
             );

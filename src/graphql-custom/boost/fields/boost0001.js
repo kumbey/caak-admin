@@ -11,6 +11,25 @@ const boost0001 = /* GraphQL */ `
     status
     updatedAt
     post {
+      totals {
+        categoryAndStatus
+        category_id
+        comments
+        createdAt
+        groupAndStatus
+        group_id
+        post_id
+        reach
+        reactions
+        search_id
+        search_key
+        shares
+        status
+        total_reactions
+        updatedAt
+        userAndStatus
+        views
+      }
       title
       items{
         items{
