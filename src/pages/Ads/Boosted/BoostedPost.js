@@ -115,6 +115,7 @@ const BoostedPost = () => {
                 <th className="text-center uppercase w-20">Хоног</th>
                 <th className="text-left uppercase w-60">Эхэлсэн огноо</th>
                 <th className="text-left uppercase w-60">Дуусах огноо</th>
+                <th className="text-center uppercase w-24">Үзэлт</th>
                 <th className="text-center uppercase w-24">Даралт</th>
                 <th className="text-center uppercase w-24">Засах</th>
               </tr>
@@ -152,6 +153,9 @@ const BoostedPost = () => {
                     </td>
                     <td>{convertDateTime(boost.start_date)}</td>
                     <td>{convertDateTime(boost.end_date)}</td>
+                    <td className="text-center">
+                      {boost.post.totals.reach ? boost.post.totals.reach : 0}
+                    </td>
                     <td className="text-center">{boost.post.totals.views}</td>
 
                     <td>

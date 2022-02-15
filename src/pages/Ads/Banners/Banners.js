@@ -37,7 +37,8 @@ const Banners = () => {
     },
   ];
   const { addToast } = useToast();
-
+  const date = new Date();
+  const now = date.toISOString();
   const [isShowModal, setIsShowModal] = useState(false);
   const [banners, setBanners] = useState([]);
   const [editId, setEditId] = useState("init");
@@ -181,7 +182,10 @@ const Banners = () => {
           <tbody>
             {banners.map((banner, index) => {
               return (
-                <tr key={index}>
+                <tr
+                  key={index}
+                  className={`${banner.end_date < now ? "bg-red-50" : ""}`}
+                >
                   <td className="text-center">{index + 1}</td>
                   <td>
                     <div className="flex items-center ">

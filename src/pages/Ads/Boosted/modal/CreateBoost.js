@@ -11,8 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { addDays, getReturnData } from "../../../../utility/Util";
 import { createBoostedPost } from "../../../../graphql-custom/boost/mutation";
 import { convertDateTime } from "../../../../components/utils";
-
-const CreateBoost = ({ editId, show, setShow }) => {
+const CreateBoost = ({ editId, show, setShow, currPost }) => {
   const initData = {
     post_id: "",
     start_date: new Date(),
@@ -34,6 +33,7 @@ const CreateBoost = ({ editId, show, setShow }) => {
     try {
       const postData = {
         post_id: editId,
+        user_id: currPost.user_id,
         start_date: data.start_date ? data.start_date.toISOString() : null,
         end_date: data.end_date ? data.end_date.toISOString() : null,
         status: "ACTIVE",

@@ -26,6 +26,7 @@ const PostList = ({ PageSize }) => {
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState();
+  const [currPost, setCurrPost] = useState();
   const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -39,9 +40,10 @@ const PostList = ({ PageSize }) => {
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
 
-  const editHandler = (id, index) => {
+  const editHandler = (id, post, index) => {
     setEditId(id);
     setCurrentIndex(index);
+    setCurrPost(post);
   };
 
   async function getAllPosts() {
@@ -229,7 +231,9 @@ const PostList = ({ PageSize }) => {
                     title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
                   >
                     <span
-                      onClick={() => !isBoosted && editHandler(post.id, index)}
+                      onClick={() =>
+                        !isBoosted && editHandler(post.id, post, index)
+                      }
                       className={`${
                         !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
                       }`}
@@ -259,6 +263,7 @@ const PostList = ({ PageSize }) => {
         editId={editId}
         show={isShowModal}
         setShow={setIsShowModal}
+        currPost={currPost}
       />
     </div>
   ) : (

@@ -9,10 +9,7 @@ import { useToast } from "../../../../components/Toast/ToastProvider";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, getDiffDays, getReturnData } from "../../../../utility/Util";
-import {
-  createBoostedPost,
-  updateBoostedPost,
-} from "../../../../graphql-custom/boost/mutation";
+import { updateBoostedPost } from "../../../../graphql-custom/boost/mutation";
 import moment from "moment";
 import { convertDateTime } from "../../../../components/utils";
 import { getBoostedPost } from "../../../../graphql-custom/boost/queries";
@@ -72,6 +69,7 @@ const AddEdit = ({
     try {
       const postData = {
         id: editId,
+        user_id: data.post.user_id,
         start_date: data.start_date ? data.start_date.toISOString() : null,
         end_date: data.end_date ? data.end_date.toISOString() : null,
         status: "ACTIVE",
