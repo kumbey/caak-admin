@@ -56,6 +56,7 @@ const Categories = () => {
         addToast({
           content: `${currentEditingData.name}`,
           title: "Амжилттай",
+          type: "update",
           autoClose: true,
         });
       });
@@ -77,6 +78,7 @@ const Categories = () => {
         addToast({
           content: `Устгалаа`,
           title: "Амжилттай",
+          type: "delete",
           autoClose: true,
         });
       });
@@ -98,6 +100,7 @@ const Categories = () => {
           addToast({
             content: `${result.data.createCategory.name} амжилттай үүслээ`,
             title: "Амжилттай",
+            type: "update",
             autoClose: true,
           });
           setIsLoading(false);

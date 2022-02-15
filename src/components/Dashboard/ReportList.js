@@ -80,9 +80,10 @@ const ReportList = ({ PageSize }) => {
       setShowAlert(false);
 
       addToast({
-        content: `Шалгалаа`,
-        title: "Амжилттай",
+        title: `Амжилттай`,
+        content: "Шалгалаа",
         autoClose: true,
+        type: "update",
       });
     } catch (error) {
       console.log(error);
@@ -106,6 +107,7 @@ const ReportList = ({ PageSize }) => {
         content: `Зөвшөөрлөө`,
         title: "Амжилттай",
         autoClose: true,
+        type: "update",
       });
     } catch (error) {
       console.log(error);
@@ -158,19 +160,24 @@ const ReportList = ({ PageSize }) => {
                   }
                 >
                   <div className="flex items-center">
-                    <img
-                      className="mr-2 cursor-pointer w-12 h-12 object-cover"
-                      src={
-                        report?.post?.items?.items[0]?.file?.type?.startsWith(
-                          "video"
-                        )
-                          ? placeholder
-                          : report?.post?.items?.items[0]?.file
-                          ? getFileUrl(report?.post?.items?.items[0]?.file)
-                          : getGenderImage("default")
-                      }
-                      alt="image"
-                    />
+                    <div
+                      className="mr-2"
+                      style={{ minWidth: "48px", minHeight: "48px" }}
+                    >
+                      <img
+                        className=" cursor-pointer w-12 h-12 object-cover"
+                        src={
+                          report?.post?.items?.items[0]?.file?.type?.startsWith(
+                            "video"
+                          )
+                            ? placeholder
+                            : report?.post?.items?.items[0]?.file
+                            ? getFileUrl(report?.post?.items?.items[0]?.file)
+                            : getGenderImage("default")
+                        }
+                        alt="image"
+                      />
+                    </div>
                     <p className="line-clamp cursor-pointer">
                       {report?.post?.title}
                     </p>

@@ -9,14 +9,29 @@ import Pagination from "../Pagination/Pagination";
 import { API } from "aws-amplify";
 import { getPostByStatus } from "../../graphql-custom/post/queries";
 import Loader from "../Loader";
+import { useToast } from "../Toast/ToastProvider";
+import CreateBoost from "../../pages/Ads/Boosted/modal/CreateBoost";
+import { listBoostedPosts } from "../../graphql-custom/boost/queries";
 
 const PostList = ({ PageSize }) => {
   let count = 0;
+  const { addToast } = useToast();
+
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [editId, setEditId] = useState("init");
+  const [currentIndex, setCurrentIndex] = useState("init");
+  const [deleteId, setDeleteId] = useState("init");
+  const [showAlert, setShowAlert] = useState(false);
+  const [boostedPosts, setBoostedPosts] = useState([]);
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState();
+  const [currPost, setCurrPost] = useState();
   const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
+
+  const date = new Date();
+  const now = date.toISOString();
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -25,13 +40,19 @@ const PostList = ({ PageSize }) => {
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
 
+  const editHandler = (id, post, index) => {
+    setEditId(id);
+    setCurrentIndex(index);
+    setCurrPost(post);
+  };
+
   async function getAllPosts() {
     let resp;
     try {
       resp = await API.graphql({
         query: getPostByStatus,
         variables: {
-          status: "ARCHIVED",
+          status: "CONFIRMED",
           sortDirection: "DESC",
           nextToken: nextNextToken,
           limit: 20,
@@ -44,15 +65,55 @@ const PostList = ({ PageSize }) => {
       console.log(ex);
     }
   }
+  const fetchBoostedPosts = async () => {
+    try {
+      const resp = await API.graphql({
+        query: listBoostedPosts,
+        variables: {
+          status: "ACTIVE",
+          // end_date: { gt: now },
+        },
+      });
+      setBoostedPosts(
+        getReturnData(resp).items.filter((boost) => boost.end_date > now)
+      );
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
 
   useEffect(() => {
     getAllPosts();
+    fetchBoostedPosts();
   }, []);
 
   useEffect(() => {
     if (nextNextToken) getAllPosts();
   }, [currentPage]);
 
+  useEffect(() => {
+    if (editId !== "init") {
+      setIsShowModal(true);
+    }
+  }, [editId]);
+
+  useEffect(() => {
+    if (!isShowModal) {
+      setEditId("init");
+    }
+  }, [isShowModal]);
+
+  useEffect(() => {
+    if (!showAlert) {
+      setDeleteId("init");
+    }
+  }, [showAlert]);
+
+  useEffect(() => {
+    if (deleteId !== "init") {
+      setShowAlert(true);
+    }
+  }, [deleteId]);
   return posts.length > 0 ? (
     <div className="mb-4">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -60,37 +121,50 @@ const PostList = ({ PageSize }) => {
           <tr>
             <th className="text-left uppercase">NO</th>
             <th className="text-left uppercase w-96">Пост</th>
-            <th className="text-left uppercase w-56">Групп</th>
-            <th className="text-left uppercase w-40">Нэмсэн хүн</th>
-            <th className="text-left uppercase w-36">Үүссэн огноо</th>
+            <th className="text-left uppercase w-36">Групп</th>
+            <th className="text-left uppercase w-36">Нэмсэн хүн</th>
+            <th className="text-left uppercase w-32">Үүссэн огноо</th>
             <th className="text-left uppercase">Сэтгэгдэл</th>
             <th className="text-left uppercase">Саак</th>
             <th className="text-left uppercase">Үзэлт</th>
+            <th className="text-left uppercase">Даралт</th>
+            <th className="text-left uppercase">Үйлдэл</th>
           </tr>
         </thead>
         <tbody>
           {currentTableData.map((post, index) => {
             count++;
+            let isBoosted = false;
+            boostedPosts.map((boost) => {
+              if (boost.post_id === post.id) isBoosted = true;
+            });
             return (
               <tr key={index}>
                 <td className="text-center">{count}</td>
 
                 <td>
                   <div className="flex items-center  ">
-                    <img
-                      onClick={() =>
-                        window.open(`https://www.caak.mn/post/view/${post.id}`)
-                      }
-                      className="mr-2 cursor-pointer w-12 h-12 object-cover"
-                      src={
-                        post?.items?.items[0]?.file?.type?.startsWith("video")
-                          ? placeholder
-                          : post?.items?.items[0]?.file
-                          ? getFileUrl(post.items.items[0].file)
-                          : getGenderImage("default")
-                      }
-                      alt={post?.items?.items[0]?.file?.type}
-                    />
+                    <div
+                      className="mr-2"
+                      style={{ minWidth: "48px", minHeight: "48px" }}
+                    >
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/post/view/${post.id}`
+                          )
+                        }
+                        className=" cursor-pointer w-12 h-12 object-cover"
+                        src={
+                          post?.items?.items[0]?.file?.type?.startsWith("video")
+                            ? placeholder
+                            : post?.items?.items[0]?.file
+                            ? getFileUrl(post.items.items[0].file)
+                            : getGenderImage("default")
+                        }
+                        alt={post?.items?.items[0]?.file?.type}
+                      />
+                    </div>
                     <p
                       onClick={() =>
                         window.open(`https://www.caak.mn/post/view/${post.id}`)
@@ -145,7 +219,33 @@ const PostList = ({ PageSize }) => {
 
                 <td className="text-center">{post.totals.comments}</td>
                 <td className="text-center">{post.totals.reactions}</td>
+                <td className="text-center">
+                  {post.totals.reach ? post.totals.reach : 0}
+                </td>
                 <td className="text-center">{post.totals.views}</td>
+                <td className="flex my-2 border-none justify-center">
+                  <a
+                    href="#"
+                    className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
+                    data-bs-toggle="tooltip"
+                    title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
+                  >
+                    <span
+                      onClick={() =>
+                        !isBoosted && editHandler(post.id, post, index)
+                      }
+                      className={`${
+                        !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
+                      }`}
+                    >
+                      <i
+                        className={`${
+                          !isBoosted ? "text-green " : "text-red "
+                        } text-2xl las la-rocket`}
+                      />
+                    </span>
+                  </a>
+                </td>
               </tr>
             );
           })}
@@ -157,6 +257,13 @@ const PostList = ({ PageSize }) => {
         totalCount={posts.length}
         pageSize={PageSize}
         onPageChange={(page) => setCurrentPage(page)}
+      />
+      <CreateBoost
+        currentIndex={currentIndex}
+        editId={editId}
+        show={isShowModal}
+        setShow={setIsShowModal}
+        currPost={currPost}
       />
     </div>
   ) : (

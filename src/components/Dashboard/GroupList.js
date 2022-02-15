@@ -71,18 +71,23 @@ const GroupList = ({ PageSize }) => {
                 <td className="text-center">{count}</td>
                 <td>
                   <div className="flex items-center ">
-                    <img
-                      onClick={() =>
-                        window.open(`https://www.caak.mn/group/${group.id}`)
-                      }
-                      className="mr-2 w-12 h-12 object-cover cursor-pointer"
-                      src={
-                        group?.profile
-                          ? getFileUrl(group.profile)
-                          : getGenderImage("default")
-                      }
-                      alt={""}
-                    />
+                    <div
+                      className="mr-2"
+                      style={{ minWidth: "48px", minHeight: "48px" }}
+                    >
+                      <img
+                        onClick={() =>
+                          window.open(`https://www.caak.mn/group/${group.id}`)
+                        }
+                        className="w-12 h-12 object-cover cursor-pointer"
+                        src={
+                          group?.profile
+                            ? getFileUrl(group.profile)
+                            : getGenderImage("default")
+                        }
+                        alt={""}
+                      />
+                    </div>
                     <p
                       onClick={() =>
                         window.open(`https://www.caak.mn/group/${group.id}`)

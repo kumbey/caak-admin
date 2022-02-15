@@ -11,6 +11,7 @@ const banner0001 = /* GraphQL */ `
     meta
     type
     typeName
+    views
     pic1_id
     pic1 ${file0001}
     pic2_id

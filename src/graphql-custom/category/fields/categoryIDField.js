@@ -1,6 +1,7 @@
 const categoryIDField = /* GraphQL */ `
   {
     id
+    name
   }
 `;
 

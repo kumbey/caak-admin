@@ -39,9 +39,10 @@ const Edit = ({
     arr[currentIndex] = resp.data.updateGroupUsers;
     setUsers(arr);
     addToast({
-      content: `Өөрчлөлтийг хадгаллаа.`,
+      content: `${resp.data.updateGroupUsers.user.nickname}-ийн эрхийг ${selectedRole} болголоо.`,
       title: "Амжилттай",
       autoClose: true,
+      type: "update",
     });
     close();
   };

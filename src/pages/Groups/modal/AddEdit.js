@@ -103,7 +103,9 @@ const AddEdit = ({
         );
         setGroups((prevState) => [...prevState, resp.data.createGroup]);
         addToast({
+          title: `Амжилттай үүслээ.`,
           content: `${resp.data.createGroup.name} амжилттай үүслээ.`,
+          type: "update",
           autoClose: true,
         });
       } else if (editId !== "new" && editId !== "init") {
@@ -118,6 +120,8 @@ const AddEdit = ({
         arr[currentIndex] = resp.data.updateGroup;
         setGroups(arr);
         addToast({
+          title: `Амжилттай хадгаллаа.`,
+          type: "update",
           content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
           autoClose: true,
         });
