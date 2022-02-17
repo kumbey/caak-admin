@@ -123,20 +123,22 @@ const Reports = () => {
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>
-                    <span
-                      onClick={() => editHandler(report.id, index)}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="las la-edit text-2xl text-green" />
-                    </span>
-                    <span
-                      onClick={() => {
-                        setDeleteId(report.id);
-                      }}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="las la-trash-alt text-2xl ml-4 text-red" />
-                    </span>
+                    <div className="w-20">
+                      <span
+                        onClick={() => editHandler(report.id, index)}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="las la-edit text-2xl text-green" />
+                      </span>
+                      <span
+                        onClick={() => {
+                          setDeleteId(report.id);
+                        }}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="las la-trash-alt text-2xl ml-4 text-red" />
+                      </span>
+                    </div>
                   </td>
                 </tr>
               );

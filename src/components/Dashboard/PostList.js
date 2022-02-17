@@ -116,141 +116,150 @@ const PostList = ({ PageSize }) => {
   }, [deleteId]);
   return posts.length > 0 ? (
     <div className="mb-4">
-      <Tables styles="hoverable table_bordered" fullWidth="w-full">
-        <thead>
-          <tr>
-            <th className="text-left uppercase">NO</th>
-            <th className="text-left uppercase w-96">Пост</th>
-            <th className="text-left uppercase w-36">Групп</th>
-            <th className="text-left uppercase w-36">Нэмсэн хүн</th>
-            <th className="text-left uppercase w-32">Үүссэн огноо</th>
-            <th className="text-left uppercase">Сэтгэгдэл</th>
-            <th className="text-left uppercase">Саак</th>
-            <th className="text-left uppercase">Үзэлт</th>
-            <th className="text-left uppercase">Даралт</th>
-            <th className="text-left uppercase">Үйлдэл</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentTableData.map((post, index) => {
-            count++;
-            let isBoosted = false;
-            boostedPosts.map((boost) => {
-              if (boost.post_id === post.id) isBoosted = true;
-            });
-            return (
-              <tr key={index}>
-                <td className="text-center">{count}</td>
+      <div style={{ minWidth: "320px" }} className={"overflow-x-auto"}>
+        <Tables styles="hoverable table_bordered" fullWidth="w-full">
+          <thead>
+            <tr>
+              <th className="text-left uppercase">NO</th>
+              <th className="text-left uppercase w-96">Пост</th>
+              <th className="text-left uppercase w-36">Групп</th>
+              <th className="text-left uppercase w-36">Нэмсэн хүн</th>
+              <th className="text-left uppercase w-32">Үүссэн огноо</th>
+              <th className="text-left uppercase">Сэтгэгдэл</th>
+              <th className="text-left uppercase">Саак</th>
+              <th className="text-left uppercase">Үзэлт</th>
+              <th className="text-left uppercase">Даралт</th>
+              <th className="text-left uppercase">Үйлдэл</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentTableData.map((post, index) => {
+              count++;
+              let isBoosted = false;
+              boostedPosts.map((boost) => {
+                if (boost.post_id === post.id) isBoosted = true;
+              });
+              return (
+                <tr key={index}>
+                  <td className="text-center">{count}</td>
 
-                <td>
-                  <div className="flex items-center  ">
-                    <div
-                      className="mr-2"
-                      style={{ minWidth: "48px", minHeight: "48px" }}
-                    >
-                      <img
+                  <td>
+                    <div className="flex items-center">
+                      <div
+                        className="mr-2"
+                        style={{ minWidth: "48px", minHeight: "48px" }}
+                      >
+                        <img
+                          onClick={() =>
+                            window.open(
+                              `https://www.caak.mn/post/view/${post.id}`
+                            )
+                          }
+                          className=" cursor-pointer w-12 h-12 object-cover"
+                          src={
+                            post?.items?.items[0]?.file?.type?.startsWith(
+                              "video"
+                            )
+                              ? placeholder
+                              : post?.items?.items[0]?.file
+                              ? getFileUrl(post.items.items[0].file)
+                              : getGenderImage("default")
+                          }
+                          alt={post?.items?.items[0]?.file?.type}
+                        />
+                      </div>
+                      <p
                         onClick={() =>
                           window.open(
                             `https://www.caak.mn/post/view/${post.id}`
                           )
                         }
-                        className=" cursor-pointer w-12 h-12 object-cover"
+                        className="cursor-pointer truncate-3"
+                      >
+                        {post.title}
+                      </p>
+                    </div>
+                  </td>
+
+                  <td>
+                    <p
+                      className="cursor-pointer truncate-3"
+                      onClick={() =>
+                        window.open(
+                          `https://www.caak.mn/group/${post.group.id}`
+                        )
+                      }
+                    >
+                      {post.group.name}
+                    </p>
+                  </td>
+                  <td>
+                    <div className=" flex items-center w-36">
+                      <img
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/user/${post.user.id}/profile`
+                          )
+                        }
+                        className="mr-2 cursor-pointer rounded-full"
+                        style={{ height: "32px", width: "32px" }}
                         src={
-                          post?.items?.items[0]?.file?.type?.startsWith("video")
-                            ? placeholder
-                            : post?.items?.items[0]?.file
-                            ? getFileUrl(post.items.items[0].file)
+                          post?.user?.pic
+                            ? getFileUrl(post?.user.pic)
                             : getGenderImage("default")
                         }
-                        alt={post?.items?.items[0]?.file?.type}
+                        alt={post?.user.pic?.type}
                       />
+                      <p
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/user/${post.user.id}/profile`
+                          )
+                        }
+                        className="cursor-pointer truncate-3"
+                      >
+                        {post.user.nickname}
+                      </p>
                     </div>
-                    <p
-                      onClick={() =>
-                        window.open(`https://www.caak.mn/post/view/${post.id}`)
-                      }
-                      className="cursor-pointer line-clamp"
-                    >
-                      {post.title}
-                    </p>
-                  </div>
-                </td>
+                  </td>
+                  <td className="text-xs">{convertDateTime(post.createdAt)}</td>
 
-                <td>
-                  <p
-                    className="cursor-pointer line-clamp"
-                    onClick={() =>
-                      window.open(`https://www.caak.mn/group/${post.group.id}`)
-                    }
-                  >
-                    {post.group.name}
-                  </p>
-                </td>
-                <td>
-                  <div className=" flex items-center">
-                    <img
-                      onClick={() =>
-                        window.open(
-                          `https://www.caak.mn/user/${post.user.id}/profile`
-                        )
-                      }
-                      className="mr-2 cursor-pointer rounded-full"
-                      style={{ height: "32px", width: "32px" }}
-                      src={
-                        post?.user?.pic
-                          ? getFileUrl(post?.user.pic)
-                          : getGenderImage("default")
-                      }
-                      alt={post?.user.pic?.type}
-                    />
-                    <p
-                      onClick={() =>
-                        window.open(
-                          `https://www.caak.mn/user/${post.user.id}/profile`
-                        )
-                      }
-                      className="cursor-pointer line-clamp"
+                  <td className="text-center">{post.totals.comments}</td>
+                  <td className="text-center">{post.totals.reactions}</td>
+                  <td className="text-center">
+                    {post.totals.reach ? post.totals.reach : 0}
+                  </td>
+                  <td className="text-center">{post.totals.views}</td>
+                  <td className="flex my-2 border-none justify-center">
+                    <a
+                      href="#"
+                      className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
+                      data-bs-toggle="tooltip"
+                      title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
                     >
-                      {post.user.nickname}
-                    </p>
-                  </div>
-                </td>
-                <td className="text-xs">{convertDateTime(post.createdAt)}</td>
-
-                <td className="text-center">{post.totals.comments}</td>
-                <td className="text-center">{post.totals.reactions}</td>
-                <td className="text-center">
-                  {post.totals.reach ? post.totals.reach : 0}
-                </td>
-                <td className="text-center">{post.totals.views}</td>
-                <td className="flex my-2 border-none justify-center">
-                  <a
-                    href="#"
-                    className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
-                    data-bs-toggle="tooltip"
-                    title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
-                  >
-                    <span
-                      onClick={() =>
-                        !isBoosted && editHandler(post.id, post, index)
-                      }
-                      className={`${
-                        !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
-                      }`}
-                    >
-                      <i
+                      <span
+                        onClick={() =>
+                          !isBoosted && editHandler(post.id, post, index)
+                        }
                         className={`${
-                          !isBoosted ? "text-green " : "text-red "
-                        } text-2xl las la-rocket`}
-                      />
-                    </span>
-                  </a>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Tables>
+                          !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
+                        }`}
+                      >
+                        <i
+                          className={`${
+                            !isBoosted ? "text-green " : "text-red "
+                          } text-2xl las la-rocket`}
+                        />
+                      </span>
+                    </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </Tables>
+      </div>
+
       <Pagination
         className="pagination-bar"
         currentPage={currentPage}

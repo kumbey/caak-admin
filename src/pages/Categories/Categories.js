@@ -98,7 +98,7 @@ const Categories = () => {
             <tr>
               <th className="text-left uppercase">NO</th>
               <th className="text-left uppercase">Нэр</th>
-              <th className="text-left uppercase">Зураг</th>
+              <th className="text-center uppercase">Зураг</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
               <th className="text-left uppercase">Засах</th>
@@ -110,11 +110,13 @@ const Categories = () => {
                 <tr key={index}>
                   <td>{index + 1}</td>
                   <td>
-                    {cat.icon + " "}
-                    {cat.name}
+                    <p className="w-44">
+                      {cat.icon + " "}
+                      {cat.name}
+                    </p>
                   </td>
                   <td>
-                    <div className="flex items-center  ">
+                    <div className="flex items-center justify-center ">
                       <img
                         className="mr-2 cursor-pointer w-12 h-12 object-cover"
                         src={
@@ -133,20 +135,22 @@ const Categories = () => {
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>
-                    <span
-                      onClick={() => editHandler(cat.id, index)}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="las la-edit text-2xl text-green" />
-                    </span>
-                    <span
-                      onClick={() => {
-                        setDeleteId(cat.id);
-                      }}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="las la-trash-alt text-2xl ml-4 text-red " />
-                    </span>
+                    <div className="w-20">
+                      <span
+                        onClick={() => editHandler(cat.id, index)}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="las la-edit text-2xl text-green" />
+                      </span>
+                      <span
+                        onClick={() => {
+                          setDeleteId(cat.id);
+                        }}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="las la-trash-alt text-2xl ml-4 text-red " />
+                      </span>
+                    </div>
                   </td>
                 </tr>
               );

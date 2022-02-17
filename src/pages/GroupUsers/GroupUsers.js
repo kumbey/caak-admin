@@ -14,9 +14,11 @@ import {
 import { getCategoryList } from "../../graphql-custom/category/queries";
 import { getReturnData } from "../../utility/Util";
 import Pagination from "../../components/Pagination/Pagination";
+import Input from "../../components/Input";
 
 const GroupUsers = () => {
   const [selectedGroup, setSelectedGroup] = useState();
+  const [selectedType, setSelectedType] = useState("nickname");
   const [groups, setGroups] = useState([]);
   const [cats, setCats] = useState([]);
   const [users, setUsers] = useState([]);
@@ -25,8 +27,26 @@ const GroupUsers = () => {
   const [userRole, setUserRole] = useState("");
   const [currentIndex, setCurrentIndex] = useState(1);
   const [nextNextToken, setNextNextToken] = useState(undefined);
+  const [data, setData] = useState("");
+  const [render, setRender] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(1);
+
+  const sortType = [
+    {
+      id: 0,
+      name: "nickname",
+      icon: "",
+      text: "Ник нэр",
+    },
+
+    {
+      id: 1,
+      name: "role",
+      icon: "",
+      text: "Эрх",
+    },
+  ];
 
   let count = 0;
   let PageSize = 50;
@@ -34,15 +54,56 @@ const GroupUsers = () => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     count = (currentPage - 1) * PageSize;
-
-    return users.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, users]);
+    console.log(selectedType);
+    return users
+      .sort(function (a, b) {
+        if (selectedType === "nickname") {
+          if (
+            a.user[`${selectedType}`].toLowerCase() <
+            b.user[`${selectedType}`].toLowerCase()
+          ) {
+            return -1;
+          }
+          if (
+            a.user[`${selectedType}`].toLowerCase() >
+            b.user[`${selectedType}`].toLowerCase()
+          ) {
+            return 1;
+          }
+          return 0;
+        } else if (selectedType === "role") {
+          if (
+            a[`${selectedType}`].toLowerCase() <
+            b[`${selectedType}`].toLowerCase()
+          ) {
+            return -1;
+          }
+          if (
+            a[`${selectedType}`].toLowerCase() >
+            b[`${selectedType}`].toLowerCase()
+          ) {
+            return 1;
+          }
+          return 0;
+        }
+      })
+      .filter(
+        (user) =>
+          user.user.nickname.toLowerCase().includes(data) ||
+          user.user.id.toLowerCase().includes(data)
+      )
+      .slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, users, data, selectedType]);
 
   const handleChange = (e) => {
     setUsers([]);
     setCurrentPage(1);
     setNextNextToken(undefined);
     setSelectedGroup(e.target.value);
+  };
+
+  const handleSelectedType = (e) => {
+    setSelectedType(e.target.value.toLowerCase());
   };
 
   const editHandler = (id, role, index) => {
@@ -126,7 +187,7 @@ const GroupUsers = () => {
 
   useEffect(() => {
     if (nextNextToken) getUsers(selectedGroup);
-  }, [currentPage]);
+  }, [currentPage, data, nextNextToken]);
 
   return (
     <div className="flex flex-col w-screen h-screen font-sans workspace">
@@ -153,6 +214,31 @@ const GroupUsers = () => {
               );
             })}
           </Select>
+
+          <div className="ml-6 flex justify-between w-full">
+            <Input
+              placeholder="Нэр / Никнэр / ID"
+              value={data}
+              onChange={(e) => setData(e.target.value)}
+            />
+            <Select
+              name="group_id"
+              // title="Груп сонгох"
+              value={selectedType || "DEFAULT"}
+              onChange={handleSelectedType}
+            >
+              <option value={"DEFAULT"} disabled hidden>
+                Эрэмбэлэх...
+              </option>
+              {sortType.map((type, index) => {
+                return (
+                  <option key={index} value={type.name}>
+                    {`${type?.icon} ${type.text}`}
+                  </option>
+                );
+              })}
+            </Select>
+          </div>
         </div>
       </div>
       <div className="mb-4">
@@ -185,7 +271,7 @@ const GroupUsers = () => {
                         editHandler(user.user.id, user.role, index)
                       }
                     >
-                      <i className="text-2xl las la-edit" />
+                      <i className="text-2xl text-green las la-edit" />
                     </span>
                   </td>
                 </tr>

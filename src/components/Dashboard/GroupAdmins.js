@@ -23,7 +23,7 @@ const GroupAdmins = ({ groupId }) => {
   }, [groupId]);
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 gap-2 w-60 md:w-96">
       {admins.map((admin, i) => {
         return admin.role === "ADMIN" || admin.role === "MODERATOR" ? (
           <div key={i} className="flex items-center">
@@ -43,7 +43,7 @@ const GroupAdmins = ({ groupId }) => {
               onClick={() =>
                 window.open(`https://www.caak.mn/user/${admin.user.id}/profile`)
               }
-              className="line-clamp cursor-pointer "
+              className="truncate-3 cursor-pointer w-36"
             >
               {admin.user.nickname}
             </p>
