@@ -28,7 +28,6 @@ const GroupUsers = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [nextNextToken, setNextNextToken] = useState(undefined);
   const [data, setData] = useState("");
-  const [render, setRender] = useState(0);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -54,7 +53,6 @@ const GroupUsers = () => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
     count = (currentPage - 1) * PageSize;
-    console.log(selectedType);
     return users
       .sort(function (a, b) {
         if (selectedType === "nickname") {
@@ -89,8 +87,9 @@ const GroupUsers = () => {
       })
       .filter(
         (user) =>
-          user.user.nickname.toLowerCase().includes(data) ||
-          user.user.id.toLowerCase().includes(data)
+          user?.user?.nickname?.toLowerCase().includes(data) ||
+          user?.user?.id?.toLowerCase().includes(data) ||
+          user?.user?.firstname?.toLowerCase().includes(data)
       )
       .slice(firstPageIndex, lastPageIndex);
   }, [currentPage, users, data, selectedType]);
