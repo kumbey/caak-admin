@@ -139,7 +139,7 @@ const BoostedPost = () => {
                           }
                           alt={""}
                         />
-                        <p className=" line-clamp">{boost.post.title}</p>
+                        <p className=" truncate-3 w-96">{boost.post.title}</p>
                       </div>
                     </td>
 

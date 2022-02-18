@@ -92,7 +92,7 @@ const GroupList = ({ PageSize }) => {
                       onClick={() =>
                         window.open(`https://www.caak.mn/group/${group.id}`)
                       }
-                      className="cursor-pointer line-clamp"
+                      className="cursor-pointer truncate-3 w-44"
                     >
                       {group.name}
                     </p>
@@ -131,7 +131,7 @@ const GroupList = ({ PageSize }) => {
                           `https://www.caak.mn/user/${group.founder.id}/profile`
                         )
                       }
-                      className="line-clamp cursor-pointer "
+                      className="truncate-3 cursor-pointer w-36"
                     >
                       {group.founder.nickname}
                     </p>

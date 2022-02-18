@@ -178,7 +178,7 @@ const ReportList = ({ PageSize }) => {
                         alt="image"
                       />
                     </div>
-                    <p className="line-clamp cursor-pointer">
+                    <p className="truncate-3 w-96 cursor-pointer">
                       {report?.post?.title}
                     </p>
                   </div>

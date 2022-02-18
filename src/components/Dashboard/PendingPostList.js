@@ -135,7 +135,7 @@ const PendingPostList = ({ PageSize }) => {
                       onClick={() =>
                         window.open(`https://www.caak.mn/post/view/${post.id}`)
                       }
-                      className="cursor-pointer line-clamp"
+                      className="cursor-pointer truncate-3"
                     >
                       {post.title}
                     </p>
@@ -144,7 +144,7 @@ const PendingPostList = ({ PageSize }) => {
 
                 <td>
                   <p
-                    className="cursor-pointer line-clamp"
+                    className="cursor-pointer truncate-2"
                     onClick={() =>
                       window.open(`https://www.caak.mn/group/${post.group.id}`)
                     }
@@ -159,7 +159,7 @@ const PendingPostList = ({ PageSize }) => {
                         `https://www.caak.mn/user/${post.user.id}/profile`
                       )
                     }
-                    className="cursor-pointer line-clamp"
+                    className="cursor-pointer truncate-3"
                   >
                     {post.user.nickname}
                   </p>

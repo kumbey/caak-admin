@@ -121,7 +121,7 @@ const Groups = () => {
               <th className="text-left uppercase">Категори нэр</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
-              <th className="text-left uppercase">Засах</th>
+              <th className="text-center uppercase">Засах</th>
             </tr>
           </thead>
           <tbody>
@@ -150,7 +150,7 @@ const Groups = () => {
                         onClick={() =>
                           window.open(`https://www.caak.mn/group/${group.id}`)
                         }
-                        className="cursor-pointer line-clamp"
+                        className="cursor-pointer line-clamp w-60"
                       >
                         {group.name}
                       </p>
@@ -164,12 +164,12 @@ const Groups = () => {
                       ? convertDateTime(group.updatedAt)
                       : "Засвар ороогүй"
                   }`}</td>
-                  <td>
+                  <td className="flex justify-center">
                     <span
                       onClick={() => editHandler(group.id, index)}
                       className={"cursor-pointer"}
                     >
-                      <i className="text-2xl las la-edit" />
+                      <i className="text-2xl text-green las la-edit" />
                     </span>
                     {/* <span
                       onClick={() => setDeleteId(group.id)}

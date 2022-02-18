@@ -61,6 +61,7 @@ const CreateBoost = ({ editId, show, setShow, currPost }) => {
 
   const close = () => {
     setShow(false);
+    setData(initData);
   };
 
   useEffect(() => {

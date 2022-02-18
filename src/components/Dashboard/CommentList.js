@@ -99,7 +99,7 @@ const CommentList = ({ PageSize }) => {
                           `https://www.caak.mn/post/view/${comment.post.id}`
                         )
                       }
-                      className="cursor-pointer line-clamp "
+                      className="cursor-pointer truncate-3 w-96"
                     >
                       {comment?.post?.title}
                     </p>
@@ -107,7 +107,7 @@ const CommentList = ({ PageSize }) => {
                 </td>
 
                 <td>
-                  <p className="line-clamp ">{comment.comment}</p>
+                  <p className="line-clamp w-96">{comment.comment}</p>
                 </td>
                 <td>
                   <div className=" flex items-center">
@@ -132,7 +132,7 @@ const CommentList = ({ PageSize }) => {
                           `https://www.caak.mn/user/${comment.user.id}/profile`
                         )
                       }
-                      className="cursor-pointer line-clamp"
+                      className="cursor-pointer line-clamp w-36"
                     >
                       {comment.user.nickname}
                     </p>

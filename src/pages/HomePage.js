@@ -56,7 +56,7 @@ const HomePage = () => {
               key={index}
               onClick={() => setActiveIndex(index)}
             >
-              <h6 className="cursor-pointer">{menu.name}</h6>
+              <h6 className="cursor-pointer truncate-2">{menu.name}</h6>
             </div>
           );
         })}

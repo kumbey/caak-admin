@@ -198,7 +198,7 @@ const Banners = () => {
                         }
                         alt={""}
                       />
-                      <p className=" line-clamp">{banner.title}</p>
+                      <p className=" truncate-3 w-96">{banner.title}</p>
                     </div>
                   </td>
 
@@ -216,18 +216,20 @@ const Banners = () => {
                     {banner.views ? banner.views : 0}
                   </td>
                   <td>
-                    <span
-                      onClick={() => editHandler(banner.id, index)}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="text-2xl text-green las la-edit" />
-                    </span>
-                    <span
-                      onClick={() => setDeleteId(banner.id)}
-                      className={"cursor-pointer"}
-                    >
-                      <i className="ml-4 text-2xl text-red las la-trash-alt" />
-                    </span>
+                    <div className="w-20">
+                      <span
+                        onClick={() => editHandler(banner.id, index)}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="text-2xl text-green las la-edit" />
+                      </span>
+                      <span
+                        onClick={() => setDeleteId(banner.id)}
+                        className={"cursor-pointer"}
+                      >
+                        <i className="ml-4 text-2xl text-red las la-trash-alt" />
+                      </span>
+                    </div>
                   </td>
                 </tr>
               );
