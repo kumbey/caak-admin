@@ -2,7 +2,12 @@ import { API, graphqlOperation } from "aws-amplify";
 import { useState, useMemo, useEffect } from "react";
 import { listGroups } from "../../graphql-custom/group/queries";
 
-import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
+import {
+  getFileUrl,
+  getGenderImage,
+  getReturnData,
+  kFormatter,
+} from "../../utility/Util";
 import Loader from "../Loader";
 import Pagination from "../Pagination/Pagination";
 import Tables from "../Tables";
@@ -106,7 +111,7 @@ const GroupList = ({ PageSize }) => {
                 </td>
 
                 <td>
-                  <p className="text-center">{group.aura}</p>
+                  <p className="text-center">{kFormatter(group.aura)}</p>
                 </td>
                 <td>
                   <div className="flex items-center">

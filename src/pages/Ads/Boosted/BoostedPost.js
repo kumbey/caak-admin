@@ -9,6 +9,7 @@ import {
   getFileUrl,
   getGenderImage,
   getReturnData,
+  kFormatter,
 } from "../../../utility/Util";
 import moment from "moment";
 import { convertDateTime } from "../../../components/utils";
@@ -115,8 +116,8 @@ const BoostedPost = () => {
                 <th className="text-center uppercase w-20">Хоног</th>
                 <th className="text-left uppercase w-60">Эхэлсэн огноо</th>
                 <th className="text-left uppercase w-60">Дуусах огноо</th>
-                <th className="text-center uppercase w-24">Үзэлт</th>
-                <th className="text-center uppercase w-24">Даралт</th>
+                <th className="text-center uppercase w-24">Харсан тоо</th>
+                <th className="text-center uppercase w-24">Үзсэн тоо</th>
                 <th className="text-center uppercase w-24">Засах</th>
               </tr>
             </thead>
@@ -154,9 +155,15 @@ const BoostedPost = () => {
                     <td>{convertDateTime(boost.start_date)}</td>
                     <td>{convertDateTime(boost.end_date)}</td>
                     <td className="text-center">
-                      {boost.post.totals.reach ? boost.post.totals.reach : 0}
+                      {boost.post.totals.reach
+                        ? kFormatter(boost.post.totals.reach)
+                        : 0}
                     </td>
-                    <td className="text-center">{boost.post.totals.views}</td>
+                    <td className="text-center">
+                      {boost.post.totals.views
+                        ? kFormatter(boost.post.totals.views)
+                        : 0}
+                    </td>
 
                     <td>
                       <div className="flex justify-center items-center">

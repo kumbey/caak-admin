@@ -157,8 +157,8 @@ export function getRandomInt(max) {
 }
 
 export function generateFileUrl(file) {
-  if (file){
-    if(file.bucket.includes("dev")){
+  if (file) {
+    if (file.bucket.includes("dev")) {
       return (
         "https://bucket-dev.caak.mn/" +
         file.level +
@@ -167,29 +167,23 @@ export function generateFileUrl(file) {
         "." +
         file.ext
       );
-    }else{
+    } else {
       return (
-        "https://bucket.caak.mn/" +
-        file.level +
-        "/" +
-        file.id +
-        "." +
-        file.ext
+        "https://bucket.caak.mn/" + file.level + "/" + file.id + "." + file.ext
       );
-      
     }
-  //   return (
-  //     "https://" +
-  //     file.bucket +
-  //     ".s3." +
-  //     file.region +
-  //     ".amazonaws.com/" +
-  //     file.level +
-  //     "/" +
-  //     file.id +
-  //     "." +
-  //     file.ext
-  //   );
+    //   return (
+    //     "https://" +
+    //     file.bucket +
+    //     ".s3." +
+    //     file.region +
+    //     ".amazonaws.com/" +
+    //     file.level +
+    //     "/" +
+    //     file.id +
+    //     "." +
+    //     file.ext
+    //   );
   }
   return null;
 }
@@ -310,6 +304,12 @@ export const addDays = (date, days) => {
   return result;
 };
 
+export const kFormatter = (num) => {
+  return Math.abs(num) > 999
+    ? Math.sign(num) * (Math.abs(num) / 1000).toFixed(1) + "k"
+    : Math.sign(num) * Math.abs(num);
+};
+
 let object = {
   useQuery,
   mailNumber,
@@ -329,5 +329,6 @@ let object = {
   extractDate,
   getDiffDays,
   addDays,
+  kFormatter,
 };
 export default object;

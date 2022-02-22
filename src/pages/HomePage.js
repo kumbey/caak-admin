@@ -36,7 +36,7 @@ const HomePage = () => {
     },
     {
       id: 6,
-      name: "Groups",
+      name: "Грүпүүд",
     },
   ];
 

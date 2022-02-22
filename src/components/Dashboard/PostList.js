@@ -1,7 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 
 import Tables from "../Tables";
-import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
+import {
+  getFileUrl,
+  getGenderImage,
+  getReturnData,
+  kFormatter,
+} from "../../utility/Util";
 import placeholder from "./../../../src/assets/images/placeholder.png";
 
 import { convertDateTime } from "../utils";
@@ -126,9 +131,9 @@ const PostList = ({ PageSize }) => {
               <th className="text-left uppercase w-36">Нэмсэн хүн</th>
               <th className="text-left uppercase w-32">Үүссэн огноо</th>
               <th className="text-left uppercase">Сэтгэгдэл</th>
+              <th className="text-left uppercase">Харсан</th>
+              <th className="text-left uppercase">Үзсэн</th>
               <th className="text-left uppercase">Саак</th>
-              <th className="text-left uppercase">Үзэлт</th>
-              <th className="text-left uppercase">Даралт</th>
               <th className="text-left uppercase">Үйлдэл</th>
             </tr>
           </thead>
@@ -222,14 +227,22 @@ const PostList = ({ PageSize }) => {
                       </p>
                     </div>
                   </td>
-                  <td className="text-xs">{convertDateTime(post.createdAt)}</td>
-
-                  <td className="text-center">{post.totals.comments}</td>
-                  <td className="text-center">{post.totals.reactions}</td>
-                  <td className="text-center">
-                    {post.totals.reach ? post.totals.reach : 0}
+                  <td className="text-xs">
+                    {convertDateTime(post?.createdAt)}
                   </td>
-                  <td className="text-center">{post.totals.views}</td>
+
+                  <td className="text-center">{post?.totals?.comments}</td>
+                  <td className="text-center">
+                    {post.totals.reach ? kFormatter(post?.totals?.reach) : 0}
+                  </td>
+                  <td className="text-center">
+                    {post?.totals?.views ? kFormatter(post?.totals?.views) : 0}
+                  </td>
+                  <td className="text-center">
+                    {post?.totals?.reactions
+                      ? kFormatter(post?.totals?.reactions)
+                      : 0}
+                  </td>
                   <td className="flex my-2 border-none justify-center">
                     <a
                       href="#"
