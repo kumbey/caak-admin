@@ -5,19 +5,13 @@ import API from "@aws-amplify/api";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { convertDateTime } from "../utils";
 import { useToast } from "../../components/Toast/ToastProvider";
-import ConfirmAlert from "../ConfirmAlert/ConfirmAlert";
-import {
-  deleteReportedPost,
-  updateReportedPost,
-} from "../../graphql-custom/report/mutation";
+
 import placeholder from "./../../../src/assets/images/placeholder.png";
 import Pagination from "../Pagination/Pagination";
-import {
-  createPostStatusHistory,
-  updatePost,
-} from "../../graphql-custom/post/mutation";
+
 import { ListReportedPostOrderByCreatedAt } from "../../graphql-custom/report/queries";
 import Loader from "../Loader";
+import Edit from "../../pages/ReportTypes/modal/Edit";
 
 const ReportList = ({ PageSize }) => {
   let count = 0;
@@ -36,12 +30,13 @@ const ReportList = ({ PageSize }) => {
   const { addToast } = useToast();
 
   const [showAlert, setShowAlert] = useState(false);
+  const [currPost, setCurrPost] = useState({});
 
+  const [editId, setEditId] = useState("init");
   const [deleteId, setDeleteId] = useState("init");
-  const [selectedType, setSelectedType] = useState();
-  const [exVersion, setExVersion] = useState();
+  const [currentIndex, setCurrentIndex] = useState("init");
+  const [isShowModal, setIsShowModal] = useState(false);
   const [loading, setLoading] = useState();
-  const [reason, setReason] = useState();
 
   const getAllReportedPosts = async () => {
     setLoading(true);
@@ -63,60 +58,27 @@ const ReportList = ({ PageSize }) => {
     }
   };
 
-  const handleClick = (id, type, version, reason) => {
-    setDeleteId(id);
-    setSelectedType(type);
-    version && setExVersion(version);
-    reason && setReason(reason);
-  };
-
-  const deleteReportFunction = async (id) => {
-    try {
-      await API.graphql(
-        graphqlOperation(updateReportedPost, {
-          input: { id: id, status: "CHECKED" },
-        })
-      );
-      setShowAlert(false);
-
-      addToast({
-        title: `Амжилттай`,
-        content: "Шалгалаа",
-        autoClose: true,
-        type: "update",
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const acceptReportFunction = async (id) => {
-    try {
-      await API.graphql(
-        graphqlOperation(updatePost, {
-          input: { id: id, status: "REPORTED", expectedVersion: exVersion },
-        })
-      );
-      await API.graphql(
-        graphqlOperation(createPostStatusHistory, {
-          input: { post_id: id, status: "REPORTED", description: reason },
-        })
-      );
-      setShowAlert(false);
-
-      addToast({
-        content: `Зөвшөөрлөө`,
-        title: "Амжилттай",
-        autoClose: true,
-        type: "update",
-      });
-    } catch (error) {
-      console.log(error);
-    }
+  const editHandler = (id, report, index) => {
+    setEditId(id);
+    setCurrPost(report);
+    setCurrentIndex(index);
   };
 
   useEffect(() => {
     getAllReportedPosts();
   }, []);
+
+  useEffect(() => {
+    if (editId !== "init") {
+      setIsShowModal(true);
+    }
+  }, [editId]);
+
+  useEffect(() => {
+    if (!isShowModal) {
+      setEditId("init");
+    }
+  }, [isShowModal]);
 
   useEffect(() => {
     if (!showAlert) {
@@ -129,7 +91,6 @@ const ReportList = ({ PageSize }) => {
       setShowAlert(true);
     }
   }, [deleteId]);
-
   return reportedPosts.length > 0 ? (
     <div className="mb-4 mr-2">
       <Tables styles="hoverable table_bordered" fullWidth="w-full">
@@ -141,7 +102,6 @@ const ReportList = ({ PageSize }) => {
             <th className="text-left uppercase w-40">Репортлогчийн нэр</th>
             <th className="text-left uppercase w-36">Үүссэн огноо</th>
             <th className="text-left uppercase w-20">Статус</th>
-            {/* <th className="text-left uppercase">Баталгаажсан огноо</th> */}
             <th className="text-left uppercase">Үйлдэл</th>
           </tr>
         </thead>
@@ -149,7 +109,10 @@ const ReportList = ({ PageSize }) => {
           {currentTableData.map((report, index) => {
             count++;
             return (
-              <tr key={index}>
+              <tr
+                key={index}
+                className={`${report.status === "CHECKED" ? "bg-red-50" : ""}`}
+              >
                 <td>{count}</td>
 
                 <td
@@ -217,29 +180,13 @@ const ReportList = ({ PageSize }) => {
                 <td className="text-xs">
                   {convertDateTime(report?.createdAt)}
                 </td>
-                <td>
-                  {report?.status === "CHECKED" ? "Идэвхтэй" : "Идэвхгүй"}
-                </td>
-                {/* <td>{convertDateTime(report?.updatedAt)}</td> */}
-                <td className="flex my-4  border-none">
+                <td>{report?.status === "CHECKED" ? "YES" : "NO"}</td>
+                <td className="flex my-4  border-none justify-center">
                   <span
-                    onClick={() =>
-                      handleClick(
-                        report?.post?.id,
-                        "accept",
-                        report?.post?.version,
-                        report?.reason
-                      )
-                    }
-                    className={"cursor-pointer "}
-                  >
-                    <i className="las la-check-circle text-2xl text-green" />
-                  </span>
-                  <span
-                    onClick={() => handleClick(report?.id, "delete")}
+                    onClick={() => editHandler(report.id, report, index)}
                     className={"cursor-pointer"}
                   >
-                    <i className="las la-trash-alt text-2xl text-red ml-4" />
+                    <i className="las la-edit text-2xl text-green" />
                   </span>
                 </td>
               </tr>
@@ -254,21 +201,15 @@ const ReportList = ({ PageSize }) => {
         pageSize={PageSize}
         onPageChange={(page) => setCurrentPage(page)}
       />
-      {selectedType === "accept" ? (
-        <ConfirmAlert
-          show={showAlert}
-          title="Та зөвшөөрөхдөө итгэлтэй байна уу?"
-          onClose={() => setShowAlert(false)}
-          onSubmit={() => acceptReportFunction(deleteId)}
-        />
-      ) : (
-        <ConfirmAlert
-          show={showAlert}
-          title="Та шалгасан уу?"
-          onClose={() => setShowAlert(false)}
-          onSubmit={() => deleteReportFunction(deleteId)}
-        />
-      )}
+      <Edit
+        currPost={currPost}
+        currentIndex={currentIndex}
+        setCurrPost={setCurrPost}
+        editId={editId}
+        show={isShowModal}
+        setIsShowModal={setIsShowModal}
+        addToast={addToast}
+      />
     </div>
   ) : (
     <Loader

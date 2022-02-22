@@ -14,6 +14,16 @@ const post0004 = /* GraphQL */ `
     updatedAt
     createdAt
     version
+    status_history {
+      items {
+        createdAt
+        description
+        id
+        post_id
+        status
+        updatedAt
+      }
+    }
     comments {
       items {
         comment

@@ -53,6 +53,7 @@ const PostList = ({ PageSize }) => {
 
   async function getAllPosts() {
     let resp;
+    setLoading(true);
     try {
       resp = await API.graphql({
         query: getPostByStatus,
@@ -66,7 +67,10 @@ const PostList = ({ PageSize }) => {
       setNextNextToken(getReturnData(resp).nextToken);
 
       setPosts([...posts, ...getReturnData(resp).items]);
+      setLoading(false);
     } catch (ex) {
+      setLoading(false);
+
       console.log(ex);
     }
   }
