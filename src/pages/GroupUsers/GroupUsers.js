@@ -213,7 +213,7 @@ const GroupUsers = () => {
                 setSelectedGroupName("");
                 setUsers([]);
               }}
-              className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-600 las la-times-circle"
+              className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-400 las la-times-circle"
             />
           </div>
           {showSearch && (
@@ -238,7 +238,7 @@ const GroupUsers = () => {
                 onClick={() => {
                   setData("");
                 }}
-                className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-600 las la-times-circle"
+                className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-400 las la-times-circle"
               />
             </div>
             <Select
