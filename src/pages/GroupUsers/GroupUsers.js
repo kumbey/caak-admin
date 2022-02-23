@@ -35,7 +35,6 @@ const GroupUsers = () => {
   const [showSearch, setShowSearch] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
-
   const sortType = [
     {
       id: 0,
@@ -94,7 +93,8 @@ const GroupUsers = () => {
         (user) =>
           user?.user?.nickname?.toLowerCase().includes(data) ||
           user?.user?.id?.toLowerCase().includes(data) ||
-          user?.user?.firstname?.toLowerCase().includes(data)
+          user?.user?.firstname?.toLowerCase().includes(data) ||
+          user?.role?.toLowerCase().includes(data)
       )
       .slice(firstPageIndex, lastPageIndex);
   }, [currentPage, users, data, selectedType]);
@@ -228,11 +228,19 @@ const GroupUsers = () => {
           )}
 
           <div className="ml-6 flex justify-between w-full">
-            <Input
-              placeholder="Нэр / Никнэр / ID"
-              value={data}
-              onChange={(e) => setData(e.target.value)}
-            />
+            <div className="relative">
+              <Input
+                placeholder="Нэр / Никнэр / Эрх / ID"
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+              />
+              <span
+                onClick={() => {
+                  setData("");
+                }}
+                className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-600 las la-times-circle"
+              />
+            </div>
             <Select
               name="group_id"
               // title="Груп сонгох"

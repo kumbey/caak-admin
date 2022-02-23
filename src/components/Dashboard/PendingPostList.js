@@ -195,7 +195,7 @@ const PendingPostList = ({ PageSize }) => {
                     }}
                     className={"cursor-pointer"}
                   >
-                    <i className="las la-trash-alt text-2xl text-red ml-4" />
+                    <i className="las la-archive text-2xl text-red ml-4" />
                   </span>
                 </td>
               </tr>

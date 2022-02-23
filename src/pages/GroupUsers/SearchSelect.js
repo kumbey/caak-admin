@@ -14,7 +14,7 @@ const SearchSelect = ({ groups, selectedGroupName, handleChange, cats }) => {
               icon = cats.filter((cat) => cat.id === group.category.id);
               return (
                 <div
-                  className="flex items-center hover:bg-primary-100 cursor-default mb-1"
+                  className="flex items-center hover:bg-primary-100 cursor-default pb-1"
                   key={index}
                   onClick={() => handleChange(group.id, group.name)}
                 >
