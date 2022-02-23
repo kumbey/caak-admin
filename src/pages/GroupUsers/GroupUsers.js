@@ -12,12 +12,14 @@ import {
   getGroupUsersByGroup,
 } from "../../graphql-custom/group/queries";
 import { getCategoryList } from "../../graphql-custom/category/queries";
-import { getReturnData } from "../../utility/Util";
+import { getReturnData, useClickOutSide } from "../../utility/Util";
 import Pagination from "../../components/Pagination/Pagination";
 import Input from "../../components/Input";
+import SearchSelect from "./SearchSelect";
 
 const GroupUsers = () => {
   const [selectedGroup, setSelectedGroup] = useState();
+  const [selectedGroupName, setSelectedGroupName] = useState("");
   const [selectedType, setSelectedType] = useState("nickname");
   const [groups, setGroups] = useState([]);
   const [cats, setCats] = useState([]);
@@ -28,6 +30,9 @@ const GroupUsers = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [nextNextToken, setNextNextToken] = useState(undefined);
   const [data, setData] = useState("");
+  const [loading, setLoading] = useState();
+  const [loaded, setLoaded] = useState();
+  const [showSearch, setShowSearch] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -94,12 +99,15 @@ const GroupUsers = () => {
       .slice(firstPageIndex, lastPageIndex);
   }, [currentPage, users, data, selectedType]);
 
-  const handleChange = (e) => {
+  const handleChange = (id, name) => {
     setUsers([]);
     setCurrentPage(1);
     setNextNextToken(undefined);
-    setSelectedGroup(e.target.value);
+    setSelectedGroup(id);
+    setSelectedGroupName(name);
+    setShowSearch(false);
   };
+  const dropDownClickOutsideRef = useClickOutSide(() => setShowSearch(false));
 
   const handleSelectedType = (e) => {
     setSelectedType(e.target.value.toLowerCase());
@@ -123,10 +131,12 @@ const GroupUsers = () => {
 
   const getGroup = async () => {
     let resp;
+    setLoaded(false);
     try {
       resp = await API.graphql(graphqlOperation(getGroupList));
+      resp = getReturnData(resp).items;
       setGroups(
-        getReturnData(resp).items.sort(function (a, b) {
+        resp.sort(function (a, b) {
           if (a.name.toLowerCase() < b.name.toLowerCase()) {
             return -1;
           }
@@ -136,43 +146,36 @@ const GroupUsers = () => {
           return 0;
         })
       );
+      setLoaded(true);
     } catch (ex) {
+      setLoaded(true);
+
       console.log(ex);
     }
   };
 
   const getUsers = async (id) => {
-    let resp;
-
+    setLoading(true);
     try {
-      resp = await API.graphql(
+      API.graphql(
         graphqlOperation(getGroupUsersByGroup, {
           group_id: id,
           nextToken: nextNextToken,
         })
-      );
-      if (getReturnData(resp).nextToken) {
-        setNextNextToken(getReturnData(resp).nextToken);
-      } else {
-        setNextNextToken(null);
-      }
-
-      setUsers([...users, ...getReturnData(resp).items]);
+      ).then((resp) => {
+        setUsers([...users, ...getReturnData(resp).items]);
+        if (getReturnData(resp).nextToken) {
+          setNextNextToken(getReturnData(resp).nextToken);
+        } else {
+          setNextNextToken(undefined);
+        }
+      });
+      setLoading(false);
     } catch (ex) {
+      setLoading(false);
+
       console.log(ex);
     }
-
-    // setUsers(
-    // resp.data.getGroupUsersByGroup.items.sort(function (a, b) {
-    //   if (a.user.nickname.toLowerCase() < b.user.nickname.toLowerCase()) {
-    //     return -1;
-    //   }
-    //   if (a.user.nickname.toLowerCase() > b.user.nickname.toLowerCase()) {
-    //     return 1;
-    //   }
-    //   return 0;
-    // })
-    // );
   };
 
   useEffect(() => {
@@ -193,26 +196,36 @@ const GroupUsers = () => {
       <div className="">
         <h1>Группын хэрэглэгчид</h1>
 
-        <div className="flex mt-6 mb-5">
-          <Select
-            name="group_id"
-            // title="Груп сонгох"
-            value={selectedGroup || "DEFAULT"}
-            onChange={handleChange}
+        <div className="flex mt-6 mb-5 items-center">
+          <div
+            ref={dropDownClickOutsideRef}
+            className="relative"
+            onClick={() => setShowSearch(true)}
           >
-            <option value={"DEFAULT"} disabled hidden>
-              Групп Сонгоно уу...
-            </option>
-            {groups.map((group, index) => {
-              let icon;
-              icon = cats.filter((cat) => cat.id === group.category.id);
-              return (
-                <option key={index} value={group.id}>
-                  {`${icon[0]?.icon} ${group.name}`}
-                </option>
-              );
-            })}
-          </Select>
+            <Input
+              placeholder="Групп Сонгоно уу..."
+              value={selectedGroupName || ""}
+              onChange={(e) => setSelectedGroupName(e.target.value)}
+              width={"w-64"}
+            />
+            <span
+              onClick={() => {
+                setSelectedGroupName("");
+                setUsers([]);
+              }}
+              className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-600 las la-times-circle"
+            />
+          </div>
+          {showSearch && (
+            <div>
+              <SearchSelect
+                groups={groups}
+                selectedGroupName={selectedGroupName}
+                handleChange={handleChange}
+                cats={cats}
+              />
+            </div>
+          )}
 
           <div className="ml-6 flex justify-between w-full">
             <Input
@@ -253,29 +266,33 @@ const GroupUsers = () => {
             </tr>
           </thead>
           <tbody>
-            {currentTableData.map((user, index) => {
-              count++;
-              return (
-                <tr key={index}>
-                  <td className="text-center">{count}</td>
+            {!loading ? (
+              currentTableData.map((user, index) => {
+                count++;
+                return (
+                  <tr key={index}>
+                    <td className="text-center">{count}</td>
 
-                  <td>{user.user.firstname}</td>
-                  <td>{user.user.nickname}</td>
-                  <td>{user.role}</td>
-                  <td>{user.user.id}</td>
-                  <td className="flex justify-center">
-                    <span
-                      className={"cursor-pointer "}
-                      onClick={() =>
-                        editHandler(user.user.id, user.role, index)
-                      }
-                    >
-                      <i className="text-2xl text-green las la-edit" />
-                    </span>
-                  </td>
-                </tr>
-              );
-            })}
+                    <td>{user.user.firstname}</td>
+                    <td>{user.user.nickname}</td>
+                    <td>{user.role}</td>
+                    <td>{user.user.id}</td>
+                    <td className="flex justify-center">
+                      <span
+                        className={"cursor-pointer "}
+                        onClick={() =>
+                          editHandler(user.user.id, user.role, index)
+                        }
+                      >
+                        <i className="text-2xl text-green las la-edit" />
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <div>loading..</div>
+            )}
           </tbody>
         </Tables>
         <Pagination

@@ -322,6 +322,7 @@ const AddEdit = ({
                 showTimeSelect
                 timeFormat="HH:mm"
                 dateFormat="yyyy/MM/d, HH:mm:ss"
+                calendarStartDay={1}
               />
             </div>
           </div>

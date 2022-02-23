@@ -6,6 +6,7 @@ import { DateTime } from "luxon";
 import maleImg from "../../src/assets/images/Man-Avatar.svg";
 import femaleImg from "../../src/assets/images/Female-Avatar.svg";
 import defaultImg from "../../src/assets/images/default.png";
+import { useEffect, useRef } from "react";
 
 const regexEmail = "^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$";
 const regexNumber = "^[0-9]{8}$";
@@ -310,6 +311,25 @@ export const kFormatter = (num) => {
     : Math.sign(num) * Math.abs(num);
 };
 
+export const useClickOutSide = (handler) => {
+  const domNode = useRef();
+
+  useEffect(() => {
+    const checkIfClickedOutside = (e) => {
+      if (domNode.current && !domNode.current.contains(e.target)) {
+        handler();
+      }
+    };
+    document.addEventListener("click", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("click", checkIfClickedOutside);
+    };
+
+    // eslint-disable-next-line
+  }, []);
+  return domNode;
+};
+
 let object = {
   useQuery,
   mailNumber,
@@ -330,5 +350,6 @@ let object = {
   getDiffDays,
   addDays,
   kFormatter,
+  useClickOutSide,
 };
 export default object;

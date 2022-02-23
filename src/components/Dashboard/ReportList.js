@@ -180,7 +180,9 @@ const ReportList = ({ PageSize }) => {
                 <td className="text-xs">
                   {convertDateTime(report?.createdAt)}
                 </td>
-                <td>{report?.status === "CHECKED" ? "YES" : "NO"}</td>
+                <td>
+                  {report?.status === "CHECKED" ? "Зөвшөөрсөн" : "Шалгаагүй"}
+                </td>
                 <td className="flex my-4  border-none justify-center">
                   <span
                     onClick={() => editHandler(report.id, report, index)}
