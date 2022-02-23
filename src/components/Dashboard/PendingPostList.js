@@ -167,6 +167,8 @@ const PendingPostList = ({ PageSize }) => {
                 <td className="text-xs">{convertDateTime(post.createdAt)}</td>
                 <td className="flex my-2 border-none">
                   <span
+                    data-bs-toggle="tooltip"
+                    title={`Зөвшөөрөх`}
                     // onClick={() => postHandler(post, post.id, "CONFIRMED")}
                     onClick={() => {
                       setType({
@@ -181,6 +183,8 @@ const PendingPostList = ({ PageSize }) => {
                     <i className="las la-check-circle text-2xl text-green" />
                   </span>
                   <span
+                    data-bs-toggle="tooltip"
+                    title={`Архивлах`}
                     onClick={() => {
                       setType({
                         post: post,

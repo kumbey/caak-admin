@@ -185,6 +185,8 @@ const ReportList = ({ PageSize }) => {
                 </td>
                 <td className="flex my-4  border-none justify-center">
                   <span
+                    data-bs-toggle="tooltip"
+                    title={`Зөвшөөрөх`}
                     onClick={() => editHandler(report.id, report, index)}
                     className={"cursor-pointer"}
                   >

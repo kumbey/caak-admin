@@ -68,7 +68,14 @@ const FeedBackList = ({ PageSize }) => {
                 <td className="text-center">{count}</td>
 
                 <td>
-                  <p className="line-clamp ">{feed.description}</p>
+                  <p
+                    style={{
+                      minWidth: "600px",
+                    }}
+                    className="break-all  "
+                  >
+                    {feed.description}
+                  </p>
                 </td>
                 <td>
                   <p className="line-clamp text-center">{feed.type}</p>
