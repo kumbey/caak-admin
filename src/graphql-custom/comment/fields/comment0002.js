@@ -48,6 +48,7 @@ const comment0002 = /* GraphQL */ `
       comment
       createdAt
     }
+    nextToken
   }
 `;
 export default comment0002;

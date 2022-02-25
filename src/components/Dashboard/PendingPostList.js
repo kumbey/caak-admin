@@ -26,10 +26,11 @@ const PendingPostList = ({ PageSize }) => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    count = (currentPage - 1) * PageSize;
 
     return pendingPosts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, pendingPosts]);
+
+  count = (currentPage - 1) * PageSize;
 
   const { user } = useUser();
 

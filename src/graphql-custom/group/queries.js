@@ -30,8 +30,14 @@ export const getGroupUsersByGroup = /* GraphQL */ `
 `;
 
 export const listGroups = /* GraphQL */ `
-    query ListGroups {
-        listGroups ${group0002}
+    query ListGroups(
+        $limit: Int, 
+        $nextToken: String
+    ) {
+        listGroups(
+            limit: $limit, 
+            nextToken: $nextToken
+        ) ${group0002}
     }
 `;
 export const listGroupUsersByGroup = /* GraphQL */ `

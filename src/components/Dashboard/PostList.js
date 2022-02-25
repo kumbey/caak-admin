@@ -41,9 +41,10 @@ const PostList = ({ PageSize }) => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    count = (currentPage - 1) * PageSize;
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
+
+  count = (currentPage - 1) * PageSize;
 
   const editHandler = (id, post, index) => {
     setEditId(id);
@@ -123,6 +124,7 @@ const PostList = ({ PageSize }) => {
       setShowAlert(true);
     }
   }, [deleteId]);
+
   return posts.length > 0 ? (
     <div className="mb-4">
       <div style={{ minWidth: "320px" }} className={"overflow-x-auto"}>
