@@ -101,7 +101,7 @@ const Categories = () => {
               <th className="text-center uppercase">Зураг</th>
               <th className="text-left uppercase">Үүссэн огноо</th>
               <th className="text-left uppercase">Зассан огноо</th>
-              <th className="text-left uppercase">Засах</th>
+              <th className="text-center uppercase">Засах</th>
             </tr>
           </thead>
           <tbody>
@@ -135,21 +135,21 @@ const Categories = () => {
                       : "Засвар ороогүй"
                   }`}</td>
                   <td>
-                    <div className="w-20">
+                    <div className="flex items-center justify-center">
                       <span
                         onClick={() => editHandler(cat.id, index)}
                         className={"cursor-pointer"}
                       >
                         <i className="las la-edit text-2xl text-green" />
                       </span>
-                      <span
+                      {/* <span
                         onClick={() => {
                           setDeleteId(cat.id);
                         }}
                         className={"cursor-pointer"}
                       >
                         <i className="las la-trash-alt text-2xl ml-4 text-red " />
-                      </span>
+                      </span> */}
                     </div>
                   </td>
                 </tr>

@@ -6,13 +6,13 @@ import ReportList from "../components/Dashboard/ReportList";
 import PendingPostList from "../components/Dashboard/PendingPostList";
 import FeedBackList from "../components/Dashboard/FeedBackList";
 import GroupList from "../components/Dashboard/GroupList";
-import PostList from "../components/Dashboard/PostList";
+import PostsTab from "../components/Dashboard/PostsTab";
 
 const HomePage = () => {
   const menus = [
     {
       id: 0,
-      name: "Постууд",
+      name: "Пост",
     },
     {
       id: 1,
@@ -36,7 +36,7 @@ const HomePage = () => {
     },
     {
       id: 6,
-      name: "Groups",
+      name: "Грүпүүд",
     },
   ];
 
@@ -62,11 +62,11 @@ const HomePage = () => {
         })}
       </div>
       <div className="flex flex-col">
-        <div className="mb-3">
-          <h5>{menus[activeIndex].name}</h5>
+        <div className="">
+          {activeIndex === 0 ? "" : <h5>{menus[activeIndex].name}</h5>}
         </div>
         {activeIndex === 0 ? (
-          <PostList PageSize={PageSize} />
+          <PostsTab PageSize={PageSize} />
         ) : activeIndex === 1 ? (
           <PendingPostList PageSize={PageSize} />
         ) : activeIndex === 2 ? (

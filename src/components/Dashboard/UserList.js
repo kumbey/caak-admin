@@ -20,15 +20,17 @@ const UserList = ({ PageSize }) => {
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState();
+  const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    count = (currentPage - 1) * PageSize;
 
     return users.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, users]);
+
+  count = (currentPage - 1) * PageSize;
 
   const getAllUsers = async () => {
     setLoading(true);
@@ -38,10 +40,13 @@ const UserList = ({ PageSize }) => {
         variables: {
           status: "ACTIVE",
           sortDirection: "DESC",
-          limit: 5000,
+          nextToken: nextNextToken,
+          limit: 20,
         },
       });
-      setUsers(getReturnData(resp).items);
+      setNextNextToken(getReturnData(resp).nextToken);
+
+      setUsers([...users, ...getReturnData(resp).items]);
       setLoading(false);
     } catch (ex) {
       setLoading(false);
@@ -53,6 +58,10 @@ const UserList = ({ PageSize }) => {
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  useEffect(() => {
+    if (nextNextToken) getAllUsers();
+  }, [currentPage]);
 
   return users.length > 0 ? (
     <div className="mb-4">

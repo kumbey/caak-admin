@@ -15,15 +15,17 @@ const CommentList = ({ PageSize }) => {
 
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState();
+  const [nextNextToken, setNextNextToken] = useState(undefined);
   const [currentPage, setCurrentPage] = useState(1);
 
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    count = (currentPage - 1) * PageSize;
 
     return comments.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, comments]);
+
+  count = (currentPage - 1) * PageSize;
 
   const getAllComments = async () => {
     setLoading(true);
@@ -33,10 +35,13 @@ const CommentList = ({ PageSize }) => {
         variables: {
           status: "ACTIVE",
           sortDirection: "DESC",
-          limit: 5000,
+          nextToken: nextNextToken,
+          limit: 20,
         },
       });
-      setComments(getReturnData(resp).items);
+      setNextNextToken(getReturnData(resp).nextToken);
+
+      setComments([...comments, ...getReturnData(resp).items]);
       setLoading(false);
     } catch (ex) {
       setLoading(false);
@@ -48,6 +53,10 @@ const CommentList = ({ PageSize }) => {
   useEffect(() => {
     getAllComments();
   }, []);
+
+  useEffect(() => {
+    if (nextNextToken) getAllComments();
+  }, [currentPage]);
 
   return comments.length > 0 ? (
     <div className="mb-4">

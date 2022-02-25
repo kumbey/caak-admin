@@ -15,10 +15,10 @@ import { API } from "aws-amplify";
 import { getPostByStatus } from "../../graphql-custom/post/queries";
 import Loader from "../Loader";
 import { useToast } from "../Toast/ToastProvider";
-import CreateBoost from "../../pages/Ads/Boosted/modal/CreateBoost";
 import { listBoostedPosts } from "../../graphql-custom/boost/queries";
+import EditDraft from "./Modal/EditDraft";
 
-const PostList = ({ PageSize }) => {
+const DraftedPostList = ({ PageSize }) => {
   let count = 0;
   const { addToast } = useToast();
 
@@ -41,10 +41,9 @@ const PostList = ({ PageSize }) => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
+    count = (currentPage - 1) * PageSize;
     return posts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, posts]);
-
-  count = (currentPage - 1) * PageSize;
 
   const editHandler = (id, post, index) => {
     setEditId(id);
@@ -59,7 +58,7 @@ const PostList = ({ PageSize }) => {
       resp = await API.graphql({
         query: getPostByStatus,
         variables: {
-          status: "CONFIRMED",
+          status: "DRAFT",
           sortDirection: "DESC",
           nextToken: nextNextToken,
           limit: 20,
@@ -124,7 +123,6 @@ const PostList = ({ PageSize }) => {
       setShowAlert(true);
     }
   }, [deleteId]);
-
   return posts.length > 0 ? (
     <div className="mb-4">
       <div style={{ minWidth: "320px" }} className={"overflow-x-auto"}>
@@ -261,25 +259,19 @@ const PostList = ({ PageSize }) => {
                         : 0}
                     </p>
                   </td>
-                  <td className="flex my-2 border-none justify-center">
+                  <td className="flex my-2 border-none items-center justify-center">
                     <a
                       href="#"
                       className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
                       data-bs-toggle="tooltip"
-                      title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
+                      title={`Нийтлэх`}
                     >
                       <span
-                        onClick={() =>
-                          !isBoosted && editHandler(post.id, post, index)
-                        }
-                        className={`${
-                          !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
-                        }`}
+                        onClick={() => editHandler(post.id, post, index)}
+                        className={"cursor-pointer"}
                       >
                         <i
-                          className={`${
-                            !isBoosted ? "text-green " : "text-red "
-                          } text-2xl las la-rocket`}
+                          className={`text-green  text-2xl las la-clipboard-check`}
                         />
                       </span>
                     </a>
@@ -298,12 +290,13 @@ const PostList = ({ PageSize }) => {
         pageSize={PageSize}
         onPageChange={(page) => setCurrentPage(page)}
       />
-      <CreateBoost
+      <EditDraft
         currentIndex={currentIndex}
         editId={editId}
         show={isShowModal}
         setShow={setIsShowModal}
-        currPost={currPost}
+        setPosts={setPosts}
+        posts={posts}
       />
     </div>
   ) : (
@@ -314,4 +307,4 @@ const PostList = ({ PageSize }) => {
   );
 };
 
-export default PostList;
+export default DraftedPostList;

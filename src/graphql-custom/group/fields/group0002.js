@@ -107,6 +107,7 @@ const group0002 = /* GraphQL */ `
         updatedAt
       }
     }
+    nextToken
   }
 `;
 

@@ -26,10 +26,11 @@ const PendingPostList = ({ PageSize }) => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    count = (currentPage - 1) * PageSize;
 
     return pendingPosts.slice(firstPageIndex, lastPageIndex);
   }, [currentPage, pendingPosts]);
+
+  count = (currentPage - 1) * PageSize;
 
   const { user } = useUser();
 
@@ -167,6 +168,8 @@ const PendingPostList = ({ PageSize }) => {
                 <td className="text-xs">{convertDateTime(post.createdAt)}</td>
                 <td className="flex my-2 border-none">
                   <span
+                    data-bs-toggle="tooltip"
+                    title={`Зөвшөөрөх`}
                     // onClick={() => postHandler(post, post.id, "CONFIRMED")}
                     onClick={() => {
                       setType({
@@ -181,6 +184,8 @@ const PendingPostList = ({ PageSize }) => {
                     <i className="las la-check-circle text-2xl text-green" />
                   </span>
                   <span
+                    data-bs-toggle="tooltip"
+                    title={`Архивлах`}
                     onClick={() => {
                       setType({
                         post: post,
@@ -191,7 +196,7 @@ const PendingPostList = ({ PageSize }) => {
                     }}
                     className={"cursor-pointer"}
                   >
-                    <i className="las la-trash-alt text-2xl text-red ml-4" />
+                    <i className="las la-archive text-2xl text-red ml-4" />
                   </span>
                 </td>
               </tr>

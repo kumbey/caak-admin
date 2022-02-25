@@ -49,6 +49,7 @@ const user0003 = /* GraphQL */ `
         }
       }
     }
+    nextToken
   }
 `;
 
