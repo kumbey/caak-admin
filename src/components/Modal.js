@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 export default function Modal({
   children,
   submitBtnName,
+  cancelBtnName,
   onSubmit,
   show,
   onClose,
@@ -16,6 +17,7 @@ export default function Modal({
   loading,
   className,
   isValid,
+  onCancel,
   ...props
 }) {
   const { setOverlay } = useTheme();
@@ -56,12 +58,12 @@ export default function Modal({
             <div className="modal-footer">
               <div className="flex ml-auto">
                 <button
-                  onClick={onClose}
+                  onClick={onCancel ? onCancel : onClose}
                   type="button"
                   className="btn btn_secondary uppercase"
                   data-dismiss="modal"
                 >
-                  Хаах
+                  {cancelBtnName ? cancelBtnName : "Хаах"}
                 </button>
                 <button
                   disabled={!isValid || loading}

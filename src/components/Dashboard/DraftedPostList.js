@@ -58,7 +58,7 @@ const DraftedPostList = ({ PageSize }) => {
       resp = await API.graphql({
         query: getPostByStatus,
         variables: {
-          status: "DRAFT",
+          status: "CAAK_DRAFT",
           sortDirection: "DESC",
           nextToken: nextNextToken,
           limit: 20,

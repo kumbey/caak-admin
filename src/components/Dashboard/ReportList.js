@@ -111,9 +111,15 @@ const ReportList = ({ PageSize }) => {
             return (
               <tr
                 key={index}
-                className={`${report.status === "CHECKED" ? "bg-red-50" : ""}`}
+                className={`${
+                  report.status === "CHECKED"
+                    ? "bg-green-50"
+                    : report.status === "CANCEL"
+                    ? "bg-red-50"
+                    : ""
+                }`}
               >
-                <td>{count}</td>
+                <td className="text-center">{count}</td>
 
                 <td
                   onClick={() =>
@@ -181,16 +187,37 @@ const ReportList = ({ PageSize }) => {
                   {convertDateTime(report?.createdAt)}
                 </td>
                 <td>
-                  {report?.status === "CHECKED" ? "Зөвшөөрсөн" : "Шалгаагүй"}
+                  {report?.status === "CANCEL"
+                    ? "Татгалзсан"
+                    : report?.status === "CHECKED"
+                    ? "Зөвшөөрсөн"
+                    : report?.status === "UNCHECKED"
+                    ? "Шалгаагүй"
+                    : ""}
                 </td>
                 <td className="flex my-4  border-none justify-center">
                   <span
                     data-bs-toggle="tooltip"
                     title={`Зөвшөөрөх`}
-                    onClick={() => editHandler(report.id, report, index)}
-                    className={"cursor-pointer"}
+                    onClick={() =>
+                      report?.status === "UNCHECKED" &&
+                      editHandler(report.id, report, index)
+                    }
+                    className={`${
+                      report?.status === "CHECKED" ||
+                      report?.status === "CANCEL"
+                        ? "cursor-not-allowed"
+                        : "cursor-pointer"
+                    }`}
                   >
-                    <i className="las la-edit text-2xl text-green" />
+                    <i
+                      className={`las la-edit text-2xl  ${
+                        report?.status === "CHECKED" ||
+                        report?.status === "CANCEL"
+                          ? "text-gray"
+                          : "text-green"
+                      }`}
+                    />
                   </span>
                 </td>
               </tr>

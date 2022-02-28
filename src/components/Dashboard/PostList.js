@@ -136,10 +136,10 @@ const PostList = ({ PageSize }) => {
               <th className="text-left uppercase w-36">Групп</th>
               <th className="text-left uppercase w-36">Нэмсэн хүн</th>
               <th className="text-left uppercase w-32">Үүссэн огноо</th>
-              <th className="text-left uppercase">Сэтгэгдэл</th>
               <th className="text-left uppercase">Харсан</th>
               <th className="text-left uppercase">Үзсэн</th>
               <th className="text-left uppercase">Саак</th>
+              <th className="text-left uppercase">Сэтгэгдэл</th>
               <th className="text-left uppercase">Үйлдэл</th>
             </tr>
           </thead>
@@ -238,11 +238,6 @@ const PostList = ({ PageSize }) => {
                   </td>
 
                   <td className="text-center">
-                    <p data-bs-toggle="tooltip" title={`Сэтгэгдлийн тоо`}>
-                      {post?.totals?.comments}
-                    </p>
-                  </td>
-                  <td className="text-center">
                     <p data-bs-toggle="tooltip" title={`Харсан тоо`}>
                       {post.totals.reach ? kFormatter(post?.totals?.reach) : 0}
                     </p>
@@ -259,6 +254,11 @@ const PostList = ({ PageSize }) => {
                       {post?.totals?.reactions
                         ? kFormatter(post?.totals?.reactions)
                         : 0}
+                    </p>
+                  </td>
+                  <td className="text-center">
+                    <p data-bs-toggle="tooltip" title={`Сэтгэгдлийн тоо`}>
+                      {post?.totals?.comments}
                     </p>
                   </td>
                   <td className="flex my-2 border-none justify-center">
