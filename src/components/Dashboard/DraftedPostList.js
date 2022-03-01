@@ -259,9 +259,8 @@ const DraftedPostList = ({ PageSize }) => {
                         : 0}
                     </p>
                   </td>
-                  <td className="flex my-2 border-none items-center justify-center">
-                    <a
-                      href="#"
+                  <td className="flex my-2 border-none items-center justify-between">
+                    <div
                       className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
                       data-bs-toggle="tooltip"
                       title={`Нийтлэх`}
@@ -274,7 +273,23 @@ const DraftedPostList = ({ PageSize }) => {
                           className={`text-green  text-2xl las la-clipboard-check`}
                         />
                       </span>
-                    </a>
+                    </div>
+                    <div
+                      className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
+                      data-bs-toggle="tooltip"
+                      title={`Засах`}
+                    >
+                      <span
+                        onClick={() =>
+                          window.open(
+                            `https://www.caak.mn/post/edit/${post.id}`
+                          )
+                        }
+                        className={"cursor-pointer"}
+                      >
+                        <i className={`text-green  text-2xl las la-edit`} />
+                      </span>
+                    </div>
                   </td>
                 </tr>
               );
