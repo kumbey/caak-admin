@@ -200,15 +200,10 @@ const ReportList = ({ PageSize }) => {
                     data-bs-toggle="tooltip"
                     title={`Зөвшөөрөх`}
                     onClick={() =>
-                      report?.status === "UNCHECKED" &&
+                      // report?.status === "UNCHECKED" &&
                       editHandler(report.id, report, index)
                     }
-                    className={`${
-                      report?.status === "CHECKED" ||
-                      report?.status === "CANCEL"
-                        ? "cursor-not-allowed"
-                        : "cursor-pointer"
-                    }`}
+                    className={"cursor-pointer"}
                   >
                     <i
                       className={`las la-edit text-2xl  ${
