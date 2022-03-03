@@ -1,4 +1,5 @@
 import { useState } from "react";
+import AccountingReqList from "./AccountingReq/AccountingReqList";
 import Banners from "./Banners/Banners";
 import SponsoredPosts from "./Boosted/BoostedPost";
 
@@ -6,10 +7,14 @@ const Ads = () => {
   const menus = [
     {
       id: 0,
-      name: "Бүүстэд пост",
+      name: "Данс цэнэглэх хүсэлт",
     },
     {
       id: 1,
+      name: "Бүүстэд пост",
+    },
+    {
+      id: 2,
       name: "Баннер",
     },
   ];
@@ -46,8 +51,10 @@ const Ads = () => {
           </div>
         </div>
         {activeIndex === 0 ? (
-          <SponsoredPosts PageSize={PageSize} />
+          <AccountingReqList />
         ) : activeIndex === 1 ? (
+          <SponsoredPosts PageSize={PageSize} />
+        ) : activeIndex === 2 ? (
           <Banners PageSize={PageSize} />
         ) : null}
       </div>
