@@ -16,6 +16,7 @@ import {
 import { useUser } from "../../../context/userContext";
 import { useToast } from "../../../components/Toast/ToastProvider";
 import CheckBox from "../../../components/CheckBox";
+import { getReturnData } from "../../../utility/Util";
 
 const AddEdit = ({
   editId,
@@ -34,29 +35,35 @@ const AddEdit = ({
     featured: false,
     profile: null,
     cover: null,
+    meta: {
+      noAds: false,
+      hidden: false,
+    },
   };
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
   const [categories, setCategories] = useState([]);
-  const [oldImageFiles, setOldImageFiles] = useState({});
   const { user } = useUser();
   const { addToast } = useToast();
   const [isChecked, setIsChecked] = useState();
+  const [isNoAds, setIsNoAds] = useState();
+  const [isHidden, setIsHidden] = useState();
   const [isValid, setIsValid] = useState(false);
 
   const fetchGroup = async () => {
     try {
       setLoading(true);
       if (editId !== "new" && editId !== "init") {
-        const resp = await API.graphql(
+        let resp = await API.graphql(
           graphqlOperation(getGroup, { id: editId })
         );
-        setData(resp.data.getGroup);
-        setIsChecked(resp.data.getGroup.featured === "true" ? true : false);
-        setOldImageFiles({
-          profile: resp.data.getGroup.profile,
-          cover: resp.data.getGroup.cover,
-        });
+        resp = getReturnData(resp);
+
+        const meta = JSON.parse(resp.meta);
+        setData({ ...resp, meta: meta });
+        setIsChecked(resp.featured === "true" ? true : false);
+        setIsNoAds(meta.noAds ? true : false);
+        setIsHidden(meta.hidden ? true : false);
       } else {
         setData(initData);
       }
@@ -92,6 +99,10 @@ const AddEdit = ({
         about: data.about,
         groupCoverId: coverImage?.id,
         groupProfileId: profileImage?.id,
+        meta: JSON.stringify({
+          noAds: data.meta.noAds,
+          hidden: data.meta.hidden,
+        }),
       };
 
       if (editId === "new") {
@@ -125,18 +136,11 @@ const AddEdit = ({
           content: `${resp.data.updateGroup.name} өөрчлөлтийг хадгаллаа.`,
           autoClose: true,
         });
-
-        // if (
-        //   oldImageFiles.cover.id !== data.cover.id &&
-        //   oldImageFiles.profile.id !== data.profile.id
-        // ) {
-        //   await API.graphql(
-        //     graphqlOperation(deleteFile, { input: oldImageFiles.cover.id })
-        //   );
-        // }
       }
       setLoading(false);
       setIsChecked(false);
+      setIsNoAds(false);
+      setIsHidden(false);
 
       setShow(false);
     } catch (ex) {
@@ -161,9 +165,17 @@ const AddEdit = ({
   };
 
   const handleCheck = (e) => {
-    setIsChecked(e.target.checked);
     const { name, checked } = e.target;
-    setData({ ...data, [name]: checked });
+    if (name === "noAds") {
+      setIsNoAds(checked);
+      setData({ ...data, meta: { ...data.meta, [name]: checked } });
+    } else if (name === "hidden") {
+      setIsHidden(checked);
+      setData({ ...data, meta: { ...data.meta, [name]: checked } });
+    } else {
+      setIsChecked(checked);
+      setData({ ...data, [name]: checked });
+    }
   };
 
   const handleChange = (e) => {
@@ -179,6 +191,8 @@ const AddEdit = ({
   };
   const close = () => {
     setIsChecked(false);
+    setIsNoAds(false);
+    setIsHidden(false);
     setShow(false);
   };
 
@@ -256,6 +270,22 @@ const AddEdit = ({
             name="featured"
             value={isChecked ? true : false}
             checked={isChecked}
+            onChange={(e) => handleCheck(e)}
+          />
+          <CheckBox
+            title={"No Ads нэмэх"}
+            label={"No Ads"}
+            name="noAds"
+            value={isNoAds ? true : false}
+            checked={isNoAds}
+            onChange={(e) => handleCheck(e)}
+          />
+          <CheckBox
+            title={"Группыг нуух"}
+            label={"Нуух"}
+            name="hidden"
+            value={isHidden ? true : false}
+            checked={isHidden}
             onChange={(e) => handleCheck(e)}
           />
           <TextArea

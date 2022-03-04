@@ -191,7 +191,7 @@ const Groups = () => {
                       ? convertDateTime(group.updatedAt)
                       : "Засвар ороогүй"
                   }`}</td>
-                  <td className="flex justify-center">
+                  <td className="text-center">
                     <span
                       onClick={() => editHandler(group.id, index)}
                       className={"cursor-pointer"}

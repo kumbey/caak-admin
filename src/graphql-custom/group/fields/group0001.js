@@ -1,5 +1,6 @@
 const groupsGetField = /* GraphQL */ `
   {
+    meta
     featured
     category {
       id
