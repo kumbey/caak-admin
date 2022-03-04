@@ -125,7 +125,7 @@ const Groups = () => {
             </Button>
             <div className="relative mb-2">
               <Input
-                placeholder="Нэр / Никнэр / Эрх / ID"
+                placeholder="Нэр / Категори"
                 value={data}
                 onChange={(e) => setData(e.target.value)}
               />
