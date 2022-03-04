@@ -7,7 +7,6 @@ import { graphqlOperation } from "@aws-amplify/api-graphql";
 
 import { useToast } from "../../../../components/Toast/ToastProvider";
 import { getReturnData } from "../../../../utility/Util";
-import Select from "../../../../components/Select";
 import { getAccouningtRequest } from "../../../../graphql-custom/accountingReq/queries";
 import {
   doTransaction,
@@ -15,7 +14,7 @@ import {
 } from "../../../../graphql-custom/accountingReq/mutation";
 import { useUser } from "../../../../context/userContext";
 
-const CreateBalance = ({ editId, show, setShow, currReq }) => {
+const EditRefund = ({ deleteId, show, setShow, currReq }) => {
   const initData = {
     pack: "",
     meta: {
@@ -26,18 +25,17 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
   const { user } = useUser();
   const [loading, setLoading] = useState();
   const [localAmount, setLocalAmount] = useState();
-  const [rejectReason, setRejectReason] = useState("");
+  const [refundReason, setRefundReason] = useState("");
   const { addToast } = useToast();
   const [isValid, setIsValid] = useState(false);
-  const [showReason, setShowReason] = useState(false);
 
   const getAccReq = async () => {
     setLoading(true);
 
     try {
-      if (editId !== "new" && editId !== "init") {
+      if (deleteId !== "new" && deleteId !== "init") {
         const resp = await API.graphql(
-          graphqlOperation(getAccouningtRequest, { id: editId })
+          graphqlOperation(getAccouningtRequest, { id: deleteId })
         );
         const meta = JSON.parse(getReturnData(resp).meta);
         setData({ ...getReturnData(resp), meta: meta });
@@ -50,27 +48,26 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
       console.log(ex);
     }
   };
-  const rejectReq = async (e) => {
-    e.preventDefault();
+  const updateReq = async () => {
     setLoading(true);
     try {
       const accReqData = {
         id: data.id,
         pack: data.pack,
         phoneNumber: data.phoneNumber,
-        status: "REJECTED",
-        userStatus: `${data.user_id}#REJECTED`,
+        status: "REFUND",
+        userStatus: `${data.user_id}#REFUND`,
         user_id: data.user_id,
 
         meta: JSON.stringify([
           ...data.meta,
           {
-            action: "REJECTED",
+            action: "REFUND",
             amount: localAmount,
             updatedAt: data.updatedAt,
             requested_user_id: data.user_id,
-            rejected_user_id: user.sysUser.id,
-            reject_reason: rejectReason,
+            refunded_user_id: user.sysUser.id,
+            refund_reason: refundReason,
           },
         ]),
       };
@@ -96,7 +93,7 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
     }
   };
 
-  const acceptReq = async (e) => {
+  const refundReq = async (e) => {
     e.preventDefault();
 
     setLoading(true);
@@ -104,10 +101,10 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
       let resp = await API.graphql(
         graphqlOperation(doTransaction, {
           amount: localAmount,
-          status: "INCREASE",
+          status: "DECREASE",
           user_id: data.user_id,
           desc: JSON.stringify({
-            type: "CHARGE",
+            type: "REFUND",
           }),
         })
       );
@@ -119,7 +116,10 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
       resp = JSON.parse(resp);
 
       if (resp.statusCode === 200) {
-        updateAccBalance();
+        updateReq();
+      }
+      if (resp.statusCode === 500) {
+        console.log(resp);
       }
 
       setLoading(false);
@@ -130,52 +130,7 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
     }
   };
 
-  const updateAccBalance = async () => {
-    setLoading(true);
-    try {
-      const accReqData = {
-        id: data.id,
-        pack: data.pack,
-        phoneNumber: data.phoneNumber,
-        status: "ACCEPTED",
-        userStatus: `${data.user_id}#ACCEPTED`,
-        user_id: data.user_id,
-
-        meta: JSON.stringify([
-          ...data.meta,
-          {
-            action: "ACCEPTED",
-            amount: localAmount,
-            updatedAt: data.updatedAt,
-            requested_user_id: data.user_id,
-            accepted_user_id: user.sysUser.id,
-          },
-        ]),
-      };
-
-      const resp = await API.graphql(
-        graphqlOperation(updateAccouningtRequest, {
-          input: accReqData,
-        })
-      );
-
-      addToast({
-        content: getReturnData(resp).user.nickname,
-        title: `Амжилттай зөвшөөрлөө.`,
-        autoClose: true,
-        type: "update",
-      });
-      setLoading(false);
-      setShow(false);
-      setData(initData);
-    } catch (ex) {
-      setLoading(false);
-      console.log(ex);
-    }
-  };
-
   useEffect(() => {
-    console.log(localAmount);
     if (data.pack) {
       setIsValid(true);
     } else {
@@ -186,7 +141,7 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
   useEffect(() => {
     getAccReq();
     // eslint-disable-next-line
-  }, [editId]);
+  }, [deleteId]);
 
   useEffect(() => {
     currReq && setLocalAmount(JSON.parse(currReq.meta)[0].amount);
@@ -194,73 +149,42 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
 
   return (
     <Modal
-      onSubmit={acceptReq}
+      onSubmit={refundReq}
       show={show}
-      title={"Багцын хүсэлт"}
+      title={"Буцаан олголт"}
       content="content"
       onClose={() => {
         setShow(false);
         setLocalAmount(0);
       }}
-      onCancel={(e) => {
-        setShowReason(true);
-        if (rejectReason.length > 0) {
-          setLocalAmount(0);
-          rejectReq(e);
-          setShow(false);
-        }
+      onCancel={() => {
+        setLocalAmount(0);
+        setShow(false);
       }}
       type="submit"
       loading={loading}
       isValid={isValid}
-      cancelBtnName={"Татгалзах"}
-      submitBtnName={"Зөвшөөрөх"}
+      cancelBtnName={"Хаах"}
+      submitBtnName={"Буцаалт"}
     >
       <div className="mt-8 max-w-md">
-        <Select
-          name={"type"}
-          title="Багц"
-          value={data.pack}
-          onChange={(e) => {
-            if (e.target.value === "caak100") {
-              setLocalAmount(100000);
-            } else if (e.target.value === "caak200") {
-              setLocalAmount(200000);
-            } else if (e.target.value === "caak500") {
-              setLocalAmount(500000);
-            } else if (e.target.value === "0") {
-              setLocalAmount(data.meta.amount);
-            }
-            setData({ ...data, pack: e.target.value });
-          }}
-        >
-          <option value={"caak100"}>Hybrid</option>
-          <option value={"caak200"}>Premium</option>
-          <option value={"caak500"}>Business</option>
-          <option value={currReq && currReq.pack}>Задгай</option>
-        </Select>
         <Input
-          name={"amount"}
           value={localAmount}
-          label="Багцын дүн"
+          label="Буцаан олгох дүн"
           onChange={(e) => {
-            currReq && setData({ ...data, pack: currReq.pack });
             setLocalAmount(parseInt(e.target.value));
           }}
         />
-        {showReason && (
-          <Input
-            name={"amount"}
-            value={rejectReason}
-            label="Татгалзах шалтгаан"
-            onChange={(e) => {
-              setRejectReason(e.target.value);
-            }}
-          />
-        )}
+        <Input
+          value={refundReason}
+          label="Буцаан олгох шалтгаан"
+          onChange={(e) => {
+            setRefundReason(e.target.value);
+          }}
+        />
       </div>
     </Modal>
   );
 };
 
-export default CreateBalance;
+export default EditRefund;
