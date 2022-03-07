@@ -62,6 +62,15 @@ const DraftedPostList = ({ PageSize }) => {
           sortDirection: "DESC",
           nextToken: nextNextToken,
           limit: 20,
+          filter: {
+            or: [
+              { user_id: { eq: "a35649ba-d066-480f-b01d-f586b53af5a5" } },
+              { user_id: { eq: "f100ebec-1ae4-4d2f-abcf-3c261af96cc7" } },
+              { user_id: { eq: "c0d39895-53fd-4da6-a266-3a1959b67431" } },
+              { owned: { eq: "CAAK" } },
+            ],
+          },
+          status: "DRAFT",
         },
       });
       setNextNextToken(getReturnData(resp).nextToken);
