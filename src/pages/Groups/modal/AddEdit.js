@@ -62,8 +62,8 @@ const AddEdit = ({
         const meta = JSON.parse(resp.meta);
         setData({ ...resp, meta: meta });
         setIsChecked(resp.featured === "true" ? true : false);
-        setIsNoAds(meta.noAds ? true : false);
-        setIsHidden(meta.hidden ? true : false);
+        setIsNoAds(meta?.noAds ? true : false);
+        setIsHidden(meta?.hidden ? true : false);
       } else {
         setData(initData);
       }

@@ -24,7 +24,7 @@ const EditRefund = ({ deleteId, show, setShow, currReq }) => {
   const [data, setData] = useState(initData);
   const { user } = useUser();
   const [loading, setLoading] = useState();
-  const [localAmount, setLocalAmount] = useState();
+  const [localAmount, setLocalAmount] = useState(0);
   const [refundReason, setRefundReason] = useState("");
   const { addToast } = useToast();
   const [isValid, setIsValid] = useState(false);
@@ -144,7 +144,7 @@ const EditRefund = ({ deleteId, show, setShow, currReq }) => {
   }, [deleteId]);
 
   useEffect(() => {
-    currReq && setLocalAmount(JSON.parse(currReq.meta)[0].amount);
+    currReq && setLocalAmount(parseInt(JSON.parse(currReq.meta)[0].amount));
   }, [currReq]);
 
   return (
@@ -172,7 +172,7 @@ const EditRefund = ({ deleteId, show, setShow, currReq }) => {
           value={localAmount}
           label="Буцаан олгох дүн"
           onChange={(e) => {
-            setLocalAmount(parseInt(e.target.value));
+            setLocalAmount(e.target.value);
           }}
         />
         <Input

@@ -127,7 +127,6 @@ const BoostedPost = () => {
             </thead>
             <tbody>
               {boostedPosts.map((boost, index) => {
-                console.log(boost);
                 return (
                   <tr
                     key={index}

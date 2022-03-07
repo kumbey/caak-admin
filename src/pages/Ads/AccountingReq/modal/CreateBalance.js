@@ -25,7 +25,7 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
   const [data, setData] = useState(initData);
   const { user } = useUser();
   const [loading, setLoading] = useState();
-  const [localAmount, setLocalAmount] = useState();
+  const [localAmount, setLocalAmount] = useState(0);
   const [rejectReason, setRejectReason] = useState("");
   const { addToast } = useToast();
   const [isValid, setIsValid] = useState(false);
@@ -175,7 +175,6 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
   };
 
   useEffect(() => {
-    console.log(localAmount);
     if (data.pack) {
       setIsValid(true);
     } else {
@@ -200,12 +199,10 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
       content="content"
       onClose={() => {
         setShow(false);
-        setLocalAmount(0);
       }}
       onCancel={(e) => {
         setShowReason(true);
         if (rejectReason.length > 0) {
-          setLocalAmount(0);
           rejectReq(e);
           setShow(false);
         }
@@ -244,8 +241,10 @@ const CreateBalance = ({ editId, show, setShow, currReq }) => {
           value={localAmount}
           label="Багцын дүн"
           onChange={(e) => {
+            let num = 0;
             currReq && setData({ ...data, pack: currReq.pack });
-            setLocalAmount(parseInt(e.target.value));
+            !isNaN(e.target.value) ? (num = e.target.value) : (num = 0);
+            num ? setLocalAmount(parseInt(num)) : setLocalAmount(0);
           }}
         />
         {showReason && (
