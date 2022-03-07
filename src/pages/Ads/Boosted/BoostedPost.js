@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Tables from "../../../components/Tables";
 import { useToast } from "../../../components/Toast/ToastProvider";
 import AddEdit from "./modal/AddEdit";
+import placeholder from "./../../../../src/assets/images/placeholder.png";
 
 import {
   getDiffDays,
@@ -112,7 +113,10 @@ const BoostedPost = () => {
             <thead>
               <tr>
                 <th className="text-center uppercase">NO</th>
-                <th className="text-left uppercase w-96">Нэр</th>
+                <th className="text-left uppercase w-96">Пост</th>
+                <th className="text-left uppercase w-96">
+                  Бүүстэлсэн хэрэглэгч
+                </th>
                 <th className="text-center uppercase w-20">Хоног</th>
                 <th className="text-left uppercase w-60">Эхэлсэн огноо</th>
                 <th className="text-left uppercase w-60">Дуусах огноо</th>
@@ -130,20 +134,72 @@ const BoostedPost = () => {
                   >
                     <td className="text-center">{index + 1}</td>
                     <td>
-                      <div className="flex items-center ">
-                        <img
-                          className="mr-2 w-12 h-12 object-cover "
-                          src={
-                            boost?.post?.items?.items[0]?.file
-                              ? getFileUrl(boost.post.items.items[0].file)
-                              : getGenderImage("default")
+                      <div className="flex items-center">
+                        <div
+                          className="mr-2"
+                          style={{ minWidth: "48px", minHeight: "48px" }}
+                        >
+                          <img
+                            onClick={() =>
+                              window.open(
+                                `https://www.caak.mn/post/view/${boost.post_id}`
+                              )
+                            }
+                            className=" cursor-pointer w-12 h-12 object-cover"
+                            src={
+                              boost.post?.items?.items[0]?.file?.type?.startsWith(
+                                "video"
+                              )
+                                ? placeholder
+                                : boost.post?.items?.items[0]?.file
+                                ? getFileUrl(boost.post.items.items[0].file)
+                                : getGenderImage("default")
+                            }
+                            alt={boost?.post?.items?.items[0]?.file?.type}
+                          />
+                        </div>
+                        <p
+                          onClick={() =>
+                            window.open(
+                              `https://www.caak.mn/post/view/${boost.post_id}`
+                            )
                           }
-                          alt={""}
-                        />
-                        <p className=" truncate-3 w-96">{boost.post.title}</p>
+                          className="cursor-pointer truncate-3"
+                        >
+                          {boost.post.title}
+                        </p>
                       </div>
                     </td>
 
+                    <td>
+                      <div className=" flex items-center w-36">
+                        <img
+                          onClick={() =>
+                            window.open(
+                              `https://www.caak.mn/user/${boost.post.user.id}/profile`
+                            )
+                          }
+                          className="mr-2 cursor-pointer rounded-full"
+                          style={{ height: "32px", width: "32px" }}
+                          src={
+                            boost?.post?.user?.pic
+                              ? getFileUrl(boost?.post?.user.pic)
+                              : getGenderImage("default")
+                          }
+                          alt={boost?.post?.user.pic?.type}
+                        />
+                        <p
+                          onClick={() =>
+                            window.open(
+                              `https://www.caak.mn/user/${boost?.post.user.id}/profile`
+                            )
+                          }
+                          className="cursor-pointer truncate-3"
+                        >
+                          {boost.post.user.nickname}
+                        </p>
+                      </div>
+                    </td>
                     <td>
                       <p className="text-center">
                         {getDiffDays(

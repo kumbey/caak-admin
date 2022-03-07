@@ -17,6 +17,7 @@ import Loader from "../Loader";
 import { useToast } from "../Toast/ToastProvider";
 import CreateBoost from "../../pages/Ads/Boosted/modal/CreateBoost";
 import { listBoostedPosts } from "../../graphql-custom/boost/queries";
+import Button from "../../components/Button";
 
 const PostList = ({ PageSize }) => {
   let count = 0;
@@ -136,10 +137,10 @@ const PostList = ({ PageSize }) => {
               <th className="text-left uppercase w-36">Групп</th>
               <th className="text-left uppercase w-36">Нэмсэн хүн</th>
               <th className="text-left uppercase w-32">Үүссэн огноо</th>
-              <th className="text-left uppercase">Сэтгэгдэл</th>
               <th className="text-left uppercase">Харсан</th>
               <th className="text-left uppercase">Үзсэн</th>
               <th className="text-left uppercase">Саак</th>
+              <th className="text-left uppercase">Сэтгэгдэл</th>
               <th className="text-left uppercase">Үйлдэл</th>
             </tr>
           </thead>
@@ -238,11 +239,6 @@ const PostList = ({ PageSize }) => {
                   </td>
 
                   <td className="text-center">
-                    <p data-bs-toggle="tooltip" title={`Сэтгэгдлийн тоо`}>
-                      {post?.totals?.comments}
-                    </p>
-                  </td>
-                  <td className="text-center">
                     <p data-bs-toggle="tooltip" title={`Харсан тоо`}>
                       {post.totals.reach ? kFormatter(post?.totals?.reach) : 0}
                     </p>
@@ -261,17 +257,21 @@ const PostList = ({ PageSize }) => {
                         : 0}
                     </p>
                   </td>
+                  <td className="text-center">
+                    <p data-bs-toggle="tooltip" title={`Сэтгэгдлийн тоо`}>
+                      {post?.totals?.comments}
+                    </p>
+                  </td>
                   <td className="flex my-2 border-none justify-center">
-                    <a
-                      href="#"
-                      className="text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
+                    <Button
+                      className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 transition duration-150 ease-in-out"
                       data-bs-toggle="tooltip"
+                      onClick={() =>
+                        !isBoosted && editHandler(post.id, post, index)
+                      }
                       title={`${isBoosted ? "Бүүстэлсэн байна!" : "Бүүстлэх"}`}
                     >
                       <span
-                        onClick={() =>
-                          !isBoosted && editHandler(post.id, post, index)
-                        }
                         className={`${
                           !isBoosted ? "cursor-pointer" : "cursor-not-allowed"
                         }`}
@@ -282,7 +282,7 @@ const PostList = ({ PageSize }) => {
                           } text-2xl las la-rocket`}
                         />
                       </span>
-                    </a>
+                    </Button>
                   </td>
                 </tr>
               );

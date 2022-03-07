@@ -60,6 +60,53 @@ const Edit = ({ show, setIsShowModal, addToast, currPost }) => {
     }
   };
 
+  const cancelReport = async (e) => {
+    e.preventDefault();
+    let id = currPost.post.id;
+    let status = "CONFIRMED";
+    setLoading(true);
+    try {
+      let resp = await API.graphql(
+        graphqlOperation(updatePost, {
+          input: { id, status, expectedVersion: currPost.post.version },
+        })
+      );
+      resp = getReturnData(resp);
+
+      await API.graphql(
+        graphqlOperation(createPostStatusHistory, {
+          input: {
+            description: denyReason ? denyReason : currPost.reason,
+            post_id: id,
+            status: "CONFIRMED",
+          },
+        })
+      );
+
+      await API.graphql(
+        graphqlOperation(updateReportedPost, {
+          input: { id: currPost.id, status: "CANCEL" },
+        })
+      );
+
+      addToast({
+        content: currPost.post.title,
+        title: `Амжилттай татгалзлаа`,
+        autoClose: true,
+        type: `update`,
+      });
+
+      setLoading(false);
+      setIsShowModal(false);
+      setDenyReason("");
+    } catch (ex) {
+      setLoading(false);
+      setIsShowModal(false);
+
+      console.log(ex);
+    }
+  };
+
   return (
     <Modal
       show={show}
@@ -69,11 +116,17 @@ const Edit = ({ show, setIsShowModal, addToast, currPost }) => {
         setIsShowModal(false);
         setDenyReason("");
       }}
+      onCancel={(e) => {
+        setIsShowModal(false);
+        setDenyReason("");
+        cancelReport(e);
+      }}
       onSubmit={(e) => postHandler(e)}
       type="submit"
       loading={loading}
       isValid={true}
-      submitBtnName={"Хадгалах"}
+      submitBtnName={"Зөвшөөрөх"}
+      cancelBtnName={"Татгалзах"}
     >
       <p className="font-semibold truncate-2 w-64">{currPost?.post?.title}</p>
       <p className=" truncate-2 w-64">Шалтгаан: {currPost.reason}</p>

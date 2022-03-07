@@ -10,6 +10,7 @@ import ConfirmAlert from "../../components/ConfirmAlert/ConfirmAlert";
 import { deleteGroup } from "../../graphql-custom/group/mutation";
 import Pagination from "../../components/Pagination/Pagination";
 import { getFileUrl, getGenderImage, getReturnData } from "../../utility/Util";
+import Input from "../../components/Input";
 
 const Groups = () => {
   // const { addToast } = useToast();
@@ -18,6 +19,7 @@ const Groups = () => {
   const [editId, setEditId] = useState("init");
   const [currentIndex, setCurrentIndex] = useState("init");
   const [deleteId, setDeleteId] = useState("init");
+  const [data, setData] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,8 +31,14 @@ const Groups = () => {
     const lastPageIndex = firstPageIndex + PageSize;
     count = (currentPage - 1) * PageSize;
 
-    return groups.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage, groups]);
+    return groups
+      .filter(
+        (group) =>
+          group?.name?.toLowerCase().includes(data) ||
+          group?.category?.name?.toLowerCase().includes(data)
+      )
+      .slice(firstPageIndex, lastPageIndex);
+  }, [currentPage, groups, data]);
 
   const editHandler = (id, index) => {
     setEditId(id);
@@ -105,10 +113,29 @@ const Groups = () => {
       <div className="">
         <div className="mb-4">
           <h1>Группууд</h1>
-          <div className="flex mt-4">
-            <Button className="bg-primary-400" onClick={() => setEditId("new")}>
+          <div
+            style={{ maxWidth: "400px" }}
+            className="flex items-center justify-between  mt-4"
+          >
+            <Button
+              className="bg-primary-400 h-10"
+              onClick={() => setEditId("new")}
+            >
               Шинэ групп үүсгэх
             </Button>
+            <div className="relative mb-2">
+              <Input
+                placeholder="Нэр / Категори"
+                value={data}
+                onChange={(e) => setData(e.target.value)}
+              />
+              <span
+                onClick={() => {
+                  setData("");
+                }}
+                className="absolute top-3.5 right-1.5 cursor-pointer text-2xl text-gray-400 las la-times-circle"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -164,7 +191,7 @@ const Groups = () => {
                       ? convertDateTime(group.updatedAt)
                       : "Засвар ороогүй"
                   }`}</td>
-                  <td className="flex justify-center">
+                  <td className="text-center">
                     <span
                       onClick={() => editHandler(group.id, index)}
                       className={"cursor-pointer"}

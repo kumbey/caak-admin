@@ -12,6 +12,18 @@ const boost0001 = /* GraphQL */ `
     updatedAt
     post {
       user_id
+      user {
+        firstname
+        id
+        followed
+        aura
+        about
+        totals {
+          followers
+        }
+        nickname
+        pic ${file0001}
+      }
       totals {
         categoryAndStatus
         category_id
