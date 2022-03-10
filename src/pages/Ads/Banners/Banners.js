@@ -35,6 +35,10 @@ const Banners = () => {
       name: "A2",
       value: "A2",
     },
+    {
+      name: "A3",
+      value: "A3",
+    },
   ];
   const { addToast } = useToast();
   const date = new Date();
