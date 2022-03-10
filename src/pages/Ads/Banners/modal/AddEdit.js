@@ -55,6 +55,10 @@ const AddEdit = ({
       name: "A2",
       value: "A2",
     },
+    {
+      name: "A3",
+      value: "A3",
+    },
   ];
   const [data, setData] = useState(initData);
   const [loading, setLoading] = useState();
@@ -220,6 +224,12 @@ const AddEdit = ({
         data.start_date &&
         data.meta.colors
       ) {
+        setIsValid(true);
+      } else {
+        setIsValid(false);
+      }
+    } else if (data.type === "A3") {
+      if (data.title && data.pic1 && data.dayLen && data.start_date) {
         setIsValid(true);
       } else {
         setIsValid(false);
