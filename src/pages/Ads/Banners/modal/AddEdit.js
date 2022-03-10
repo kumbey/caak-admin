@@ -50,14 +50,17 @@ const AddEdit = ({
     {
       name: "A1",
       value: "A1",
+      tip: "Нүүр хуудас дээр харагдах модал баннер",
     },
     {
       name: "A2",
       value: "A2",
+      tip: "Дэлгэрэнгүй дээр баруун талд харагдах баннер",
     },
     {
       name: "A3",
       value: "A3",
+      tip: "Нүүр хуудсын хамгийн дээд хэсэгт харагдах баннер",
     },
   ];
   const [data, setData] = useState(initData);
@@ -273,7 +276,12 @@ const AddEdit = ({
           >
             {types.map((type, index) => {
               return (
-                <option key={index} value={type.value}>
+                <option
+                  data-bs-toggle="tooltip"
+                  title={type.tip}
+                  key={index}
+                  value={type.value}
+                >
                   {`${type.name}`}
                 </option>
               );
@@ -293,7 +301,7 @@ const AddEdit = ({
             file={data.pic1}
             setFile={setFile}
           />
-          {data.type !== "A2" ? (
+          {data.type !== "A2" && data.type !== "A3" ? (
             <>
               <h4>Баннер айкон</h4>
               <DropZone
@@ -345,7 +353,7 @@ const AddEdit = ({
               : null}
           </p>
 
-          {data.type !== "A2" ? (
+          {data.type !== "A2" && data.type !== "A3" ? (
             <>
               <h4>Өнгө</h4>
 

@@ -7,15 +7,15 @@ const Ads = () => {
   const menus = [
     {
       id: 0,
-      name: "Данс цэнэглэх хүсэлт",
-    },
-    {
-      id: 1,
       name: "Бүүстэд пост",
     },
     {
-      id: 2,
+      id: 1,
       name: "Баннер",
+    },
+    {
+      id: 2,
+      name: "Данс цэнэглэх хүсэлт",
     },
   ];
 
@@ -65,11 +65,11 @@ const Ads = () => {
           )}
         </div>
         {activeIndex === 0 ? (
-          <AccountingReqList />
-        ) : activeIndex === 1 ? (
           <SponsoredPosts PageSize={PageSize} />
-        ) : activeIndex === 2 ? (
+        ) : activeIndex === 1 ? (
           <Banners PageSize={PageSize} />
+        ) : activeIndex === 2 ? (
+          <AccountingReqList />
         ) : null}
       </div>
     </div>
