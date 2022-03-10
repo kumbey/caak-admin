@@ -30,14 +30,17 @@ const Banners = () => {
     {
       name: "A1",
       value: "A1",
+      tip: "Нүүр хуудас дээр харагдах модал баннер",
     },
     {
       name: "A2",
       value: "A2",
+      tip: "Дэлгэрэнгүй дээр баруун талд харагдах баннер",
     },
     {
       name: "A3",
       value: "A3",
+      tip: "Нүүр хуудсын хамгийн дээд хэсэгт харагдах баннер",
     },
   ];
   const { addToast } = useToast();
@@ -163,7 +166,12 @@ const Banners = () => {
           {/* <option value={"All"}>Сонгох...</option> */}
           {types.map((type, index) => {
             return (
-              <option key={index} value={type.value}>
+              <option
+                data-bs-toggle="tooltip"
+                title={type.tip}
+                key={index}
+                value={type.value}
+              >
                 {`${type.name}`}
               </option>
             );
